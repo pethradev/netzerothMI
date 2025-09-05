@@ -1,0 +1,1072 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manual Interativo de Netzeroth</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Estilos básicos para emular a classe 'prose' do Tailwind para melhor legibilidade do texto */
+        .prose {
+            max-width: none;
+        }
+        .prose h2, .prose h3, .prose h4 {
+            font-weight: 600;
+            margin-bottom: 0.5em;
+        }
+        /* CORREÇÃO DEFINITIVA PARA O TÍTULO PRINCIPAL */
+        #content-article h2 {
+             color: #111827; /* Preto para modo claro */
+        }
+        .dark #content-article h2 {
+            color: #f9fafb; /* Branco para modo escuro */
+        }
+
+        .prose h2 { font-size: 1.5rem; }
+        .prose h3 { font-size: 1.25rem; }
+        .prose h4 { font-size: 1.125rem; }
+        .prose p, .prose ul, .prose ol, .prose blockquote {
+            margin-top: 1em;
+            margin-bottom: 1em;
+        }
+        .prose a {
+            color: #4f46e5;
+            text-decoration: underline;
+        }
+        .dark .prose a {
+            color: #818cf8;
+        }
+        .prose ul {
+            list-style-type: disc;
+            padding-left: 1.5em;
+        }
+        .prose ol {
+            list-style-type: decimal;
+            padding-left: 1.5em;
+        }
+        .prose blockquote {
+            border-left: 4px solid #e5e7eb;
+            padding-left: 1em;
+            font-style: italic;
+        }
+        .dark .prose blockquote {
+            border-left-color: #4b5563;
+        }
+    </style>
+</head>
+<body class="font-sans">
+
+    <!-- Cabeçalho -->
+    <header class="sticky top-0 z-30 backdrop-blur border-b border-gray-200 dark:border-gray-800 bg-white/70 dark:bg-gray-950/60">
+        <div class="max-w-6xl mx-auto px-4 py-3 flex items-center gap-3">
+            <div class="flex-1">
+                <h1 class="text-xl font-bold text-gray-900 dark:text-gray-100">A Lenda de Netzeroth</h1>
+                <p class="text-xs text-gray-700 dark:text-gray-400">Guia para Jogadores e Mestres</p>
+            </div>
+            <div class="flex items-center gap-2">
+                <input
+                    type="text"
+                    id="search-input"
+                    aria-label="Pesquisar"
+                    placeholder="Pesquisar…"
+                    class="w-52 md:w-80 rounded-full border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-indigo-400"
+                />
+                <button
+                    id="theme-toggle"
+                    class="rounded-full px-3 py-2 text-sm border border-gray-300 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-800"
+                    title="Alternar modo claro/escuro"
+                >
+                    <!-- O ícone será inserido pelo JS -->
+                </button>
+                <button
+                    onclick="window.print()"
+                    class="rounded-full px-3 py-2 text-sm border border-gray-300 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-800"
+                    title="Imprimir/Exportar PDF"
+                >
+                    🖨️
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Conteúdo Principal -->
+    <main class="max-w-6xl mx-auto px-4 py-6 grid md:grid-cols-[260px_1fr] gap-6">
+        <!-- Barra Lateral (Índice) -->
+        <aside class="md:sticky md:top-[76px] md:self-start">
+            <nav class="rounded-xl border border-gray-200 dark:border-gray-700 overflow-hidden bg-white dark:bg-gray-900 shadow-sm">
+                <div class="px-3 py-2 text-xs uppercase tracking-wide font-semibold text-gray-600 dark:text-gray-400">Índice</div>
+                <ul id="sidebar-nav" class="divide-y divide-gray-200 dark:divide-gray-800 max-h-[70vh] overflow-auto">
+                    <!-- O índice será inserido pelo JS -->
+                </ul>
+            </nav>
+            <div class="mt-4 text-xs text-gray-700 dark:text-gray-400 bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-700 p-3">
+                <div class="font-semibold text-gray-800 dark:text-gray-100">Dica rápida</div>
+                <div class="mt-1 text-gray-700 dark:text-gray-300">Use a busca para encontrar termos dentro de todas as abas e clique em uma aba para acessá‑la.</div>
+            </div>
+        </aside>
+
+        <!-- Seção de Conteúdo -->
+        <section>
+            <div id="tabs-container" class="flex flex-wrap gap-2 mb-4">
+                <!-- As abas serão inseridas pelo JS -->
+            </div>
+            <article id="content-article" class="prose">
+                <!-- O conteúdo da seção será inserido pelo JS -->
+            </article>
+        </section>
+    </main>
+
+    <!-- Rodapé -->
+    <footer class="border-t border-gray-200 dark:border-gray-800 py-6 mt-8 bg-white dark:bg-gray-900">
+        <div class="max-w-6xl mx-auto px-4 text-xs text-gray-600 dark:text-gray-400 flex flex-wrap items-center gap-2">
+            <span>Netzeroth — Manual Interativo</span>
+            <span aria-hidden>•</span>
+            <span>Versão interativa — salva preferências localmente.</span>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- ESTADO DA APLICAÇÃO ---
+            let state = {
+                activeKey: null,
+                isDark: false,
+                query: ''
+            };
+
+            // --- FUNÇÕES DE RENDERIZAÇÃO AUXILIARES ---
+            function highlight(text, q) {
+                if (!q || !text) return text;
+                const regex = new RegExp(`(${q.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")})`, "gi");
+                return text.split(regex).map(part => {
+                    if (part.toLowerCase() === q.toLowerCase()) {
+                        return `<span class="bg-yellow-300/70 dark:bg-yellow-500/60 rounded-sm px-0.5">${part}</span>`;
+                    }
+                    return part;
+                }).join('');
+            }
+
+            function renderAccordion(items) {
+                if (!items) return '';
+                return `
+                    <div class="space-y-3 accordion-container">
+                        ${items.map((item, i) => `
+                            <div class="border border-gray-300 dark:border-gray-700 rounded-xl overflow-hidden shadow-sm bg-white dark:bg-gray-900">
+                                <button
+                                    class="w-full text-left px-5 py-3 bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 transition flex items-center justify-between accordion-toggle"
+                                    aria-expanded="false"
+                                >
+                                    <div>
+                                        <div class="font-semibold text-gray-900 dark:text-gray-100 text-sm">${highlight(item.title, state.query)}</div>
+                                        ${item.subtitle ? `<div class="text-xs text-gray-600 dark:text-gray-400 mt-0.5">${highlight(item.subtitle, state.query)}</div>` : ''}
+                                    </div>
+                                    <div class="text-gray-500 dark:text-gray-400 text-sm accordion-icon">+</div>
+                                </button>
+                                <div class="px-5 py-4 leading-relaxed hidden accordion-content text-gray-800 dark:text-gray-300">
+                                    ${typeof item.content === 'function' ? item.content() : `<div class="whitespace-pre-line">${highlight(item.content, state.query)}</div>`}
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+            }
+
+             function renderTable(headers, rows) {
+                return `
+                    <div class="overflow-x-auto rounded-xl border border-gray-200 dark:border-gray-700 mt-3 bg-white dark:bg-gray-900">
+                        <table class="min-w-full text-sm">
+                            <thead class="bg-gray-50 dark:bg-gray-800">
+                                <tr>
+                                    ${headers.map(h => `<th class="px-4 py-2 text-left font-semibold text-gray-700 dark:text-gray-200">${h}</th>`).join('')}
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
+                                ${rows.map(r => `<tr>${r.map(c => `<td class="px-4 py-2 text-gray-900 dark:text-gray-200">${highlight(String(c), state.query)}</td>`).join('')}</tr>`).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                `;
+            }
+
+            // --- DEFINIÇÃO DOS DADOS ---
+            const sections = [
+              {
+                key: "prologo",
+                title: "Prólogo",
+                summary: "A criação de Netzeroth por Elyon, a rebelião e o chamado aos Portadores do Selo.",
+                content: () => `
+                    <div class="space-y-4">
+                        <p>No princípio, quando as estrelas ainda cantavam e os rios conheciam seus nomes, Elyon, o Grande Rei, moldou a terra de Netzeroth com sua palavra. As montanhas ergueram-se como muralhas, as florestas floresceram com aromas jamais sentidos, e os mares dançavam ao som do vento. Ele habitava no Palácio de Luz, no alto do Monte do Alvorecer, e seu reino se estendia sem sombra ou temor.</p>
+                        <p>Mas nem todos guardaram lealdade. Um príncipe da corte, cujo nome foi apagado dos registros, invejou a glória de Elyon e buscou governar por si. Quando a rebelião eclodiu, a terra tremeu. O príncipe rebelde e os seus foram lançados para as regiões mais distantes e sombrias da criação. Desde então, o mundo se tornou campo de disputa entre a Luz e a Escuridão Velada do Usurpador.</p>
+                        <p>Elyon, em sua misericórdia, não abandonou Netzeroth. Chamou homens e mulheres comuns — pastores, ferreiros, sábios, mercadores — e lhes concedeu o Selo do Rei, um chamado para restaurar o que foi quebrado, curar o que foi ferido e libertar os que estão cativos.</p>
+                        <blockquote class="border-l-4 pl-4 italic text-gray-700 dark:text-gray-400">
+                           “Agora, os ventos mudam... E um sussurro ecoa das Terras Queimadas: ‘O Rei não voltará...’ Mas você sabe que é mentira. Você carrega o Selo. Elyon chama.”
+                        </blockquote>
+                    </div>
+                `
+              },
+               {
+                key: "criacao",
+                title: "Criação de Personagens",
+                summary: "Guia completo para criar seu Portador do Selo, passo a passo.",
+                content: () => `
+                    <div class="space-y-6">
+                        <p>Seu personagem não é apenas uma coleção de números e habilidades — ele é um Portador do Selo do Rei, chamado por Elyon para ser luz em tempos de sombra. Siga os passos abaixo para dar vida ao seu herói.</p>
+                        ${renderAccordion([
+                            { title: "Passo 1: Escolha sua Classe", content: "A classe define o papel do seu personagem. Cada uma tem um papel mecânico e narrativo. Veja a aba 'Classes & Espécies' para a descrição completa de cada uma." },
+                            { title: "Passo 2: Escolha sua Espécie", content: "A espécie define seu lugar no mundo e concede traços únicos. Consulte a aba 'Classes & Espécies' para ver todas as opções em detalhe." },
+                             { title: "Passo 3: Determine seus Atributos", content: "Atributos são os valores que representam as capacidades básicas do seu personagem. Consulte a aba 'Atributos & Habilidades' para as regras de distribuição." },
+                             { title: "Passo 4: Escolha sua Origem", content: "Sua origem (região) concede +1 em um atributo temático ou um talento regional. Ex: Haravoth → +1 SAB ou 'Conhecimento Popular'." },
+                             { title: "Passo 5: Defina suas Skills", content: "Skills representam as habilidades específicas. Você pode escolher até 6 no início. Veja a aba 'Atributos & Habilidades' para as regras de cálculo e a lista completa." },
+                             { title: "Passo 6: Monte sua Lore", content: "Defina sua história pessoal, votos, propósitos e relacionamentos. Uma boa lore enriquece o jogo e guia a interpretação." },
+                             { title: "Passo 7: Alinhamento e o Selo", content: "Seu alinhamento (Fiel, Curioso, Vacilante, etc.) é dinâmico e reflete sua jornada espiritual. O Selo do Rei é um item central nessa jornada. Veja mais na aba 'Bênçãos e o Selo'." },
+                             { title: "Passo 8: Prepare sua Mochila", content: "Escolha seus equipamentos iniciais. A capacidade de carga é medida em 'slots'. Consulte a aba 'Equipamentos' para a lista de itens e equipamentos iniciais por classe." }
+                        ])}
+                    </div>`
+            },
+            {
+                key: "classes_especies",
+                title: "Classes & Espécies",
+                summary: "Descrição detalhada das Classes e Espécies jogáveis.",
+                content: () => `
+                    <div class="space-y-6">
+                        <h4>Classes</h4>
+                        <p>A classe define o papel do seu personagem, suas habilidades iniciais e como você contribui nas missões. Cada classe tem um papel mecânico e um papel narrativo.</p>
+                        ${renderAccordion([
+                            { title: "Guardião", subtitle: "Defesa e proteção", content: "<strong>Função:</strong> Protetor firme e corajoso, especialista em manter aliados seguros. Usa armaduras, escudos e táticas de defesa.<br><strong>Atributos-chave:</strong> FOR, VIG." },
+                            { title: "Arauto", subtitle: "Diplomacia e estratégia", content: "<strong>Função:</strong> Mensageiro e diplomata, mestre em persuasão e alianças. Capaz de mudar o rumo de cidades ou batalhas com palavras.<br><strong>Atributos-chave:</strong> CAR, AST." },
+                            { title: "Curandeiro", subtitle: "Restauração e suporte", content: "<strong>Função:</strong> Restaurador de vida e coragem, usando conhecimentos antigos e dons especiais. É o farol de esperança em meio ao caos.<br><strong>Atributos-chave:</strong> FÉ, SAB." },
+                            { title: "Caçador de Sombras", subtitle: "Rastreamento e combate furtivo", content: "<strong>Função:</strong> Rastreia e elimina ameaças ocultas. É ágil, silencioso e perspicaz, sendo a mão rápida contra a Escuridão.<br><strong>Atributos-chave:</strong> AGI, AST." },
+                            { title: "Místico", subtitle: "Manipulação de energias", content: "<strong>Função:</strong> Manipula energias naturais e ancestrais de forma artística e simbólica (luz, vento, som). Sua 'magia' é uma manifestação da criação.<br><strong>Atributos-chave:</strong> SAB, FÉ." },
+                            { title: "Peregrino", subtitle: "Exploração e revelação", content: "<strong>Função:</strong> Viajante guiado por visões e sinais. É um descobridor de mistérios, conectando regiões e segredos antigos.<br><strong>Atributos-chave:</strong> FÉ, SAB." }
+                        ])}
+
+                        <h4 class="!mt-8">Espécies</h4>
+                        <p>A escolha da espécie define não apenas suas habilidades, mas também seu lugar no mundo, sua relação com a Luz, a Corrupção e os demais habitantes.</p>
+                        ${renderAccordion([
+                            { title: "Humano", content: "<strong>Essência:</strong> Frágeis, mas livres; representam esperança e redenção.<br><strong>Atributo:</strong> +1 em qualquer.<br><strong>Traço:</strong> Versatilidade (+1 skill treinada).<br><strong>Narrativa:</strong> Humanos são moldados pela vontade e pela ação, símbolos de esperança e da capacidade de superação." },
+                            { title: "Alvorecido", content: "<strong>Essência:</strong> Seres tocados pela Luz, como ecos do Éden.<br><strong>Atributo:</strong> +1 Fé.<br><strong>Traço:</strong> Clarão Sagrado (revela ocultos 1x/descanso).<br><strong>Narrativa:</strong> Inspiram esperança, mas são alvo de desconfiança e medo das Sombras." },
+                            { title: "Errante", content: "<strong>Essência:</strong> Criaturas com marcas sombrias, buscando redenção.<br><strong>Atributo:</strong> +1 Vigor ou Astúcia.<br><strong>Traço:</strong> Marca Sombria (vantagem contra medo, desvantagem em persuasão com religiosos).<br><strong>Narrativa:</strong> Simbolizam a graça e misericórdia oferecidas por Elyon aos arrependidos." },
+                            { title: "Auralino", content: "<strong>Essência:</strong> Animais despertos pela Luz, com pureza moral.<br><strong>Atributo:</strong> +1 temático.<br><strong>Traço:</strong> Instinto Ancestral (vantagem em Sobrevivência/Percepção).<br><strong>Narrativa:</strong> Vozes da Criação, representam o vínculo entre o mundo natural e a vontade divina." },
+                            { title: "Vigia", content: "<strong>Essência:</strong> Pequenos seres espirituais encarnados, mensageiros divinos.<br><strong>Atributo:</strong> +1 Sabedoria.<br><strong>Traço:</strong> Olhar Celestial (pode detectar Corrupção com teste de Fé).<br><strong>Narrativa:</strong> Guiam os mortais, sendo observadores silenciosos e conselheiros discretos." },
+                            { title: "Ferino", content: "<strong>Essência:</strong> Seres híbridos (humano-fera), buscando restaurar uma aliança antiga.<br><strong>Atributo:</strong> +1 Força ou Agilidade.<br><strong>Traço:</strong> Faro Instintivo (vantagem para rastrear corruptos).<br><strong>Narrativa:</strong> Vivem a tensão entre instinto e fé, lutando para reconciliar sua natureza." },
+                        ])}
+                    </div>
+                `
+            },
+            {
+                key: "atributos_skills",
+                title: "Atributos & Habilidades",
+                summary: "Detalhes sobre Atributos, Skills e as habilidades únicas de cada Classe.",
+                content: () => `
+                    <div class="space-y-6">
+                        ${renderAccordion([
+                            { title: "Atributos", content: () => `
+                                <p>Atributos são valores que representam as capacidades básicas do seu personagem. Eles definem quão forte, rápido, sábio ou resistente alguém é.</p>
+                                <h4>Regras de Distribuição</h4>
+                                <p>Todos os atributos começam em 10. Você tem mais 10 pontos para distribuir livremente, sem ultrapassar 15 em nenhum atributo inicial. Baixar qualquer atributo para 6 concede +2 pontos extras, uma única vez.</p>
+                                ${renderTable(
+                                    ["Atributo", "Sigla", "Descrição", "Exemplos de Uso"],
+                                    [
+                                        ["Força", "FOR", "Poder físico.", "Lutar corpo a corpo, erguer pesos."],
+                                        ["Agilidade", "AGI", "Reflexos, velocidade.", "Esquivar, acrobacias."],
+                                        ["Vigor", "VIG", "Resistência física.", "Suportar ferimentos, longas caminhadas."],
+                                        ["Astúcia", "AST", "Inteligência prática.", "Resolver enigmas, armar estratégias."],
+                                        ["Sabedoria", "SAB", "Discernimento e percepção.", "Detectar armadilhas, interpretar sinais."],
+                                        ["Carisma", "CAR", "Influência e persuasão.", "Negociar, inspirar aliados."],
+                                        ["Fé", "FÉ", "Força moral e espiritual.", "Resistir à corrupção, ativar bênçãos."]
+                                    ]
+                                )}
+                                <h4 class="!mt-6">Escala de Atributos</h4>
+                                ${renderTable(
+                                    ["Valor", "Descrição"],
+                                    [
+                                        ["1–3", "Muito fraco"],
+                                        ["4–6", "Fraco"],
+                                        ["7–9", "Abaixo da média"],
+                                        ["10–11", "Média humana"],
+                                        ["12–14", "Acima da média"],
+                                        ["15–17", "Excelente"],
+                                        ["18–19", "Heróico"],
+                                        ["20", "Lendário"]
+                                    ]
+                                )}`
+                            },
+                            { title: "Skills", content: () => `
+                                <p>As skills representam as habilidades específicas do seu personagem, ligadas aos atributos básicos. Elas determinam o que seu personagem consegue fazer com maestria.</p>
+                                <h4>Cálculo de Skills</h4>
+                                <p>O valor de uma skill é determinado assim: <strong>Skill = Modificador do Atributo + Bônus por Treino (+2) + Bônus por Especialização (+4) + Bônus Extra</strong>.</p>
+                                ${renderTable(
+                                    ["Atributo", "Skills Principais"],
+                                    [
+                                        ["FOR", "Atletismo, Briga, Quebra e Força Bruta"],
+                                        ["AGI", "Acrobacia, Furtividade, Prestidigitação"],
+                                        ["VIG", "Resistência, Fortitude, Marcha Forçada"],
+                                        ["AST", "Investigação, Estratégia, Enganação"],
+                                        ["SAB", "Percepção, Sobrevivência, Empatia"],
+                                        ["CAR", "Persuasão, Intimidação, Performance"],
+                                        ["FÉ", "Resistência à Corrupção, Canalização de Bênçãos, Liturgia"]
+                                    ]
+                                )}`
+                            },
+                            { title: "Habilidades de Classe (Dons da Criação)", content: () => `
+                                <p>Os Dons da Criação são manifestações da fé e da sintonia com a obra de Elyon. Cada Dom consome Pontos de Energia (PE). A progressão de nível acontece em marcos narrativos, e as novas habilidades são ganhas nos níveis 3, 5 e 7.</p>
+                                ${renderAccordion([
+                                    { title: "Guardião", content: `<ul>
+                                        <li><strong>Nível 1 - Postura Inabalável (Passiva):</strong> Pode usar sua reação para adicionar seu bônus de Vigor à DEF de um aliado adjacente contra um ataque.</li>
+                                        <li><strong>Nível 3 - Muralha de Fé (5 PE):</strong> Como uma ação, todos os aliados a 3 metros recebem +2 em testes de Fé contra medo e corrupção.</li>
+                                        <li><strong>Nível 5 - Voto de Proteção (4 PE):</strong> Como ação bônus, força um inimigo a ter desvantagem em ataques que não sejam contra você.</li>
+                                        <li><strong>Nível 7 - Inquebrável (8 PE, 1x/descanso):</strong> Como reação, quando seria reduzido a 0 HP, permanece com 1 HP.</li>
+                                    </ul>`},
+                                    { title: "Arauto", content: `<ul>
+                                        <li><strong>Nível 1 - Palavras que Movem (1/dia):</strong> Convence um PNJ a realizar uma ação não-letal e razoável sem teste.</li>
+                                        <li><strong>Nível 3 - Rede de Contatos:</strong> Pode gastar um dia numa cidade para encontrar um contato útil que lhe deva um pequeno favor (teste de CAR DF 15).</li>
+                                        <li><strong>Nível 5 - Vantagem em Persuasão:</strong> Ganha vantagem em todos os testes de Persuasão.</li>
+                                        <li><strong>Nível 7 - Discurso Desmoralizante:</strong> Pode desestabilizar a moral de inimigos com um discurso (DF definida pelo Mestre).</li>
+                                    </ul>`},
+                                    { title: "Curandeiro", content: `<ul>
+                                        <li><strong>Nível 1 - Toque Restaurador (3 PE):</strong> Cura 1d8 + Modificador de SAB em HP.</li>
+                                        <li><strong>Nível 3 - Purificar (5 PE):</strong> Remove uma condição (Envenenado, Doente, Amedrontado) de um alvo.</li>
+                                        <li><strong>Nível 5 - Prece da Salvação (10 PE):</strong> Estabiliza imediatamente um aliado com 0 HP e o cura em 1 HP.</li>
+                                        <li><strong>Nível 7 - Toque Restaurador Maior (6 PE):</strong> Cura 2d8 + Modificador de SAB em HP.</li>
+                                    </ul>`},
+                                    { title: "Caçador de Sombras", content: `<ul>
+                                        <li><strong>Nível 1 - Olhos na Escuridão (Passiva):</strong> Tem vantagem em testes de Percepção para detectar criaturas das Sombras.</li>
+                                        <li><strong>Nível 3 - Golpe Silencioso:</strong> Se atacar um inimigo que ainda não agiu, causa +1d6 de dano extra.</li>
+                                        <li><strong>Nível 5 - Passo Leve:</strong> Ignora penalidades de terreno difícil.</li>
+                                        <li><strong>Nível 7 - Ataque e Fuga:</strong> Pode atacar e se mover sem provocar ataques de oportunidade.</li>
+                                    </ul>`},
+                                    { title: "Místico", content: `<ul>
+                                        <li><strong>Nível 1 - Manifestação Elemental (4 PE):</strong> Cria um efeito de Luz (cega), Vento (empurra) ou Som (ensurdece).</li>
+                                        <li><strong>Nível 3 - Passo do Vento (5 PE):</strong> Aumenta o movimento de um aliado em 3 metros por um turno.</li>
+                                        <li><strong>Nível 5 - Escudo de Luz (6 PE):</strong> Como reação, concede a um aliado +4 de DEF contra um ataque.</li>
+                                        <li><strong>Nível 7 - Manifestação Aprimorada (7 PE):</strong> Pode manifestar dois efeitos elementais diferentes com uma única ação.</li>
+                                    </ul>`},
+                                    { title: "Peregrino", content: `<ul>
+                                        <li><strong>Nível 1 - Sinais da Jornada (1/sessão):</strong> Pode pedir ao Mestre uma pista direta sobre o caminho, fraqueza de inimigo ou segredo de um local.</li>
+                                        <li><strong>Nível 3 - Caminho Seguro (5 PE):</strong> Concede ao grupo vantagem no próximo teste para evitar perigos de viagem.</li>
+                                        <li><strong>Nível 5 - Fé Inspiradora (8 PE):</strong> Todos os aliados que o ouvem ganham vantagem no seu próximo teste.</li>
+                                        <li><strong>Nível 7 - Sentir a Ferida do Mundo (Passiva):</strong> Sente automaticamente a presença e direção da fonte de Corrupção mais próxima num raio de 1 km.</li>
+                                    </ul>`},
+                                ])}`
+                            }
+                        ])}
+                    </div>`
+            },
+            {
+                key: "mapa",
+                title: "Mapa & Regiões",
+                summary: "Panorama das terras de Netzeroth, seus perigos e ganchos de aventura.",
+                content: () => `
+                    <div class="space-y-6">
+                        <p>Netzeroth é um mosaico de terras, cada qual moldada por sua própria beleza, cultura e desafios. O mapa, passado de geração em geração, fala de regiões que brilham sob a luz de Elyon e de outras onde a sombra do Usurpador lança seu véu pesado.</p>
+                        ${renderAccordion([
+                            { title: "Haravoth — Campos de Multidões", content: `<div class="text-sm"><p><strong>Ambiente:</strong> Planícies férteis e pradarias douradas. Povos nômades e agricultores preservam cânticos ancestrais.</p><p><strong>Perigos:</strong> Invasores e criaturas das sombras que se ocultam sob a relva alta.</p><p><strong>Inspiração:</strong> Comunidades unidas, coragem simples e sabedoria popular.</p></div>` },
+                            { title: "Ashkar — Terras Queimadas", content: `<div class="text-sm"><p><strong>Ambiente:</strong> Rocha negra e cinzas eternas. Uma cicatriz no mundo, amaldiçoada pela rebelião.</p><p><strong>Perigos:</strong> Tempestades de cinzas, ruínas amaldiçoadas, criaturas corrompidas.</p><p><strong>Inspiração:</strong> Resistência, superação e vigilância.</p></div>` },
+                            { title: "Neveloth — Vales Enevoados", content: `<div class="text-sm"><p><strong>Ambiente:</strong> Montanhas e brumas. Aldeias isoladas e sinos distantes.</p><p><strong>Perigos:</strong> Vozes que atraem viajantes para perder-se na névoa.</p><p><strong>Inspiração:</strong> Mistério, silêncio e busca interior.</p></div>` },
+                            { title: "Metsudoth — Cidades‑Muralha", content: `<div class="text-sm"><p><strong>Ambiente:</strong> Fortalezas de pedra, guardiões militares e fronteiras protegidas.</p><p><strong>Perigos:</strong> Cercos prolongados, traições internas.</p><p><strong>Inspiração:</strong> Honra, defesa e estratégia.</p></div>` },
+                            { title: "Neharim — Mercados & Rios Largos", content: `<div class="text-sm"><p><strong>Ambiente:</strong> Comércio e política, ganância e intriga em meio à prosperidade.</p><p><strong>Perigos:</strong> Corrupção, intrigas políticas, contrabandistas.</p><p><strong>Inspiração:</strong> Negociação, astúcia e alianças improváveis.</p></div>` },
+                            { title: "Qadmiar — Deserto Antigo", content: `<div class="text-sm"><p><strong>Ambiente:</strong> Areias douradas e segredos milenares.</p><p><strong>Perigos:</strong> Tempestades de areia, miragens, criaturas ocultas.</p><p><strong>Inspiração:</strong> Perseverança, sabedoria e descoberta.</p></div>` },
+                            { title: "Yam Talorah — Mar da Canção", content: `<div class="text-sm"><p><strong>Ambiente:</strong> Oceanos profundos, melodias místicas vindas das águas.</p><p><strong>Perigos:</strong> Tempestades súbitas, melodias sedutoras.</p><p><strong>Inspiração:</strong> Liberdade, exploração e mistério.</p></div>` },
+                            { title: "Gan-Eved — Jardim Perdido", content: `<div class="text-sm"><p><strong>Ambiente:</strong> Florestas exuberantes, criaturas raras e frutos cintilantes.</p><p><strong>Perigos:</strong> Criaturas raras e territoriais, caminhos mutantes.</p><p><strong>Inspiração:</strong> Beleza, proteção e conexão com a criação.</p></div>` },
+                        ])}
+                    </div>
+                `
+              },
+               {
+                key: "forcas",
+                title: "Forças & Ordens",
+                summary: "As facções em conflito e as Ordens Livres que resistem à Escuridão.",
+                content: () => `
+                    <div class="space-y-4">
+                        <h4>Forças em Conflito</h4>
+                        ${renderAccordion([
+                           { title: "Elyon, o Grande Rei", subtitle: "Restaurar o mundo e reunir os fiéis.", content: "Criador e soberano de Netzeroth. Seu chamado inspira coragem e propósito." },
+                           { title: "O Usurpador", subtitle: "Corromper a criação e reinar nas sombras.", content: "Antigo guardião da corte, agora senhor da Escuridão Velada. Usa mentiras, medo e poder sombrio." },
+                           { title: "As Ordens Livres", subtitle: "Defender regiões e manter tradições.", content: "Irmandades, cidades e reinos que resistem à corrupção. Usam diplomacia, resistência militar e alianças." },
+                           { title: "As Sombras", subtitle: "Servir ao Usurpador e espalhar corrupção.", content: "Criaturas deformadas e homens que escolheram o caminho do poder sombrio." },
+                        ])}
+                        
+                        <h4 class="!mt-6">As Ordens Livres</h4>
+                        <p>As Ordens Livres são comunidades, irmandades e reinos que resistem à Escuridão Velada. Cada uma possui tradições, liderança e cultura próprias.</p>
+                        ${renderAccordion([
+                            { title: "Irmandade de Lumenar (Haravoth)", content: "<strong>Especialidade:</strong> Conhecimento, persuasão e arte.<br><strong>Missão Típica:</strong> Recuperar um manuscrito roubado." },
+                            { title: "Ordem do Escudo de Pedra (Metsudoth)", content: "<strong>Especialidade:</strong> Defesa e liderança militar.<br><strong>Missão Típica:</strong> Escolta de um dignitário até uma cidade sitiada." },
+                            { title: "Conclave dos Navegantes (Yam Talorah)", content: "<strong>Especialidade:</strong> Navegação, exploração, espionagem marítima.<br><strong>Missão Típica:</strong> Mapear uma rota secreta entre ilhas." },
+                            { title: "Fraternidade de Neharim (Neharim)", content: "<strong>Especialidade:</strong> Comércio, diplomacia, influência política.<br><strong>Missão Típica:</strong> Negociar a paz entre duas casas rivais." },
+                            { title: "Vigias de Qadmiar (Qadmiar)", content: "<strong>Especialidade:</strong> Conhecimento, exploração, sobrevivência no deserto.<br><strong>Missão Típica:</strong> Investigar uma caravana desaparecida." },
+                        ])}
+                        <h4 class="!mt-6">Favores de Ordem</h4>
+                        <p>A relação com as Ordens Livres pode ser medida numa trilha de 3 degraus. O nível de favor sobe ao cumprir missões e agir de acordo com os valores da Ordem, e desce com falhas ou traições.</p>
+                        ${renderTable(
+                            ["Nível", "Benefícios"],
+                            [
+                                ["Aliado", "Acesso básico: pousada segura, notícias. 1x/sessão, +2 em um teste ligado ao domínio da Ordem."],
+                                ["Confidente", "Acesso a recursos ou contatos internos. 1x/sessão, pode converter uma falha simples em sucesso com custo."],
+                                ["Emissário", "Reconhecimento oficial. 1x/sessão, pode pedir o apoio de um pequeno grupo aliado ou um perdão social viável."]
+                            ]
+                        )}
+                    </div>
+                `
+            },
+            {
+                key: "mecanicas",
+                title: "Mecânicas de Jogo",
+                summary: "Regras de testes, combate, viagem, evolução e recursos.",
+                content: () => `
+                    <div class="space-y-4">
+                     ${renderAccordion([
+                        { title: "Sistema de Regras (Testes e DF)", content: () => `
+                            <p><strong>Fórmula Básica:</strong> 1d20 + Modificador de Atributo + Bônus de Skill ≥ DF (Dificuldade).</p>
+                            ${renderTable(
+                                ["DF", "Tipo", "Exemplo"],
+                                [
+                                    ["5", "Muito fácil", "Abrir uma porta destrancada"],
+                                    ["10", "Fácil/Média", "Subir uma colina"],
+                                    ["15", "Difícil", "Resolver enigma complexo"],
+                                    ["20", "Muito difícil", "Resistir a um veneno forte"],
+                                    ["25", "Épico", "Derrubar um golem"],
+                                    ["30", "Lendário", "Proezas míticas"]
+                                ]
+                            )}
+                            <h4 class="!mt-6">Os Dados</h4>
+                            <p>Em Netzeroth, diferentes dados são usados para diferentes propósitos:</p>
+                            <ul>
+                                <li><strong>d20:</strong> O dado principal, usado para todos os testes de ação, como ataques, esquivas e testes de skill.</li>
+                                <li><strong>d12, d10, d8, d6:</strong> Usados principalmente para calcular o dano de armas e o efeito de algumas habilidades.</li>
+                                <li><strong>d4:</strong> Geralmente usado para danos de armas menores ou para calcular a recuperação de recursos, como Pontos de Energia em um descanso curto.</li>
+                            </ul>
+                            <h4 class="!mt-6">Vantagem e Desvantagem</h4>
+                            <p>Para criar momentos mais dramáticos, o Mestre pode conceder Vantagem ou Desvantagem em um teste.</p>
+                            <ul>
+                                <li><strong>Vantagem:</strong> Role 2d20 e use o maior resultado.</li>
+                                <li><strong>Desvantagem:</strong> Role 2d20 e use o menor resultado.</li>
+                            </ul>`
+                        },
+                        { title: "Combate", content: () => `
+                            <p><strong>Iniciativa:</strong> 1d20 + AGI.</p>
+                            <p><strong>Ações por Turno:</strong> 1 Ação Principal, 1 Movimento, e talvez 1 Ação Bônus.</p>
+                            <p><strong>Ataques:</strong> 1d20 + modificador de ataque ≥ Defesa (DEF) do alvo. <strong>Crítico (20 natural):</strong> Dobre os dados de dano.</p>
+                            <p><strong>Defesa (DEF):</strong> 10 + Modificador de AGI + Bônus de Armadura + Bônus de Escudo.</p>`
+                        },
+                         { title: "Viagem e Exploração", content: () =>`
+                             <p>Viajar em Netzeroth é parte viva da narrativa, com escolhas estratégicas e riscos. As jornadas são organizadas em ritmo, eventos e logística.</p>
+                             <h4 class="!mt-4">Ritmo de Viagem</h4>
+                             <p>Antes de uma jornada, o grupo decide o ritmo. Esta escolha afeta encontros, percepção e segurança.</p>
+                             <ul>
+                                <li><strong>Lento:</strong> O grupo avança com cuidado, examinando pistas. Ganha +1 teste útil (Ex: Percepção) e -1 evento hostil no trecho.</li>
+                                <li><strong>Normal:</strong> Sem modificadores. Ritmo equilibrado entre cautela e progresso.</li>
+                                <li><strong>Rápido:</strong> Avanço apressado, ignorando detalhes. Sofre +1 evento hostil e –2 em testes de Percepção.</li>
+                             </ul>
+                              <h4 class="!mt-4">Cheque de Jornada</h4>
+                             <p>Cada trecho percorrido exige um Cheque de Jornada. O Mestre determina o que acontece no caminho, considerando:</p>
+                             <ul>
+                                 <li><strong>Evento Regional:</strong> Pode ser hostil (emboscada), neutro (encontro social) ou benéfico (atalho).</li>
+                                 <li><strong>Condição de Clima:</strong> Tempestades, neblina ou calor extremo podem afetar testes e consumir mais suprimentos.</li>
+                                 <li><strong>Ajuste de Dificuldade (DF):</strong> Regiões mais corrompidas aumentam a DF dos testes.</li>
+                             </ul>
+                             <h4 class="!mt-4">Acampamento</h4>
+                             <p>Ao final de um dia, um jogador realiza um <strong>teste de Sobrevivência</strong> para montar acampamento.</p>
+                             <ul>
+                                <li><strong>Sucesso:</strong> O grupo descansa e recupera recursos normalmente.</li>
+                                <li><strong>Falha:</strong> O grupo sofre penalidades, como gasto adicional de Pontos de Energia (PE), recuperação parcial de Pontos de Vida (PV), ou a ativação de uma complicação (ataque noturno, perda de suprimentos).</li>
+                             </ul>
+                             <h4 class="!mt-4">Logística da Jornada</h4>
+                             <ul>
+                                <li><strong>Suprimentos:</strong> Cada dia de viagem consome 1 uso de suprimentos por personagem.</li>
+                                 <li><strong>Carga:</strong> O excesso de peso pode causar penalidades (veja a aba de Equipamentos).</li>
+                                 <li><strong>Exaustão:</strong> Falhas repetidas em testes de acampamento ou ignorar descansos pode gerar níveis de Exaustão, com penalidades cumulativas.</li>
+                             </ul>
+                             <h4 class="!mt-4">Velocidade e Deslocamento</h4>
+                             <p>Sua velocidade determina o quão longe você pode se mover em combate (aproximadamente 6 segundos).</p>
+                             <ul>
+                                 <li><strong>Deslocamento Base:</strong> 9m + Modificador de Agilidade (AGI).</li>
+                                 <li><strong>Correr:</strong> Gaste sua Ação Principal para se mover novamente.</li>
+                                 <li><strong>Arrancada:</strong> Gaste uma Ação Bônus para se mover uma distância extra igual ao seu Vigor em metros. Custa 1d4 PE e exige um teste de Vigor (DF 12) para evitar Fadiga.</li>
+                                 <li><strong>Fatores que Afetam:</strong> Armadura, Carga (sobrepeso) e Terreno Difícil reduzem seu deslocamento.</li>
+                             </ul>
+                             `
+                         },
+                         { title: "Descanso e Recuperação", content: () => `
+                            <p>Descansar é essencial para recuperar fôlego físico e espiritual. Ambientes hostis podem reduzir os benefícios do descanso.</p>
+                            ${renderTable(
+                                ["Tipo", "Duração", "Efeito"],
+                                [
+                                    ["Curto", "10–15 minutos", "Recupera 1d4 + VIG em Pontos de Energia (PE). Gasta 1 uso de suprimentos."],
+                                    ["Longo", "Pernoite seguro", "Recupera todos os PE e metade dos Pontos de Vida (PV) máximos."],
+                                    ["Sagrado", "Local consagrado ou rito", "Funciona como um descanso longo, mas também permite escolher entre: <strong>remover 1 ponto de Corrupção</strong> ou <strong>curar +1d6 PV adicional</strong>."]
+                                ]
+                            )}`
+                         },
+                         { title: "Mini-Procedimentos de Exploração", content: () => `
+                            <p>Para manter o ritmo da exploração, use estes procedimentos rápidos.</p>
+                            ${renderAccordion([
+                                { title: "Varredura de Área", content: `Quando o grupo examina uma área em busca de pistas, armadilhas ou perigos, cada jogador declara um foco e faz um teste relevante (Percepção, Sobrevivência, etc.).<br>• <strong>2+ sucessos:</strong> O grupo ganha uma vantagem tática no próximo encontro (evita surpresa, encontra ponto de emboscada).<br>• <strong>0 sucessos:</strong> O Mestre aciona uma complicação ou um evento inesperado.`},
+                                { title: "Rastreio", content: `Para seguir rastros, um jogador faz um teste de Sobrevivência ou Percepção.<br>• <strong>Sucesso:</strong> Mantém a trilha.<br>• <strong>Falha:</strong> Perde a trilha e o Mestre pode introduzir um encontro não planejado.`},
+                                { title: "Acampamento Seguro", content: `Este é o teste de Sobrevivência realizado para montar acampamento. <br>• <strong>Sucesso:</strong> Permite um Descanso Longo normal.<br>• <strong>Falha:</strong> O descanso conta apenas como Curto ou gasta recursos extras.`}
+                            ])}`
+                         }
+                     ])}
+                    </div>`
+            },
+            {
+                key: "pontos",
+                title: "Indicadores & Pontos",
+                summary: "Detalhes sobre Pontos de Vida, Energia, Ação e Experiência.",
+                content: () => `
+                    <div class="space-y-4">
+                        ${renderAccordion([
+                            {
+                                title: "Pontos de Vida (PV / HP)",
+                                content: `Representam a resistência física. O total é calculado pela fórmula: <strong>VIG × 5</strong>. Ao chegar a 0 PV, o personagem não morre, mas cai inconsciente e fica "À Beira da Morte", precisando de testes de Vigor para estabilizar.`
+                            },
+                            {
+                                title: "Pontos de Energia / Espirituais (PE / EP)",
+                                content: `Medem o fôlego espiritual e a força de vontade, usados para ativar os Dons da Criação. O total é calculado por: <strong>(VIG + Modificador de SAB) × 2</strong>. São recuperados com descansos.`
+                            },
+                            {
+                                title: "Pontos de Ação (PA)",
+                                content: `Recurso raro que representa picos de heroísmo. São ganhos por feitos notáveis, não com descanso. Podem ser usados para: <strong>1)</strong> Realizar uma Ação Extra; <strong>2)</strong> Rolar um teste com Vantagem; ou <strong>3)</strong> Reduzir o dano de um ataque.`
+                            },
+                            {
+                                title: "Experiência (XP) e Marcos de Jornada",
+                                content: () => `
+                                    <p>O crescimento em Netzeroth é medido por feitos que mudam o mundo. O avanço ocorre através de <strong>Marcos de Jornada</strong>. Ao acumular 3 Marcos, todos os personagens sobem 1 nível.</p>
+                                    <p>Cada Marco de Jornada concede <strong>350 XP</strong> a cada personagem. O Mestre pode conceder XP bônus por desafios ou boa interpretação.</p>
+                                    ${renderTable(
+                                        ["Nível Atual", "XP para o Próximo Nível", "Total de XP Acumulado"],
+                                        [
+                                            ["1", "1.000", "0"],
+                                            ["2", "1.500", "1.000"],
+                                            ["3", "2.000", "2.500"],
+                                            ["4", "2.500", "4.500"],
+                                            ["5", "3.000", "7.000"],
+                                            ["6", "3.500", "10.000"],
+                                            ["7", "-", "13.500"]
+                                        ]
+                                    )}`
+                            }
+                        ])}
+                    </div>`
+            },
+            {
+                key: "bencaos",
+                title: "Bênçãos e o Selo",
+                summary: "O poder de Elyon: Dons divinos, Alinhamento e o Selo do Rei.",
+                content: () => `
+                    <div class="space-y-4">
+                        <h4>O Selo do Rei</h4>
+                        <p>Todos os personagens são Portadores do Selo do Rei, um vínculo espiritual com Elyon que se manifesta de forma única em cada indivíduo (marca na pele, objeto simbólico, luz nos olhos). Ele representa o propósito maior de cada personagem.</p>
+                        ${renderAccordion([
+                            { title: "Efeitos do Selo", content: `
+                                <ul>
+                                    <li><strong>Percepção de Corrupção e Bênção:</strong> O Portador sente a presença de forças espirituais. A intensidade e o alcance dependem do nível ou de eventos narrativos.</li>
+                                    <li><strong>Teste de Fé com Vantagem:</strong> Uma vez por sessão, o Portador pode rolar com Vantagem um teste de Fé.</li>
+                                    <li><strong>Reconhecimento e Reputação:</strong> Aliados de Elyon reconhecem o Portador como confiável, enquanto inimigos podem temê-lo ou atacá-lo.</li>
+                                </ul>`
+                            }
+                        ])}
+
+                        <h4 class="!mt-6">Alinhamento Espiritual</h4>
+                        <p>O alinhamento reflete como cada Portador do Selo responde ao Chamado de Elyon. É dinâmico e pode mudar com as escolhas do personagem.</p>
+                        ${renderAccordion([
+                            { title: "Fiel", content: "Caminha na luz com convicção, um exemplo de perseverança e integridade." },
+                            { title: "Curioso", content: "Busca compreender o Chamado de Elyon, aprendendo e explorando, ainda em crescimento." },
+                            { title: "Vacilante", content: "Sente o peso da tentação e da escuridão, oscilando entre escolhas corretas e fraquezas internas." },
+                            { title: "Tentado", content: "Enfronta constantes provações do Usurpador, frequentemente vulnerável às sombras." },
+                            { title: "Neófito", content: "Recém-regenerado, cheio de esperança, mas ainda imaturo e vulnerável." }
+                        ])}
+
+                        <h4 class="!mt-6">Bênçãos de Elyon</h4>
+                        <p>As bênçãos funcionam como recompensas especiais que não vêm de esforço próprio, mas como resposta a atos de fé e coragem.</p>
+                        ${renderTable(
+                            ["Bênção", "Efeito", "Duração / Uso"],
+                            [
+                                ["Luz do Caminho", "+2 em testes de Percepção e Sobrevivência", "1 sessão"],
+                                ["Escudo Invisível", "Reduz o dano de um ataque em 50%", "1 vez"],
+                                ["Coração Inabalável", "Imune a efeitos de medo e intimidação", "Até o amanhecer"],
+                                ["Voz de Autoridade", "Vantagem em um teste de Persuasão", "1 vez"],
+                                ["Mãos Restauradoras", "Cura instantânea de 1d8 + FÉ HP", "1 vez"],
+                                ["Passos da Graça", "Ignora terreno difícil ou obstáculos leves", "1 cena"],
+                                ["Olhar Celestial", "Vantagem em detectar criaturas ocultas ou armadilhas", "1 cena"],
+                                ["Ressonância de Esperança", "Aliados próximos recebem +1 em testes de FÉ ou coragem", "1 cena"],
+                                ["Chama de Elyon", "+1 dado extra de dano contra criaturas sombrias", "1 ataque"],
+                                ["Purificação da Alma", "Remove 1 ponto de Corrupção", "Uso imediato"],
+                                ["Proteção do Guardião", "+2 DF ou absorve 1 ataque de dano", "1 combate"],
+                                ["Palavra Inspiradora", "+2 em teste de Persuasão ou Inspiração", "1 cena"],
+                                ["Força da Fé", "+1 em teste de FOR ou VIG", "1 cena"],
+                                ["Bênção da Visão", "Revela pontos importantes no ambiente", "1 cena"],
+                                ["Escudo da Luz", "Absorve até 2 ataques de aliados próximos", "1 cena"]
+                            ]
+                        )}
+                    </div>`
+            },
+            {
+                key: "corrupcao",
+                title: "Corrupção",
+                summary: "O perigo da Escuridão: Itens Maculados e seus efeitos.",
+                content: () => `
+                    <div class="space-y-4">
+                        <h4>Itens Maculados: Poder com Preço</h4>
+                        <p>Itens maculados são artefatos corrompidos que oferecem vantagens significativas, mas cada uso acumula Corrupção no usuário. Cada uso deixa uma marca narrativa, como uma sombra sutil ou cheiro de fuligem.</p>
+                        ${renderAccordion([
+                            { title: "Lâmina de Cinzas", content: "<strong>Bônus:</strong> +1 dado extra de dano.<br><strong>Custo:</strong> +1 Corrupção por acerto." },
+                            { title: "Anel de Névoa", content: "<strong>Bônus:</strong> 1x/descanso, Vantagem em Furtividade por 1 cena.<br><strong>Custo:</strong> +1 Corrupção se usado egoisticamente." },
+                            { title: "Adaga do Lamento", content: "<strong>Bônus:</strong> +1 em ataques furtivos.<br><strong>Custo:</strong> +1 Corrupção por acerto." },
+                            { title: "Manto da Penumbra", content: "<strong>Bônus:</strong> Vantagem em Furtividade e Esquiva por 1 cena.<br><strong>Custo:</strong> +1 Corrupção se usado para malícia." },
+                            { title: "Cinto do Usurpador", content: "<strong>Bônus:</strong> +1 em testes de Intimidação.<br><strong>Custo:</strong> +1 Corrupção se usado em atos cruéis." },
+                            { title: "Elmo do Espectro", content: "<strong>Bônus:</strong> +2 DF contra ataques surpresa.<br><strong>Custo:</strong> +1 Corrupção por combate." },
+                            { title: "Anel da Ambição", content: "<strong>Bônus:</strong> 1x/descanso, +2 em Persuasão ou Enganação.<br><strong>Custo:</strong> +1 Corrupção se usado para manipulação." },
+                            { title: "Orbe da Sombra", content: "<strong>Bônus:</strong> 1x/descanso, esfera de escuridão 3m raio.<br><strong>Custo:</strong> +1 Corrupção por uso." }
+                        ])}
+                        
+                        <h4 class="!mt-6">Trilha de Corrupção</h4>
+                        <p>A Corrupção é medida em pontos, que provocam efeitos mecânicos e narrativos à medida que aumentam.</p>
+                         ${renderTable(
+                            ["Pontos", "Efeito", "Narrativa"],
+                            [
+                                ["0–1", "Mancha", "Efeitos puramente narrativos: frio interior, visões fugazes."],
+                                ["2–3", "Fenda", "–1 em testes sociais com fiéis; tentação constante."],
+                                ["4–5", "Sombra", "–2 contra efeitos de Medo da Luz; complicações espirituais."],
+                                ["6+", "Queda", "O Mestre pode impor escolhas morais ou falhas críticas."]
+                            ]
+                        )}
+                        <p class="mt-4">A Corrupção pode ser removida através de bênçãos, rituais, consumíveis sagrados (como o Óleo da Oliveira Vigia) ou arcos narrativos de redenção.</p>
+                    </div>`
+            },
+            {
+                key: "equip",
+                title: "Equipamentos",
+                summary: "Dinâmica do inventário, listas de itens e economia.",
+                content: () => `
+                    <div class="space-y-6 text-sm">
+                        ${renderAccordion([
+                             {
+                                title: "Dinâmica do Inventário",
+                                content: () => `
+                                    <p>Em suas viagens, você carregará armas, armaduras, ferramentas e provisões. Sua capacidade de carga é medida em "slots" para simplificar o gerenciamento.</p>
+                                    <ul>
+                                        <li><strong>Capacidade Total:</strong> ${highlight('5 × VIG', state.query)} slots.</li>
+                                        <li><strong>Itens Pesados (5 slots):</strong> Como escudos de torre ou armaduras pesadas.</li>
+                                        <li><strong>Itens Médios (3 slots):</strong> Como espadas, machados ou uma corda de 15m.</li>
+                                        <li><strong>Itens Leves (1 slot):</strong> Como um kit de ervas ou um odre de água.</li>
+                                        <li><strong>Miudezas (Agrupadas):</strong> Itens muito pequenos como frascos, mapas ou rações. A cada 5 miudezas, conta-se 1 slot completo.</li>
+                                        <li><strong>Sobrepeso:</strong> Para cada 5 slots acima do seu limite, você sofre uma penalidade de <strong>–2 em testes de AGI e Furtividade</strong>.</li>
+                                    </ul>
+                                `
+                            },
+                            {
+                                title: "Dracmas e Economia",
+                                content: () => `
+                                    <p>A moeda principal em Netzeroth são os <strong>Dracmas (Dr)</strong>, peças de prata cunhadas em Neharim. Cada personagem começa com 20 Dracmas, além de seu equipamento inicial.</p>
+                                    ${renderTable(
+                                        ["Item Comum", "Custo"],
+                                        [
+                                            ["Ração seca (1 dia)", "5 Dr"],
+                                            ["Odre de água", "2 Dr"],
+                                            ["Tocha", "1 Dr"],
+                                            ["Corda (15m)", "10 Dr"],
+                                            ["Kit de ervas", "25 Dr"],
+                                            ["Poção de Vida", "50 Dr"],
+                                            ["Pederneira", "2 Dr"]
+                                        ]
+                                    )}
+                                `
+                            },
+                            { 
+                                title: "Armas", 
+                                content: () => renderAccordion([
+                                    { title: "Espada Longa de Elyon", content: "<strong>Tipo:</strong> Cortante (Médio)<br><strong>Dano:</strong> 1d8<br><strong>Atributo:</strong> FOR<br><strong>Descrição:</strong> Forjada com lâmina leve e resistente; permite ataques rápidos ou fortes." },
+                                    { title: "Machado de Guerra", content: "<strong>Tipo:</strong> Cortante (Médio)<br><strong>Dano:</strong> 1d10<br><strong>Atributo:</strong> FOR<br><strong>Descrição:</strong> Peso alto, ótimo para quebrar armaduras e barreiras." },
+                                    { title: "Lança da Vigília", content: "<strong>Tipo:</strong> Perfuração (Médio)<br><strong>Dano:</strong> 1d6<br><strong>Atributo:</strong> FOR / AGI<br><strong>Descrição:</strong> Pode ser arremessada ou usada em combate corpo a corpo." },
+                                    { title: "Cajado do Peregrino", content: "<strong>Tipo:</strong> Contundente (Médio)<br><strong>Dano:</strong> 1d6<br><strong>Atributo:</strong> AST / SAB<br><strong>Descrição:</strong> Versátil, pode canalizar Dons da Criação." },
+                                    { title: "Adaga de Rapina", content: "<strong>Tipo:</strong> Cortante (Miudeza)<br><strong>Dano:</strong> 1d4<br><strong>Atributo:</strong> AGI<br><strong>Descrição:</strong> Pequena e rápida; ideal para ataques furtivos." },
+                                    { title: "Arco de Haravoth", content: "<strong>Tipo:</strong> Perfuração (Médio)<br><strong>Dano:</strong> 1d6<br><strong>Atributo:</strong> AGI / AST<br><strong>Descrição:</strong> Construído com madeira viva; pode ter flechas encantadas." },
+                                    { title: "Besta de Neveloth", content: "<strong>Tipo:</strong> Perfuração (Médio)<br><strong>Dano:</strong> 1d8<br><strong>Atributo:</strong> AST<br><strong>Descrição:</strong> Disparo potente, ideal para muralhas." },
+                                    { title: "Dardo de Qadmiar", content: "<strong>Tipo:</strong> Perfuração (Miudeza)<br><strong>Dano:</strong> 1d4<br><strong>Atributo:</strong> AGI<br><strong>Descrição:</strong> Arremesso rápido, usado por nômades." },
+                                    { title: "Funda de Yam Talorah", content: "<strong>Tipo:</strong> Contundente (Miudeza)<br><strong>Dano:</strong> 1d4<br><strong>Atributo:</strong> AGI / AST<br><strong>Descrição:</strong> Útil contra criaturas pequenas ou para distrações." },
+                                    { title: "Lâmina de Luz de Elyon", content: "<strong>Tipo:</strong> Cortante (Especial)<br><strong>Dano:</strong> 1d10<br><strong>Atributo:</strong> FÉ / FOR<br><strong>Descrição:</strong> Brilho cega inimigos por 1 turno. Ativada pelo portador do Selo; mais eficaz contra Sombras." },
+                                    { title: "Arco das Vinhas", content: "<strong>Tipo:</strong> Perfuração (Especial)<br><strong>Dano:</strong> 1d6<br><strong>Atributo:</strong> AGI / SAB<br><strong>Descrição:</strong> Flechas podem prender ou desacelerar inimigos." },
+                                    { title: "Cajado do Som", content: "<strong>Tipo:</strong> Contundente (Especial)<br><strong>Dano:</strong> 1d6<br><strong>Atributo:</strong> SAB / AST<br><strong>Descrição:</strong> Ondas sonoras podem atordoar, empurrar inimigos ou alertar aliados." },
+                                ])
+                            },
+                            { title: "Equipamento Inicial por Classe", content: () => `
+                                ${renderAccordion([
+                                    { title: "Guardião", content: "Espada Longa ou Machado de Guerra, Cota de Malha, Escudo Redondo, mochila com 3 rações e 1 odre de água." },
+                                    { title: "Arauto", content: "Adaga, Arco de Haravoth com 20 flechas, Peitoral de Couro, mochila com mapa, tinta, pena e 2 rações." },
+                                    { title: "Curandeiro", content: "Cajado do Peregrino, Manto do Peregrino, mochila com Kit de Ervas, 3 rações e 2 odres de água." },
+                                    { title: "Caçador de Sombras", content: "Duas Adagas ou Arco, Peitoral de Couro, mochila com 15m de corda, uma capa e 2 rações." },
+                                    { title: "Místico", content: "Cajado do Peregrino, Manto do Peregrino, mochila com um símbolo sagrado, 2 tochas e 2 rações." },
+                                    { title: "Peregrino", content: "Lança da Vigília, Manto do Peregrino, mochila com mapa regional, pederneira, 4 rações e 1 odre de água." },
+                                ])}
+                                <p class="mt-4 text-xs italic text-gray-600 dark:text-gray-400"><strong>Observação:</strong> Além do kit do personagem, é permitido o acréscimo de 1 item a mais que tenha relação com sua lore.</p>
+                            `}
+                        ])}
+                    </div>`
+            },
+            {
+                key: "bestiario",
+                title: "Bestiário",
+                summary: "Um guia de criaturas de Netzeroth, de Sombras a seres Lendários.",
+                content: () => `
+                    <p>As criaturas de Netzeroth são mais do que inimigos; são ferramentas narrativas que refletem o estado do mundo.</p>
+                    ${renderAccordion([
+                        { title: "Criaturas das Sombras", content: () => renderAccordion([
+                            { title: "Sussurrantes", subtitle: "Ameaça: Média", content: "<strong>Descrição:</strong> Antigos viajantes que cederam à voz do Usurpador. Plantam dúvidas e medo.<br><strong>Atributos:</strong> FOR 8, AGI 10, VIG 9, AST 14, SAB 12, CAR 13, FÉ 5.<br><strong>HP:</strong> 45 | <strong>EP:</strong> 38<br><strong>Habilidades:</strong> Voz da Dúvida (força teste de FÉ DF 15), Sombras Furtivas (+2 em furtividade).<br><strong>Táticas:</strong> Infiltram-se e manipulam.<br><strong>Ganchos:</strong> Um Sussurrante se infiltra numa vila aliada." },
+                            { title: "Espadas Sombrias", subtitle: "Ameaça: Média-Alta", content: "<strong>Descrição:</strong> Guerreiros de elite do Usurpador.<br><strong>Atributos:</strong> FOR 16, AGI 13, VIG 15, AST 12, SAB 10, CAR 9, FÉ 4.<br><strong>HP:</strong> 75 | <strong>EP:</strong> 45<br><strong>Habilidades:</strong> Golpe Implacável (+2 de dano após mover), Resistência Sombria (-2 de dano de armas comuns).<br><strong>Táticas:</strong> Avançam em formação, focando o alvo mais perigoso.<br><strong>Ganchos:</strong> Um destacamento foi visto próximo a Metsudoth." },
+                            { title: "Filhos do Eclipse", subtitle: "Ameaça: Alta", content: "<strong>Descrição:</strong> Híbridos de humano e criatura mística, com asas e garras.<br><strong>Atributos:</strong> FOR 15, AGI 17, VIG 14, AST 15, SAB 12, CAR 10, FÉ 3.<br><strong>HP:</strong> 80 | <strong>EP:</strong> 50<br><strong>Habilidades:</strong> Investida Aérea (ataca e recua sem provocar ataque), Olhar da Escuridão (paralisa em área com teste de FÉ DF 18).<br><strong>Táticas:</strong> Atacam alvos isolados, priorizando curandeiros.<br><strong>Ganchos:</strong> Um Filho do Eclipse comanda uma fortaleza em Neveloth." },
+                            { title: "Guardiões Retorcidos", subtitle: "Ameaça: Alta", content: "<strong>Descrição:</strong> Antigos protetores de Netzeroth, agora deformados.<br><strong>Atributos:</strong> FOR 18, AGI 12, VIG 18, AST 9, SAB 8, CAR 6, FÉ 2.<br><strong>HP:</strong> 100 | <strong>EP:</strong> 55<br><strong>Habilidades:</strong> Golpe Demolidor (dano extra a barreiras), Aura de Medo (-1 em ataques de inimigos próximos).<br><strong>Táticas:</strong> Usados como força bruta para quebrar defesas.<br><strong>Ganchos:</strong> Um Guardião Retorcido vigia uma passagem secreta." },
+                        ])},
+                        { title: "Seres Mitológicos Hostis", content: () => renderAccordion([
+                             { title: "Serpentes do Vento", subtitle: "Ameaça: Média", content: "<strong>Descrição:</strong> Criaturas aéreas que se movem como rajadas de vento, usando ilusões.<br><strong>Atributos:</strong> FOR 12, AGI 18, VIG 14, AST 13, SAB 14, CAR 8, FÉ 5.<br><strong>HP:</strong> 70 | <strong>EP:</strong> 60<br><strong>Habilidades:</strong> Controle de Correntes (empurra/puxa alvos), Ilusão Óptica.<br><strong>Táticas:</strong> Atacam de surpresa usando o vento para isolar alvos.<br><strong>Ganchos:</strong> Colheitas destruídas por ventos anormais." },
+                             { title: "Cavaleiros de Cinza", subtitle: "Ameaça: Alta", content: "<strong>Descrição:</strong> Guerreiros espectrais em corcéis sombrios.<br><strong>Atributos:</strong> FOR 15, AGI 16, VIG 14, AST 12, SAB 10, CAR 9, FÉ 4.<br><strong>HP:</strong> 85 | <strong>EP:</strong> 50<br><strong>Habilidades:</strong> Investida Fantasmática (+1d8 de dano), Desaparecer na Névoa.<br><strong>Táticas:</strong> Atacam rápido e recuam.<br><strong>Ganchos:</strong> Patrulhas relatam encontros noturnos sem sobreviventes." },
+                             { title: "Golem da Escuridão", subtitle: "Ameaça: Muito Alta", content: "<strong>Descrição:</strong> Gigantes de pedra fundidos com energia sombria.<br><strong>Atributos:</strong> FOR 20, AGI 6, VIG 20, AST 8, SAB 8, CAR 3, FÉ 0.<br><strong>HP:</strong> 150 | <strong>EP:</strong> 0<br><strong>Habilidades:</strong> Imunidade Física (-5 de dano de ataques não-mágicos), Golpe Sísmico (derruba inimigos em área).<br><strong>Táticas:</strong> Lentos e destrutivos.<br><strong>Ganchos:</strong> Um golem vigia a entrada de uma tumba antiga." },
+                             { title: "Fantom Abissal", subtitle: "Ameaça: Muito Alta", content: "<strong>Descrição:</strong> Entidades semi-visíveis que passam através de paredes e atacam a mente.<br><strong>Atributos:</strong> FOR 8, AGI 14, VIG 10, AST 15, SAB 16, CAR 12, FÉ 3.<br><strong>HP:</strong> 55 | <strong>EP:</strong> 65<br><strong>Habilidades:</strong> Atravessar Matéria, Medo Profundo (paralisa com teste de FÉ DF 18).<br><strong>Táticas:</strong> Usam ataques psicológicos.<br><strong>Ganchos:</strong> Uma mina foi abandonada por causa de 'vozes do abismo'." },
+                        ])},
+                        { title: "Aliados e Neutros", content: () => renderAccordion([
+                            { title: "Luminares", content: "<strong>Descrição:</strong> Manifestações de luz da presença de Elyon. Não atacam.<br><strong>Atributos:</strong> FOR 10, AGI 12, VIG 14, AST 15, SAB 18, CAR 16, FÉ 20.<br><strong>HP:</strong> 60 | <strong>EP:</strong> 80<br><strong>Habilidades:</strong> Luz Purificadora (remove Corrupção), Passagem Segura (cria campo protetor)." },
+                            { title: "Guardas do Lago", content: "<strong>Descrição:</strong> Espíritos que guardam lagos sagrados. Atacam se provocados.<br><strong>Atributos:</strong> FOR 14, AGI 14, VIG 15, AST 12, SAB 16, CAR 13, FÉ 18.<br><strong>HP:</strong> 70 | <strong>EP:</strong> 60<br><strong>Habilidades:</strong> Controle da Água, Cura das Águas." },
+                             { title: "Seres da Névoa", content: "<strong>Descrição:</strong> Formas etéreas feitas de vapor, servem como mensageiros e vigias.<br><strong>Atributos:</strong> FOR 8, AGI 15, VIG 10, AST 14, SAB 15, CAR 11, FÉ 12.<br><strong>HP:</strong> 40 | <strong>EP:</strong> 50<br><strong>Habilidades:</strong> Desaparecer, Sussurros Distantes (transmite mensagens)." },
+                            { title: "Caravaneiros do Deserto", content: "<strong>Descrição:</strong> Nômades de Qadmiar que conhecem rotas secretas.<br><strong>Atributos:</strong> FOR 12, AGI 14, VIG 14, AST 13, SAB 15, CAR 14, FÉ 10.<br><strong>HP:</strong> 55 | <strong>EP:</strong> 40<br><strong>Habilidades:</strong> Rota Oculta (evita exaustão), Comércio Raro." },
+                             { title: "Espíritos da Canção", content: "<strong>Descrição:</strong> Entidades invisíveis cuja música enfraquece a corrupção.<br><strong>Atributos:</strong> FOR 6, AGI 12, VIG 10, AST 15, SAB 17, CAR 18, FÉ 20.<br><strong>HP:</strong> 35 | <strong>EP:</strong> 70<br><strong>Habilidades:</strong> Canção Purificadora (remove medo/paralisia), Harmonia Protetora (+1 em testes de FÉ)." },
+                             { title: "Guardião da Lua", content: "<strong>Descrição:</strong> Criatura felina gigante prateada que vigia caminhos sagrados.<br><strong>Atributos:</strong> FOR 16, AGI 17, VIG 15, AST 12, SAB 16, CAR 14, FÉ 18.<br><strong>HP:</strong> 90 | <strong>EP:</strong> 50<br><strong>Habilidades:</strong> Salto Lunar, Olhar Sereno (pacifica inimigos)." },
+                        ])},
+                        { title: "Flora Viva", content: () => renderAccordion([
+                            { title: "Oliveira Vigia (Protetora)", content: "<strong>Descrição:</strong> Oliveiras antigas que protegem locais sagrados.<br><strong>Atributos:</strong> FOR 14, AGI 4, VIG 18, AST 10, SAB 18, CAR 14, FÉ 16.<br><strong>Habilidades:</strong> Raízes Sagradas (aprisiona inimigos), Bênção do Azeite (cura e remove corrupção)." },
+                            { title: "Vinha Sussurrante (Hostil)", content: "<strong>Descrição:</strong> Plantas que atraem vítimas com sussurros para enredá-las.<br><strong>Atributos:</strong> FOR 14, AGI 8, VIG 15, AST 4, SAB 12, CAR 5, FÉ 0.<br><strong>Habilidades:</strong> Enredar, Dreno de Energia (causa dano por turno)." },
+                            { title: "Flor do Sol (Benigna)", content: "<strong>Descrição:</strong> Flores cujo pólen revigora e restaura Pontos de Energia.<br><strong>Atributos:</strong> FOR 2, AGI 0, VIG 6, AST 6, SAB 14, CAR 15, FÉ 12.<br><strong>Habilidades:</strong> Pólen Revigorante, Brilho Solar." },
+                            { title: "Relva Murmurante (Neutra)", content: "<strong>Descrição:</strong> Grama alta cujo som pode acalmar ou enlouquecer, dependendo da pureza do coração.<br><strong>Atributos:</strong> FOR 1, AGI 0, VIG 4, AST 5, SAB 12, CAR 8, FÉ 6.<br><strong>Habilidades:</strong> Murmúrio Calmante, Murmúrio Sombrio." },
+                            { title: "Carvalho da Memória (Protetor)", content: "<strong>Descrição:</strong> Árvores gigantes que armazenam lembranças do mundo em suas folhas.<br><strong>Atributos:</strong> FOR 18, AGI 4, VIG 20, AST 12, SAB 18, CAR 12, FÉ 14.<br><strong>Habilidades:</strong> Folha da Lembrança, Raízes Imutáveis." },
+                            { title: "Cipreste da Bruma (Protetor)", content: "<strong>Descrição:</strong> Árvores que geram uma neblina densa para proteger florestas sagradas.<br><strong>Atributos:</strong> FOR 14, AGI 0, VIG 16, AST 8, SAB 15, CAR 8, FÉ 10.<br><strong>Habilidades:</strong> Bruma Protetora (dá desvantagem a inimigos). " },
+                            { title: "Trepadeira Sombria (Hostil)", content: "<strong>Descrição:</strong> Planta que cresce em áreas corrompidas e enreda inimigos.<br><strong>Atributos:</strong> FOR 14, AGI 6, VIG 12, AST 4, SAB 8, CAR 4, FÉ 0.<br><strong>Habilidades:</strong> Enredar (prende até teste de FOR DF 14)." },
+                            { title: "Flor da Luz (Sagrada)", content: "<strong>Descrição:</strong> Flor que brilha intensamente, afastando escuridão.<br><strong>Atributos:</strong> FOR 1, AGI 0, VIG 4, AST 8, SAB 16, CAR 16, FÉ 18.<br><strong>Habilidades:</strong> Luz Sagrada (impede aproximação de Sombras)." },
+                        ])},
+                        { title: "Criaturas Lendárias", subtitle: "Ameaça: Épica/Apocalíptica", content: () => renderAccordion([
+                            { title: "Aelindor, o Guardião do Firmamento", content: "<strong>Descrição:</strong> Dragão de luz pura.<br><strong>Atributos:</strong> FOR 22, AGI 18, VIG 20, AST 16, SAB 20, CAR 18, FÉ 25.<br><strong>HP:</strong> 300 | <strong>EP:</strong> 200<br><strong>Habilidades:</strong> Chama Celestial (dano radiante), Asas do Horizonte (movimento rápido), Escudo das Estrelas (reduz dano)." },
+                            { title: "Sybryth, a Serpente de Cristal", content: "<strong>Descrição:</strong> Serpente colossal de escamas transparentes que vive em lagos sagrados.<br><strong>Atributos:</strong> FOR 20, AGI 16, VIG 18, AST 14, SAB 18, CAR 16, FÉ 20.<br><strong>HP:</strong> 250 | <strong>EP:</strong> 160<br><strong>Habilidades:</strong> Reflexo Hipnótico, Enrolar, Bênção das Águas." },
+                            { title: "Korim, o Leão das Tribos", content: "<strong>Descrição:</strong> Leão dourado gigantesco, símbolo de coragem.<br><strong>Atributos:</strong> FOR 24, AGI 18, VIG 22, AST 14, SAB 20, CAR 20, FÉ 25.<br><strong>HP:</strong> 320 | <strong>EP:</strong> 180<br><strong>Habilidades:</strong> Rugido de Elyon (remove medo e dá vantagem), Salto do Campeão." },
+                            { title: "Tzahar, o Gigante das Cinzas", content: "<strong>Descrição:</strong> Ser colossal de rocha e brasas.<br><strong>Atributos:</strong> FOR 28, AGI 10, VIG 26, AST 12, SAB 16, CAR 12, FÉ 14.<br><strong>HP:</strong> 400 | <strong>EP:</strong> 100<br><strong>Habilidades:</strong> Erupção Viva (explosão de lava), Punho Sísmico." },
+                            { title: "Azrath, o Arauto da Tempestade", content: "<strong>Descrição:</strong> Entidade com corpo humanoide de nuvem e relâmpagos.<br><strong>Atributos:</strong> FOR 18, AGI 24, VIG 20, AST 16, SAB 18, CAR 18, FÉ 16.<br><strong>HP:</strong> 260 | <strong>EP:</strong> 200<br><strong>Habilidades:</strong> Raio Supremo, Voo Tempestuoso." },
+                            { title: "Melodith, a Guardiã da Canção Eterna", content: "<strong>Descrição:</strong> Ser etéreo que altera a realidade com canções.<br><strong>Atributos:</strong> FOR 8, AGI 14, VIG 14, AST 20, SAB 24, CAR 26, FÉ 28.<br><strong>HP:</strong> 180 | <strong>EP:</strong> 300<br><strong>Habilidades:</strong> Harmonia Absoluta (remove efeitos negativos), Cântico da Vitória (dá vantagem a aliados)." },
+                             { title: "Tharvok, o Devorador de Reinos", content: "<strong>Descrição:</strong> Monstro colossal de origem incerta.<br><strong>Atributos:</strong> FOR 30, AGI 14, VIG 30, AST 18, SAB 16, CAR 14, FÉ 0.<br><strong>HP:</strong> 500 | <strong>EP:</strong> 150<br><strong>Habilidades:</strong> Engolir Mundo (destrói estruturas), Aura da Ruína (dano em área por turno)." },
+                        ])},
+                    ])}`
+            },
+            {
+                key: "mestre",
+                title: "Guia do Mestre",
+                summary: "Ferramentas, guias e dicas para narrar aventuras épicas e espirituais em Netzeroth.",
+                content: () => `
+                    ${renderAccordion([
+                        { 
+                            title: "A Jornada do Mestre: Narrando em Netzeroth", 
+                            content: () => `
+                                <p>Como Mestre de Jogo (MJ), você é a voz do mundo, o árbitro das regras e o guardião da história. Seu objetivo é criar desafios justos, interessantes e que testem não apenas a força dos personagens, mas também sua fé e suas escolhas morais.</p>
+                                <p>Lembre-se: a vitória em Netzeroth nem sempre é derrotar um inimigo; muitas vezes, é manter a esperança acesa. Os tons narrativos que guiam o jogo são:</p>
+                                <ul>
+                                    <li><strong>Épico:</strong> Guerras, pactos antigos e criaturas lendárias.</li>
+                                    <li><strong>Espiritual:</strong> Provas de fé, combate contra a corrupção e milagres.</li>
+                                    <li><strong>Heroico:</strong> Personagens comuns realizando feitos impossíveis.</li>
+                                    <li><strong>Exploratório:</strong> Descoberta de locais sagrados e segredos antigos.</li>
+                                </ul>` 
+                        },
+                        { 
+                            title: "Construindo Aventuras e Campanhas", 
+                            content: () => `
+                                <h4>Tipos de Campanha</h4>
+                                <p>Pense no escopo da sua história para definir sua duração:</p>
+                                <ul>
+                                    <li><strong>Crônicas Curtas (3–5 sessões):</strong> Foco em um objetivo claro, como proteger uma vila ou recuperar um artefato. Ideal para iniciantes.</li>
+                                    <li><strong>Arcos Médios (8–12 sessões):</strong> Permitem desenvolver personagens, intrigas e antagonistas recorrentes.</li>
+                                    <li><strong>Saga Épica (12+ sessões):</strong> Histórias de longo prazo, com um enredo central forte, como deter o avanço completo do Usurpador.</li>
+                                </ul>
+                                <h4>Estrutura Narrativa de 3 Atos</h4>
+                                <p>Para manter a coesão, uma campanha pode ser dividida em atos:</p>
+                                <ul>
+                                    <li><strong>Ato I – O Chamado:</strong> Apresenta o mundo, os personagens e o conflito inicial.</li>
+                                    <li><strong>Ato II – O Conflito:</strong> Intensifica os desafios, revela traições e cria escolhas morais difíceis.</li>
+                                    <li><strong>Ato III – O Clímax e a Restauração:</strong> O grupo enfrenta o maior perigo, e suas decisões finais determinam o destino da história.</li>
+                                </ul>
+                                <h4>Conexão Entre Missões</h4>
+                                <p>Uma campanha envolvente liga cada missão a um propósito maior:</p>
+                                <ul>
+                                    <li><strong>Fio Condutor:</strong> Um artefato, profecia ou vilão recorrente guia os eventos.</li>
+                                    <li><strong>Consequências Visíveis:</strong> O resultado de uma missão afeta o mundo (uma cidade protegida prospera; uma vila ignorada cai nas sombras).</li>
+                                    <li><strong>Evolução dos Personagens:</strong> As experiências moldam os heróis, seus relacionamentos e sua fé.</li>
+                                </ul>`
+                        },
+                        {
+                            title: "Estruturando Cenas",
+                            content: () => `
+                                <p>Uma cena é um recorte de tempo e espaço da história, com um conflito ou situação a ser resolvida. Elas são o pulso narrativo do jogo, mantendo a mesa engajada.</p>
+                                <h4>Tipos de Cena</h4>
+                                <ul>
+                                    <li><strong>Exploração:</strong> O grupo interage com o ambiente (investigar ruínas, atravessar um pântano). Foco em testes de Percepção, Sobrevivência e Astúcia.</li>
+                                    <li><strong>Social:</strong> O foco são diálogos e relacionamentos (convencer um ancião, interrogar um prisioneiro). Foco em roleplay e testes de Carisma e Sabedoria.</li>
+                                    <li><strong>Conflito:</strong> O ritmo acelera (combate, fuga, duelo de vontades). Foco em ação e rolagens de combate ou resistência.</li>
+                                </ul>
+                                <h4>Estrutura Básica de uma Cena</h4>
+                                <ol>
+                                    <li><strong>Abertura:</strong> O Mestre define o quadro (onde estão, quem está presente, qual a situação).</li>
+                                    <li><strong>Desenvolvimento:</strong> Os jogadores agem e o Mestre reage, pedindo testes e narrando os resultados.</li>
+                                    <li><strong>Clímax:</strong> O ponto alto da cena, onde a situação é resolvida, para o bem ou para o mal.</li>
+                                    <li><strong>Fecho:</strong> A cena termina com uma mudança de lugar, tempo ou foco, criando uma transição para a próxima.</li>
+                                </ol>`
+                        },
+                         { 
+                             title: "Criando Desafios Memoráveis", 
+                             content: () => `
+                                <p>Em Netzeroth, cada desafio deve ter um sentido narrativo, seja para avançar a história, revelar algo sobre o mundo ou testar um aspecto importante dos personagens.</p>
+                                <h4>Os 3 Eixos de Desafio</h4>
+                                <p>Alterne entre os três tipos para manter o jogo dinâmico e interessante:</p>
+                                <ul>
+                                    <li><strong>Físico:</strong> Combates, armadilhas, perseguições, sobrevivência em ambientes hostis.</li>
+                                    <li><strong>Social:</strong> Diplomacia, intriga, negociações, discursos para inspirar ou enganar.</li>
+                                    <li><strong>Espiritual:</strong> Resistir à corrupção, manter a fé diante do medo, interpretar sinais de Elyon, escolher entre vingança e misericórdia.</li>
+                                </ul>
+                                <h4>Inimigos Memoráveis</h4>
+                                <p>Um inimigo não é só um bloco de estatísticas. Dê a ele um traço marcante (aparência, voz, gesto), conecte-o à história e dê-lhe um objetivo claro. Grandes vilões devem ser escalados: introduza-os sutilmente, crie conflitos parciais e guarde o confronto final para o clímax.</p>
+                                <h4>Balanceamento Rápido de Combate</h4>
+                                <ul>
+                                    <li><strong>Ameaça Baixa:</strong> HP total dos inimigos = metade do HP total dos jogadores.</li>
+                                    <li><strong>Ameaça Média:</strong> HP total dos inimigos = HP total dos jogadores.</li>
+                                    <li><strong>Ameaça Alta:</strong> HP total dos inimigos = 1.5x o HP total dos jogadores.</li>
+                                </ul>`
+                         },
+                         {
+                            title: "Ferramenta: Relógios de Tensão e Corrupção",
+                            content: () => `
+                                <p>Para tornar a progressão de ameaças e da Corrupção mais visível e dramática, use relógios de tensão. Um relógio é um círculo dividido em segmentos (4, 6 ou 8). Cada vez que os jogadores falham, demoram ou um evento negativo ocorre, o Mestre preenche um segmento. Quando o relógio se completa, a consequência acontece.</p>
+                                <ul>
+                                    <li><strong>Relógio de Cena (4–6 segmentos):</strong> Mede pressão imediata. Ex: Guardas se aproximando, um ritual sombrio sendo completado. Quando completo, a ameaça chega ou a oportunidade se perde.</li>
+                                    <li><strong>Relógio Regional (6–8 segmentos):</strong> Mede a presença da Corrupção numa região. Cada segmento preenchido pode aumentar a força dos inimigos, espalhar doenças ou introduzir penalidades. Ações heroicas dos jogadores podem remover segmentos deste relógio.</li>
+                                </ul>
+                                <p>Esta ferramenta cria uma representação visual da tensão, tornando as escolhas dos jogadores mais impactantes e urgentes.</p>`
+                         },
+                         {
+                             title: "Recompensas e Consequências",
+                             content: () => `
+                                <p>A maior recompensa em Netzeroth é o impacto que as escolhas dos jogadores têm no mundo. Recompensas devem ter propósito e refletir os temas do jogo.</p>
+                                <h4>Tipos de Recompensa</h4>
+                                <ul>
+                                    <li><strong>Materiais:</strong> Itens, armas, ouro. Úteis para suprir necessidades imediatas.</li>
+                                    <li><strong>Narrativas:</strong> Acesso a regiões, informações secretas, contatos influentes. Abrem novas possibilidades na trama.</li>
+                                    <li><strong>Espirituais:</strong> Bênçãos, milagres, visões ou aumento de Fé. Fortalecem o vínculo dos heróis com Elyon. (Veja a aba 'Bênçãos e o Selo').</li>
+                                    <li><strong>Sociais:</strong> Reputação, títulos, alianças com as Ordens Livres. Aumentam a influência política. (Veja a aba 'Forças & Ordens').</li>
+                                </ul>
+                                <p>Da mesma forma, as consequências de uma falha devem ir além da perda de HP. Uma falha pode resultar na perda de um aliado, no avanço da Corrupção em uma região (preenchendo um Relógio Regional) ou na quebra de confiança com uma Ordem Livre.</p>`
+                         },
+                        { title: "NPCs Universais", content: () => renderAccordion([
+                            { title: "Elonir, o Velho Sábio-Profeta", content: "Fala por parábolas e pode revelar visões ou profecias." },
+                            { title: "Mira, a Viajante das Estradas", content: "Mensageira que sempre traz notícias frescas e ganchos de aventura." },
+                            { title: "Drako, o Ferreiro", content: "Pode consertar armas e forjar itens simples no meio da jornada." },
+                            { title: "Seliah, a Curandeira Nômade", content: "Oferece cura básica, mas sempre pede algo em troca." },
+                            { title: "Kael, o Errante Redimido", content: "Ex-guerreiro buscando redenção. Pode ser um aliado poderoso ou um dilema moral." },
+                            { title: "Ruthiel, a Cantora Itinerante", content: "Guardiã de histórias antigas, pode inspirar o grupo com seu canto." },
+                            { title: "Alon, o Louco das Praças", content: "Suas palavras desconexas podem esconder profecias reais." },
+                        ])},
+                        { title: "Ferramentas Rápidas de Improviso", content: () =>`
+                            <p>Use tabelas para gerar eventos, boatos e complicações rapidamente, mantendo o jogo fluido e surpreendente.</p>
+                            ${renderTable(
+                                ["1d6 (Complicação)", "Evento"],
+                                [
+                                    ["1", "Um aliado ou NPC importante é ferido ou capturado."],
+                                    ["2", "O terreno desmorona ou se torna instável."],
+                                    ["3", "O clima muda drasticamente em minutos."],
+                                    ["4", "Um inimigo recebe reforços imprevistos."],
+                                    ["5", "Um objeto essencial se perde ou quebra."],
+                                    ["6", "Um mal-entendido cria hostilidade imediata."]
+                                ]
+                            )}
+                            <h4 class="!mt-6">Tabela de Boatos e Rumores (1d8)</h4>
+                            ${renderTable(
+                                ["1d8", "Rumor"],
+                                [
+                                    ["1", "“O Usurpador ergueu um forte nas Terras Queimadas.”"],
+                                    ["2", "“Um artefato de luz foi visto em um leilão secreto em Neharim.”"],
+                                    ["3", "“A Irmandade de Lumenar procura heróis para uma missão de resgate.”"],
+                                    ["4", "“Criaturas estranhas rondam as margens do Mar da Canção.”"],
+                                    ["5", "“Um Guardião de Elyon desapareceu na fronteira de Metsudoth.”"],
+                                    ["6", "“O deserto de Qadmiar revelou uma cidade soterrada.”"],
+                                    ["7", "“Um comerciante jura ter visto o Jardim Perdido.”"],
+                                    ["8", "“As Sombras se infiltraram em uma das Ordens Livres.”"]
+                                ]
+                            )}
+                            <h4 class="!mt-6">Tabela de Eventos Aleatórios em Haravoth (1d6)</h4>
+                            ${renderTable(
+                                ["1d6", "Evento"],
+                                [
+                                    ["1", "Uma caravana nômade pede escolta em troca de suprimentos."],
+                                    ["2", "Uma manada de animais assustados atravessa a trilha, forçando testes de Agilidade."],
+                                    ["3", "Uma Vinha Sussurrante tenta enganar os viajantes com vozes familiares."],
+                                    ["4", "Uma aldeia prepara uma festa tradicional e convida o grupo a participar."],
+                                    ["5", "Um mensageiro ferido da Ordem do Escudo de Pedra carrega um selo real."],
+                                    ["6", "Um artefato de uma antiga batalha é revelado após uma forte chuva."]]
+                            )}`
+                        }
+                    ])}`
+            },
+            {
+                key: "aventura",
+                title: "Aventura Inicial",
+                summary: "Uma aventura pronta para jogar: 'As Cinzas de Haravoth'.",
+                content: () => `
+                    <div class="space-y-4">
+                        <h4>As Cinzas de Haravoth</h4>
+                        <p><strong>Duração:</strong> 1-2 sessões | <strong>Local:</strong> Haravoth</p>
+                        <p><strong>Resumo:</strong> A vila de Nivrel está ameaçada por Criaturas das Cinzas e um cavaleiro caído que tomou a vinícola local. Os heróis devem investigar, unir os aldeões e confrontar o cavaleiro, decidindo entre a redenção e a destruição.</p>
+                        ${renderAccordion([
+                            { title: "Ato I: Nivrel em Alvoroço", content: "Cena social onde os heróis devem usar Persuasão (DF 12-14) para unir os aldeões apavorados." },
+                            { title: "Ato II: Caminho pelas Cinzas", content: "Eventos de viagem, incluindo uma tempestade de cinzas (teste de VIG DF 13) e o resgate de uma criança desaparecida." },
+                            { title: "Ato III: Criaturas das Cinzas", content: "Combate contra 3-4 ex-camponeses corrompidos (HP 12, CA 12) que liberam fumaça venenosa ao morrer." },
+                            { title: "Ato IV: O Cavaleiro Cinzento", content: "Confronto com Sir Kaelen (HP 30, CA 15), um ex-guardião corrompido. Pode ser derrotado em combate ou redimido com um teste de CAR + FÉ (DF 16)." },
+                            { title: "Ato V: Desfecho", content: "As ações dos jogadores afetam o 'Relógio da Corrupção' da região. A recompensa é 1 Marco de Jornada e a aliança com a Irmandade de Lumenar." }
+                        ])}
+                    </div>`
+            }
+            ];
+
+            // --- ELEMENTOS DO DOM ---
+            const bodyEl = document.body;
+            const searchInput = document.getElementById('search-input');
+            const themeToggle = document.getElementById('theme-toggle');
+            const sidebarNav = document.getElementById('sidebar-nav');
+            const tabsContainer = document.getElementById('tabs-container');
+            const contentArticle = document.getElementById('content-article');
+
+            // --- FUNÇÕES DE RENDERIZAÇÃO ---
+            function renderContent(section) {
+                const finalHtml = `
+                  <h2 class="!mb-1">${highlight(section.title, state.query)}</h2>
+                  <p class="!mt-0 text-sm text-gray-700 dark:text-gray-400">${highlight(section.summary, state.query)}</p>
+                  <div class="mt-4">${section.content()}</div>
+                `;
+                contentArticle.innerHTML = finalHtml;
+            }
+
+            function renderSidebar() {
+                const q = state.query.toLowerCase();
+                const filtered = !q ? sections : sections
+                    .map(s => ({...s, score: (s.title.toLowerCase().includes(q) ? 3 : 0) + (s.summary.toLowerCase().includes(q) ? 1 : 0)}))
+                    .filter(s => s.score > 0)
+                    .sort((a,b) => b.score - a.score);
+
+                sidebarNav.innerHTML = filtered.map(s => {
+                    const isActive = state.activeKey === s.key;
+                    
+                    const buttonClasses = isActive
+                        ? 'bg-indigo-600 dark:bg-indigo-500'
+                        : 'hover:bg-gray-100 dark:hover:bg-gray-800';
+
+                    const titleClasses = isActive
+                        ? 'font-semibold text-white'
+                        : 'font-medium text-gray-900 dark:text-gray-100';
+
+                    const summaryClasses = isActive
+                        ? 'text-xs mt-1 text-indigo-200 dark:text-indigo-200'
+                        : 'text-xs mt-1 text-gray-700 dark:text-gray-400';
+
+                    return `
+                        <li>
+                            <button
+                                data-key="${s.key}"
+                                class="w-full text-left px-3 py-3 text-sm nav-button ${buttonClasses}"
+                            >
+                                <div class="${titleClasses}">${highlight(s.title, state.query)}</div>
+                                <div class="${summaryClasses}">${highlight(s.summary, state.query)}</div>
+                            </button>
+                        </li>
+                    `;
+                }).join('');
+            }
+            
+            function renderTabs() {
+                tabsContainer.innerHTML = sections.map(s => `
+                    <button
+                        data-key="${s.key}"
+                        class="px-3 py-1.5 text-sm rounded-full border nav-button ${state.activeKey === s.key ? 'border-transparent bg-indigo-600 text-white dark:bg-indigo-500 dark:text-white' : 'border-gray-400 dark:border-gray-600 text-gray-800 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'}"
+                        title="${s.summary}"
+                    >
+                        ${s.title}
+                    </button>
+                `).join('');
+            }
+
+            function updateUI() {
+                // Lógica de troca de tema APRIMORADA para ser mais direta e robusta
+                if (state.isDark) {
+                    document.documentElement.classList.add('dark');
+                    bodyEl.className = 'font-sans bg-gray-950 text-gray-200';
+                } else {
+                    document.documentElement.classList.remove('dark');
+                    bodyEl.className = 'font-sans bg-gray-50 text-gray-800';
+                }
+                
+                themeToggle.innerHTML = state.isDark ? '☀️' : '🌙';
+                themeToggle.title = state.isDark ? 'Modo claro' : 'Modo escuro';
+
+                renderSidebar();
+                renderTabs();
+                const currentSection = sections.find(s => s.key === state.activeKey) || sections[0];
+                renderContent(currentSection);
+            }
+
+            // --- MANIPULADORES DE EVENTOS ---
+            function handleNavClick(e) {
+                const button = e.target.closest('.nav-button');
+                if (button && button.dataset.key) {
+                    setState({ activeKey: button.dataset.key });
+                }
+            }
+
+            function handleAccordionToggle(e) {
+                const button = e.target.closest('.accordion-toggle');
+                if (!button) return;
+
+                const content = button.nextElementSibling;
+                const icon = button.querySelector('.accordion-icon');
+                const isExpanded = button.getAttribute('aria-expanded') === 'true';
+
+                button.setAttribute('aria-expanded', !isExpanded);
+                content.classList.toggle('hidden');
+                icon.textContent = isExpanded ? '+' : '−';
+            }
+            
+            // --- INICIALIZAÇÃO ---
+            function loadState() {
+                try {
+                    const storedTab = localStorage.getItem('netzeroth_tab');
+                    const storedTheme = localStorage.getItem('netzeroth_theme');
+                    state.activeKey = storedTab ? JSON.parse(storedTab) : sections[0].key;
+                    state.isDark = storedTheme ? JSON.parse(storedTheme) : true;
+                } catch {
+                    state.activeKey = sections[0].key;
+                    state.isDark = true;
+                }
+            }
+
+            function setState(newState) {
+                state = { ...state, ...newState };
+                
+                if (newState.activeKey !== undefined) localStorage.setItem('netzeroth_tab', JSON.stringify(state.activeKey));
+                if (newState.isDark !== undefined) localStorage.setItem('netzeroth_theme', JSON.stringify(state.isDark));
+
+                updateUI();
+            }
+
+
+
+            // --- Registra os listeners ---
+            searchInput.addEventListener('input', (e) => setState({ query: e.target.value }));
+            themeToggle.addEventListener('click', () => setState({ isDark: !state.isDark }));
+            sidebarNav.addEventListener('click', handleNavClick);
+            tabsContainer.addEventListener('click', handleNavClick);
+            contentArticle.addEventListener('click', handleAccordionToggle);
+
+            // --- Primeira renderização ---
+            loadState();
+            updateUI();
+        });
+    </script>
+</body>
+</html>
