@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Manual Interativo de Netzeroth</title>
+    <title>A Lenda de Netzeroth</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         /* Estilos básicos para emular a classe 'prose' do Tailwind para melhor legibilidade do texto */
@@ -61,8 +61,8 @@
     <header class="sticky top-0 z-30 backdrop-blur border-b border-gray-200 dark:border-gray-800 bg-white/70 dark:bg-gray-950/60">
         <div class="max-w-6xl mx-auto px-4 py-3 flex items-center gap-3">
             <div class="flex-1">
-                <h1 class="text-xl font-bold text-gray-900 dark:text-gray-100">Manual de Netzeroth</h1>
-                <p class="text-xs text-gray-700 dark:text-gray-400">Livro do Jogador & Mestre — versão interativa</p>
+                <h1 class="text-xl font-bold text-gray-900 dark:text-gray-100">A Lenda de Netzeroth</h1>
+                <p class="text-xs text-gray-700 dark:text-gray-400">Guia interativo para Mestres e Jogadores</p>
             </div>
             <div class="flex items-center gap-2">
                 <input
@@ -609,11 +609,11 @@
                         ${renderAccordion([
                             {
                                 title: "Pontos de Vida (PV / HP)",
-                                content: `Representam a resistência física. O total é calculado pela fórmula: <strong>VIG × 5</strong>. Ao chegar a 0 PV, o personagem não morre, mas cai inconsciente e fica "À Beira da Morte", precisando de testes de Vigor para estabilizar.`
+                                content: `Representam a resistência e a saúde física do seu personagem. Eles determinam quanto dano você pode suportar antes de sucumbir.<br><br><strong>Cálculo:</strong> VIG × 5.<br><strong>A 0 PV:</strong> Um personagem com 0 PV não morre imediatamente. Ele cai inconsciente e entra no estado de "À Beira da Morte". No início de cada turno, deve fazer um teste de Vigor (DF 10). Três sucessos estabilizam o personagem; três falhas resultam em morte. Qualquer cura que restaure ao menos 1 PV estabiliza o personagem imediatamente.`
                             },
                             {
                                 title: "Pontos de Energia / Espirituais (PE / EP)",
-                                content: `Medem o fôlego espiritual e a força de vontade, usados para ativar os Dons da Criação. O total é calculado por: <strong>(VIG + Modificador de SAB) × 2</strong>. São recuperados com descansos.`
+                                content: `Medem o fôlego espiritual e a força de vontade, sendo o combustível para os Dons da Criação.<br><br><strong>Cálculo:</strong> (VIG + Modificador de SAB) × 2.<br><strong>Recuperação:</strong> A energia é restaurada com repouso. Um <strong>Descanso Curto</strong> recupera 1d4 + VIG em PE. Um <strong>Descanso Longo</strong> recupera todos os Pontos de Energia.`
                             },
                             {
                                 title: "Pontos de Ação (PA)",
@@ -641,6 +641,19 @@
                                             ["7", "-", "13.500"]
                                         ]
                                     )}`
+                            },
+                            {
+                                title: "Condições Comuns",
+                                content: () => `
+                                    <p>Durante o combate e a exploração, personagens podem sofrer condições que alteram suas capacidades. Elas são temporárias e podem ser removidas com tempo, itens ou habilidades.</p>
+                                    <ul>
+                                        <li class="!my-1"><strong>Atordoado:</strong> Perde o próximo turno.</li>
+                                        <li class="!my-1"><strong>Envenenado:</strong> –2 em testes físicos até ser curado.</li>
+                                        <li class="!my-1"><strong>Imobilizado:</strong> Não pode se mover.</li>
+                                        <li class="!my-1"><strong>Inspirado:</strong> Ganha Vantagem no próximo teste.</li>
+                                        <li class="!my-1"><strong>Amedrontado:</strong> Sofre Desvantagem contra a fonte do medo.</li>
+                                    </ul>
+                                `
                             }
                         ])}
                     </div>`
@@ -672,6 +685,14 @@
                             { title: "Tentado", content: "Enfronta constantes provações do Usurpador, frequentemente vulnerável às sombras." },
                             { title: "Neófito", content: "Recém-regenerado, cheio de esperança, mas ainda imaturo e vulnerável." }
                         ])}
+                         <h4 class="!mt-6">🕊️ A Fé em Jogo</h4>
+                        <p>A FÉ é mais que um atributo: é o elo do seu personagem com Elyon. Ela pode:</p>
+                        <ul>
+                            <li>Resistir à corrupção.</li>
+                            <li>Potencializar bênçãos.</li>
+                            <li>Influenciar criaturas de luz ou sombra.</li>
+                        </ul>
+                        <p>O MJ pode pedir um teste de FÉ sempre que sua convicção for posta à prova.</p>
 
                         <h4 class="!mt-6">Bênçãos de Elyon</h4>
                         <p>As bênçãos funcionam como recompensas especiais que não vêm de esforço próprio, mas como resposta a atos de fé e coragem.</p>
@@ -695,7 +716,8 @@
                                 ["Escudo da Luz", "Absorve até 2 ataques de aliados próximos", "1 cena"]
                             ]
                         )}
-                    </div>`
+                    </div>
+                `
             },
             {
                 key: "corrupcao",
@@ -1012,15 +1034,33 @@
                                     <li><strong>Fim do Combate:</strong> O Mestre narra as consequências, recompensas e o que acontece a seguir.</li>
                                 </ol>
 
-                                <h4 class="!mt-6">Inimigos Memoráveis e Balanceamento (ND)</h4>
-                                <p>Um inimigo memorável precisa de um traço marcante, uma conexão com a história e um objetivo claro. O <strong>Nível de Desafio (ND)</strong> é uma ferramenta para medir a dificuldade de um combate: um encontro de ND 1 é um desafio equilibrado para 4 personagens de nível 1.</p>
-                                <h5 class="!font-semibold !mt-4">Fórmula Rápida para Balanceamento</h5>
+                                <h5 class="!font-semibold !mt-4">Condições Comuns</h5>
+                                <p>Durante o combate, personagens e criaturas podem sofrer condições que alteram suas capacidades.</p>
+                                ${renderAccordion([
+                                    { title: "Atordoado", content: "Perde o próximo turno." },
+                                    { title: "Envenenado", content: "–2 em testes físicos até ser curado." },
+                                    { title: "Imobilizado", content: "Não pode se mover." },
+                                    { title: "Inspirado", content: "Ganha Vantagem no próximo teste." },
+                                    { title: "Amedrontado", content: "Sofre Desvantagem contra a fonte do medo." }
+                                ])}
+
+                                <h4 class="!mt-6">Balanceamento de Encontros (Nível de Desafio - ND)</h4>
+                                <p>O Nível de Desafio (ND) é uma ferramenta para o Mestre medir a dificuldade de um combate.</p>
                                 <ul>
-                                    <li><strong>Ameaça Baixa:</strong> HP total dos inimigos = metade do HP total dos jogadores.</li>
-                                    <li><strong>Ameaça Média:</strong> HP total dos inimigos = HP total dos jogadores.</li>
-                                    <li><strong>Ameaça Alta:</strong> HP total dos inimigos = 1.5x o HP total dos jogadores.</li>
+                                    <li><strong>Conceito:</strong> Um encontro de ND 1 é um desafio equilibrado para um grupo de 4 personagens de nível 1.</li>
+                                    <li><strong>Ameaças Múltiplas:</strong> O ND é cumulativo. Dois monstros de ND 1/2 equivalem a um encontro de ND 1. No entanto, o número de inimigos (economia de ações) aumenta a dificuldade.</li>
                                 </ul>
-                                
+                                ${renderTable(
+                                    ["Criatura", "Grau de Ameaça", "ND Sugerido"],
+                                    [
+                                        ["Sussurrante", "Médio", "1/2"],
+                                        ["Espada Sombria", "Médio-Alto", "1"],
+                                        ["Filho do Eclipse", "Alto", "3"],
+                                        ["Guardião Retorcido", "Alto", "4"],
+                                        ["Golem da Escuridão", "Muito Alto", "7"]
+                                    ]
+                                )}
+
                                 <h4 class="!mt-6">Ferramenta Rápida para Criar Inimigos</h4>
                                 <ol class="list-decimal pl-5 text-sm">
                                    <li><strong>Nome e Papel:</strong> Ex: “Espadas Sombrias, elite militar do Usurpador”.</li>
@@ -1217,7 +1257,7 @@
             
             function renderSidebar() {
                 const q = state.query.toLowerCase().trim();
-                const filtered = !q ? processedSections : processedSections.filter(s => s.fullSearchableText.includes(q));
+                const filtered = !q ? processedSections : processedSections;
 
                 sidebarNav.innerHTML = filtered.map(s => {
                     const isActive = state.activeKey === s.key && !state.query.trim();
@@ -1323,8 +1363,12 @@
             function setState(newState) {
                 state = { ...state, ...newState };
                 
-                if (newState.activeKey !== undefined) localStorage.setItem('netzeroth_tab', JSON.stringify(state.activeKey));
-                if (newState.isDark !== undefined) localStorage.setItem('netzeroth_theme', JSON.stringify(state.isDark));
+                if (newState.activeKey !== undefined && !newState.query) {
+                    localStorage.setItem('netzeroth_tab', JSON.stringify(state.activeKey));
+                }
+                if (newState.isDark !== undefined) {
+                    localStorage.setItem('netzeroth_theme', JSON.stringify(state.isDark));
+                }
 
                 updateUI();
             }
@@ -1333,8 +1377,8 @@
             searchInput.addEventListener('input', (e) => {
                 clearTimeout(searchTimeout);
                 searchTimeout = setTimeout(() => {
-                    setState({ query: e.target.value, activeKey: state.activeKey });
-                }, 250); // Debounce
+                    setState({ query: e.target.value });
+                }, 300); // Debounce
             });
             
             themeToggle.addEventListener('click', () => setState({ isDark: !state.isDark }));
@@ -1352,4 +1396,3 @@
     </script>
 </body>
 </html>
-
