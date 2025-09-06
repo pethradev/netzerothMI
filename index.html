@@ -727,6 +727,7 @@
                                     { title: "Lâmina de Luz de Elyon", content: "<strong>Tipo:</strong> Cortante (Especial)<br><strong>Dano:</strong> 1d10<br><strong>Atributo:</strong> FÉ / FOR<br><strong>Descrição:</strong> Brilho cega inimigos por 1 turno. Ativada pelo portador do Selo; mais eficaz contra Sombras." },
                                     { title: "Arco das Vinhas", content: "<strong>Tipo:</strong> Perfuração (Especial)<br><strong>Dano:</strong> 1d6<br><strong>Atributo:</strong> AGI / SAB<br><strong>Descrição:</strong> Flechas podem prender ou desacelerar inimigos." },
                                     { title: "Cajado do Som", content: "<strong>Tipo:</strong> Contundente (Especial)<br><strong>Dano:</strong> 1d6<br><strong>Atributo:</strong> SAB / AST<br><strong>Descrição:</strong> Ondas sonoras podem atordoar, empurrar inimigos ou alertar aliados." },
+                                    { title: "Lança das Estrelas", content: "<strong>Tipo:</strong> Perfuração (Especial)<br><strong>Dano:</strong> 1d8<br><strong>Atributo:</strong> FOR / FÉ<br><strong>Descrição:</strong> A luz desta lança guia o portador (+1 em testes de percepção). Usada em rituais de proteção ou exploração noturna." },
                                 ])
                             },
                             { 
@@ -736,8 +737,11 @@
                                     { title: "Cota de Malha de Neveloth", content: "<strong>Tipo:</strong> Média<br><strong>Proteção (CA):</strong> +4<br><strong>Observações:</strong> Boa mobilidade e proteção, usada por guardiões de muralhas." },
                                     { title: "Peitoral de Couro de Haravoth", content: "<strong>Tipo:</strong> Leve<br><strong>Proteção (CA):</strong> +2<br><strong>Observações:</strong> Flexível, não atrapalha movimentos rápidos." },
                                     { title: "Manto do Peregrino", content: "<strong>Tipo:</strong> Leve<br><strong>Proteção (CA):</strong> +1<br><strong>Observações:</strong> Protege contra clima, ajuda em furtividade e percepção." },
+                                    { title: "Escama de Dragão (rara)", content: "<strong>Tipo:</strong> Pesada<br><strong>Proteção (CA):</strong> +7<br><strong>Observações:</strong> Encontrada em criaturas lendárias, excelente proteção física e mágica natural." },
                                     { title: "Escudo Redondo de Elyon", content: "<strong>Tipo:</strong> Médio<br><strong>Proteção (CA):</strong> +2<br><strong>Observações:</strong> Equilíbrio entre defesa e manobrabilidade." },
                                     { title: "Escudo de Torre de Metsudoth", content: "<strong>Tipo:</strong> Pesado<br><strong>Proteção (CA):</strong> +4<br><strong>Observações:</strong> Para proteção de muralhas e bloqueio de ataques em linha." },
+                                    { title: "Escudo de Madeira Viva", content: "<strong>Tipo:</strong> Leve<br><strong>Proteção (CA):</strong> +1<br><strong>Observações:</strong> De Haravoth; pode crescer raízes para prender inimigos por 1 turno (uso limitado)." },
+                                    { title: "Escudo de Cristal do Deserto", content: "<strong>Tipo:</strong> Médio<br><strong>Proteção (CA):</strong> +3<br><strong>Observações:</strong> De Ashkar; reflete luz solar, podendo cegar inimigos por 1 turno." },
                                 ])
                             },
                             { 
@@ -764,6 +768,7 @@
                                         <li><strong>Lágrima da Aurora (Miudeza):</strong> Remove a condição “amedrontado” ou “enfeitiçado”.</li>
                                     </ul>`},
                                     {title: "Outros Itens de Viagem", content: `<ul>
+                                        <li><strong>Corda (15m) (Médio):</strong> Para escalada, amarrar objetos ou inimigos.</li>
                                         <li><strong>Tocha (Miudeza):</strong> Iluminação por 1h.</li>
                                         <li><strong>Kit de ervas (Leve):</strong> Cura 1d4 HP fora de combate (1 uso/dia).</li>
                                         <li><strong>Odre de água (Leve):</strong> Hidratação por 1 dia.</li>
@@ -876,7 +881,19 @@
                                     <li><strong>Fio Condutor:</strong> Um artefato, profecia ou vilão recorrente guia os eventos.</li>
                                     <li><strong>Consequências Visíveis:</strong> O resultado de uma missão afeta o mundo (uma cidade protegida prospera; uma vila ignorada cai nas sombras).</li>
                                     <li><strong>Evolução dos Personagens:</strong> As experiências moldam os heróis, seus relacionamentos e sua fé.</li>
-                                </ul>`
+                                </ul>
+                                 <h4 class="!mt-6">Tipos de Missão em Netzeroth</h4>
+                                ${renderTable(
+                                    ["Tipo", "Descrição", "Exemplos"],
+                                    [
+                                        ["Defesa", "Proteger uma cidade, templo ou pessoa.", "Guardar as muralhas de Metsudoth; proteger um sábio."],
+                                        ["Exploração", "Descobrir novos territórios ou segredos.", "Encontrar uma passagem no deserto de Qadmiar."],
+                                        ["Recuperação", "Trazer de volta um item, pessoa ou informação.", "Resgatar um manuscrito sagrado de Haravoth."],
+                                        ["Purificação", "Libertar uma região da influência das Sombras.", "Expulsar criaturas corrompidas das ruínas de Ashkar."],
+                                        ["Negociação", "Resolver conflitos entre facções.", "Intermediar paz entre dois clãs rivais de Neharim."],
+                                        ["Prova de Fé", "Testar a coragem e a lealdade dos heróis.", "Resistir a uma tentação oferecida pelo Usurpador."]
+                                    ]
+                                )}`
                         },
                         {
                             title: "Estruturando Cenas",
@@ -897,32 +914,78 @@
                                 </ol>`
                         },
                          { 
-                             title: "Criando Desafios Memoráveis", 
+                             title: "Desafios, Conflitos e Tom", 
                              content: () => `
-                                <p>Em Netzeroth, cada desafio deve ter um sentido narrativo, seja para avançar a história, revelar algo sobre o mundo ou testar um aspecto importante dos personagens.</p>
                                 <h4>Os 3 Eixos de Desafio</h4>
-                                <p>Alterne entre os três tipos para manter o jogo dinâmico e interessante:</p>
+                                <p>Em Netzeroth, cada desafio deve ter sentido narrativo. Para manter o jogo dinâmico, alterne entre três eixos de desafio:</p>
                                 <ul>
                                     <li><strong>Físico:</strong> Combates, armadilhas, perseguições, sobrevivência em ambientes hostis.</li>
                                     <li><strong>Social:</strong> Diplomacia, intriga, negociações, discursos para inspirar ou enganar.</li>
-                                    <li><strong>Espiritual:</strong> Resistir à corrupção, manter a fé diante do medo, interpretar sinais de Elyon, escolher entre vingança e misericórdia.</li>
+                                    <li><strong>Espiritual:</strong> Resistir à corrupção, manter a fé diante do medo, interpretar sinais de Elyon, e escolher entre vingança e misericórdia.</li>
                                 </ul>
-                                <h4>Inimigos Memoráveis</h4>
-                                <p>Um inimigo não é só um bloco de estatísticas. Dê a ele um traço marcante (aparência, voz, gesto), conecte-o à história e dê-lhe um objetivo claro. Grandes vilões devem ser escalados: introduza-os sutilmente, crie conflitos parciais e guarde o confronto final para o clímax.</p>
-                                <h4>Balanceamento Rápido de Combate</h4>
+                                <p class="mt-2 text-xs italic">Um bom desafio pode misturar dois ou mais eixos — por exemplo, convencer um líder a ajudar enquanto a cidade é atacada.</p>
+
+                                <h4 class="!mt-6">Mantendo o Tom</h4>
+                                <p>O jogo não é um sermão, mas a fé está no pano de fundo de tudo. Para manter o tom:</p>
+                                <ul>
+                                    <li>A Luz sempre vence, mas nem sempre no tempo ou da forma esperada.</li>
+                                    <li>A corrupção é sedutora, mas sempre tem um custo alto.</li>
+                                    <li>Personagens podem falhar moralmente — e isso deve gerar novas oportunidades de redenção.</li>
+                                    <li>Pequenos atos de bondade podem ter impacto tão grande quanto uma vitória em batalha.</li>
+                                </ul>
+
+                                <h4 class="!mt-6">Inimigos Memoráveis</h4>
+                                <p>Um inimigo não é só um bloco de estatísticas. Para torná-lo memorável:</p>
+                                <ul>
+                                    <li><strong>Dê um traço marcante:</strong> aparência, voz, arma ou gesto.</li>
+                                    <li><strong>Conecte-o à história:</strong> talvez já tenha cruzado com os heróis antes.</li>
+                                    <li><strong>Dê-lhe um objetivo:</strong> não apenas “matar”, mas proteger algo ou corromper um local sagrado.</li>
+                                </ul>
+                                <p class="mt-2">Grandes vilões devem ser escalados: introduza-os sutilmente, crie conflitos parciais e guarde o confronto final para o clímax.</p>
+                             `
+                         },
+                         { 
+                            title: "Combate: Regras e Balanceamento", 
+                            content: () => `
+                                <h4>Regras de Combate Básico</h4>
+                                <ol class="list-decimal pl-5 space-y-2">
+                                    <li><strong>Início (Iniciativa):</strong> Cada participante rola 1d20 + AGI. A ordem é do maior para o menor.</li>
+                                    <li><strong>Turnos:</strong> No seu turno, você tem uma <strong>Ação Principal</strong> e um <strong>Movimento</strong>. Algumas habilidades podem conceder uma <strong>Ação Bônus</strong>.</li>
+                                    <li><strong>Ataques:</strong> Role 1d20 + modificador de ataque. Se igualar ou superar a Defesa (DEF) do alvo, acerta. Um 20 natural é um acerto crítico (dobre os dados de dano).</li>
+                                    <li><strong>Fim do Combate:</strong> O Mestre narra as consequências, recompensas e o que acontece a seguir.</li>
+                                </ol>
+
+                                <h5 class="!font-semibold !mt-4">Condições Comuns</h5>
+                                ${renderTable(
+                                    ["Condição", "Efeito"],
+                                    [
+                                        ["Atordoado", "Perde o próximo turno."],
+                                        ["Envenenado", "–2 em testes físicos até ser curado."],
+                                        ["Imobilizado", "Não pode se mover."],
+                                        ["Inspirado", "Ganha Vantagem no próximo teste."],
+                                        ["Amedrontado", "Sofre Desvantagem contra a fonte do medo."]
+                                    ]
+                                )}
+                                <p class="mt-2 text-xs italic">O combate deve ser tenso, mas fluido. Use o ambiente para criar drama.</p>
+
+                                <h4 class="!mt-6">Criando Encontros Equilibrados</h4>
+                                <p>Para definir a dificuldade de um encontro, avalie o poder do grupo e o papel do obstáculo na história. O Nível de Desafio (ND) de uma criatura ajuda a medir isso (um encontro de ND 1 é um desafio equilibrado para 4 personagens de nível 1).</p>
+                                <h5 class="!font-semibold !mt-4">Fórmula Rápida para Balanceamento</h5>
                                 <ul>
                                     <li><strong>Ameaça Baixa:</strong> HP total dos inimigos = metade do HP total dos jogadores.</li>
                                     <li><strong>Ameaça Média:</strong> HP total dos inimigos = HP total dos jogadores.</li>
                                     <li><strong>Ameaça Alta:</strong> HP total dos inimigos = 1.5x o HP total dos jogadores.</li>
-                                </ul>`
-                         },
+                                    <li><strong>Ameaça Épica:</strong> HP total = 2x ou mais, com habilidades únicas.</li>
+                                </ul>
+                            `
+                        },
                          {
                             title: "Ferramenta: Relógios de Tensão e Corrupção",
                             content: () => `
                                 <p>Para tornar a progressão de ameaças e da Corrupção mais visível e dramática, use relógios de tensão. Um relógio é um círculo dividido em segmentos (4, 6 ou 8). Cada vez que os jogadores falham, demoram ou um evento negativo ocorre, o Mestre preenche um segmento. Quando o relógio se completa, a consequência acontece.</p>
                                 <ul>
                                     <li><strong>Relógio de Cena (4–6 segmentos):</strong> Mede pressão imediata. Ex: Guardas se aproximando, um ritual sombrio sendo completado. Quando completo, a ameaça chega ou a oportunidade se perde.</li>
-                                    <li><strong>Relógio Regional (6–8 segmentos):</strong> Mede a presença da Corrupção numa região. Cada segmento preenchido pode aumentar a força dos inimigos, espalhar doenças ou introduzir penalidades. Ações heroicas dos jogadores podem remover segmentos deste relógio.</li>
+                                    <li><strong>Relógio de Regional (6–8 segmentos):</strong> Mede a presença da Corrupção numa região. Cada segmento preenchido pode aumentar a força dos inimigos, espalhar doenças ou introduzir penalidades. Ações heroicas dos jogadores podem remover segmentos deste relógio.</li>
                                 </ul>
                                 <p>Esta ferramenta cria uma representação visual da tensão, tornando as escolhas dos jogadores mais impactantes e urgentes.</p>`
                          },
@@ -1153,4 +1216,3 @@
     </script>
 </body>
 </html>
-
