@@ -10,7 +10,7 @@
         .prose {
             max-width: none;
         }
-        .prose h2, .prose h3, .prose h4 {
+        .prose h2, .prose h3, .prose h4, .prose h5 {
             font-weight: 600;
             margin-bottom: 0.5em;
         }
@@ -25,6 +25,7 @@
         .prose h2 { font-size: 1.5rem; }
         .prose h3 { font-size: 1.25rem; }
         .prose h4 { font-size: 1.125rem; }
+        .prose h5 { font-size: 1rem; }
         .prose p, .prose ul, .prose ol, .prose blockquote {
             margin-top: 1em;
             margin-bottom: 1em;
@@ -216,7 +217,7 @@
                             { title: "Passo 1: Escolha sua Classe", content: "A classe define o papel do seu personagem. Cada uma tem um papel mecânico e narrativo. Veja a aba 'Classes & Espécies' para a descrição completa de cada uma." },
                             { title: "Passo 2: Escolha sua Espécie", content: "A espécie define seu lugar no mundo e concede traços únicos. Consulte a aba 'Classes & Espécies' para ver todas as opções em detalhe." },
                              { title: "Passo 3: Determine seus Atributos", content: "Atributos são os valores que representam as capacidades básicas do seu personagem. Consulte a aba 'Atributos & Habilidades' para as regras de distribuição." },
-                             { title: "Passo 4: Escolha sua Origem", content: "Sua origem (região) concede +1 em um atributo temático ou um talento regional. Ex: Haravoth → +1 SAB ou 'Conhecimento Popular'." },
+                             { title: "Passo 4: Escolha sua Origem", content: "Sua origem (região) concede +1 em um atributo temático ou um talento regional. Consulte a aba 'Mapa & Regiões' para a lista completa de talentos e suas descrições." },
                              { title: "Passo 5: Defina suas Skills", content: "Skills representam as habilidades específicas. Você pode escolher até 6 no início. Veja a aba 'Atributos & Habilidades' para as regras de cálculo e a lista completa." },
                              { title: "Passo 6: Monte sua Lore", content: "Defina sua história pessoal, votos, propósitos e relacionamentos. Uma boa lore enriquece o jogo e guia a interpretação." },
                              { title: "Passo 7: Alinhamento e o Selo", content: "Seu alinhamento (Fiel, Curioso, Vacilante, etc.) é dinâmico e reflete sua jornada espiritual. O Selo do Rei é um item central nessa jornada. Veja mais na aba 'Bênçãos e o Selo'." },
@@ -231,7 +232,19 @@
                 content: () => `
                     <div class="space-y-6">
                         <h4>Classes</h4>
-                        <p>A classe define o papel do seu personagem, suas habilidades iniciais e como você contribui nas missões. Cada classe tem um papel mecânico e um papel narrativo.</p>
+                        <p>A classe define o papel do seu personagem, suas habilidades iniciais e como você contribui nas missões.</p>
+                        ${renderTable(
+                            ["Classe", "Função Principal", "Habilidade Central / Recurso", "Papel Narrativo em Netzeroth"],
+                            [
+                                ["Guardião", "Combate / Defesa", "Força, armaduras, escudos", "Protege aliados e contém o avanço da Escuridão. Símbolo de coragem e disciplina."],
+                                ["Arauto", "Suporte / Diplomacia", "Persuasão, alianças, espionagem", "Constrói pontes entre povos e ordens livres; influencia decisões importantes."],
+                                ["Curandeiro", "Suporte / Cura", "Ervas, dons simbólicos, rituais", "Mantém os heróis vivos, inspira esperança e coragem; foco em restauração."],
+                                ["Caçador de Sombras", "Combate / Exploração", "Arco, rastreio, furtividade", "Elimina ameaças ocultas; explora e desarma perigos antes que causem dano."],
+                                ["Místico", "Suporte / Controle", "Energias naturais (luz, vento, som)", "Transforma fenômenos naturais em arte ou arma; protege e inspira."],
+                                ["Peregrino", "Exploração / Revelação", "Visões, sinais, conhecimento antigo", "Descobre segredos, conecta regiões e histórias; guia a narrativa."]
+                            ]
+                        )}
+                        <h5 class="!text-base !font-semibold !mt-6">Detalhes das Classes</h5>
                         ${renderAccordion([
                             { title: "Guardião", subtitle: "Defesa e proteção", content: "<strong>Função:</strong> Protetor firme e corajoso, especialista em manter aliados seguros. Usa armaduras, escudos e táticas de defesa.<br><strong>Atributos-chave:</strong> FOR, VIG." },
                             { title: "Arauto", subtitle: "Diplomacia e estratégia", content: "<strong>Função:</strong> Mensageiro e diplomata, mestre em persuasão e alianças. Capaz de mudar o rumo de cidades ou batalhas com palavras.<br><strong>Atributos-chave:</strong> CAR, AST." },
@@ -361,14 +374,14 @@
                     <div class="space-y-6">
                         <p>Netzeroth é um mosaico de terras, cada qual moldada por sua própria beleza, cultura e desafios. O mapa, passado de geração em geração, fala de regiões que brilham sob a luz de Elyon e de outras onde a sombra do Usurpador lança seu véu pesado.</p>
                         ${renderAccordion([
-                            { title: "Haravoth — Campos de Multidões", content: `<div class="text-sm"><p><strong>Ambiente:</strong> Planícies férteis e pradarias douradas. Povos nômades e agricultores preservam cânticos ancestrais.</p><p><strong>Perigos:</strong> Invasores e criaturas das sombras que se ocultam sob a relva alta.</p><p><strong>Inspiração:</strong> Comunidades unidas, coragem simples e sabedoria popular.</p></div>` },
-                            { title: "Ashkar — Terras Queimadas", content: `<div class="text-sm"><p><strong>Ambiente:</strong> Rocha negra e cinzas eternas. Uma cicatriz no mundo, amaldiçoada pela rebelião.</p><p><strong>Perigos:</strong> Tempestades de cinzas, ruínas amaldiçoadas, criaturas corrompidas.</p><p><strong>Inspiração:</strong> Resistência, superação e vigilância.</p></div>` },
-                            { title: "Neveloth — Vales Enevoados", content: `<div class="text-sm"><p><strong>Ambiente:</strong> Montanhas e brumas. Aldeias isoladas e sinos distantes.</p><p><strong>Perigos:</strong> Vozes que atraem viajantes para perder-se na névoa.</p><p><strong>Inspiração:</strong> Mistério, silêncio e busca interior.</p></div>` },
-                            { title: "Metsudoth — Cidades‑Muralha", content: `<div class="text-sm"><p><strong>Ambiente:</strong> Fortalezas de pedra, guardiões militares e fronteiras protegidas.</p><p><strong>Perigos:</strong> Cercos prolongados, traições internas.</p><p><strong>Inspiração:</strong> Honra, defesa e estratégia.</p></div>` },
-                            { title: "Neharim — Mercados & Rios Largos", content: `<div class="text-sm"><p><strong>Ambiente:</strong> Comércio e política, ganância e intriga em meio à prosperidade.</p><p><strong>Perigos:</strong> Corrupção, intrigas políticas, contrabandistas.</p><p><strong>Inspiração:</strong> Negociação, astúcia e alianças improváveis.</p></div>` },
-                            { title: "Qadmiar — Deserto Antigo", content: `<div class="text-sm"><p><strong>Ambiente:</strong> Areias douradas e segredos milenares.</p><p><strong>Perigos:</strong> Tempestades de areia, miragens, criaturas ocultas.</p><p><strong>Inspiração:</strong> Perseverança, sabedoria e descoberta.</p></div>` },
-                            { title: "Yam Talorah — Mar da Canção", content: `<div class="text-sm"><p><strong>Ambiente:</strong> Oceanos profundos, melodias místicas vindas das águas.</p><p><strong>Perigos:</strong> Tempestades súbitas, melodias sedutoras.</p><p><strong>Inspiração:</strong> Liberdade, exploração e mistério.</p></div>` },
-                            { title: "Gan-Eved — Jardim Perdido", content: `<div class="text-sm"><p><strong>Ambiente:</strong> Florestas exuberantes, criaturas raras e frutos cintilantes.</p><p><strong>Perigos:</strong> Criaturas raras e territoriais, caminhos mutantes.</p><p><strong>Inspiração:</strong> Beleza, proteção e conexão com a criação.</p></div>` },
+                            { title: "Haravoth — Campos de Multidões", content: `<div class="text-sm"><p><strong>Características:</strong> Planícies férteis onde povos nômades e agricultores preservam cânticos ancestrais. Vinhas antigas sussurram histórias de guerra e paz.</p><p><strong>Ganchos de Aventura:</strong> Proteger caravanas, buscar artefatos escondidos nas pradarias, mediar disputas entre clãs.</p><p><strong>Talento Regional:</strong> +1 SAB ou habilidade “Conhecimento Popular” (vantagem para identificar plantas e tradições locais).</p></div>` },
+                            { title: "Ashkar — Terras Queimadas", content: `<div class="text-sm"><p><strong>Características:</strong> Rocha negra e cinzas eternas. Uma cicatriz no mundo, amaldiçoada pela rebelião, onde a própria terra geme.</p><p><strong>Ganchos de Aventura:</strong> Sobreviver a tempestades de cinzas, investigar ruínas amaldiçoadas, encontrar uma fonte de água pura.</p><p><strong>Talento Regional:</strong> +1 VIG ou “Resistência às Cinzas” (vantagem contra calor e fumaça).</p></div>` },
+                            { title: "Neveloth — Vales Enevoados", content: `<div class="text-sm"><p><strong>Características:</strong> Montanhas e brumas eternas. Aldeias isoladas vivem em silêncio, e vozes sussurram na névoa.</p><p><strong>Ganchos de Aventura:</strong> Resgatar viajantes perdidos, enfrentar criaturas ocultas pela névoa, encontrar um mosteiro secreto.</p><p><strong>Talento Regional:</strong> +1 AST ou “Olhar na Névoa” (vantagem para detectar ilusões e emboscadas).</p></div>` },
+                            { title: "Metsudoth — Cidades‑Muralha", content: `<div class="text-sm"><p><strong>Características:</strong> Imponentes fortalezas de pedra que vigiam fronteiras e segredos. Cultura militar e disciplinada.</p><p><strong>Ganchos de Aventura:</strong> Defender as muralhas de um cerco, investigar uma traição interna, treinar com os guardiões lendários.</p><p><strong>Talento Regional:</strong> +1 FOR ou “Treinamento Militar” (vantagem em testes de Defesa contra investidas).</p></div>` },
+                            { title: "Neharim — Mercados & Rios Largos", content: `<div class="text-sm"><p><strong>Características:</strong> Centros de comércio e política, onde a prosperidade esconde ganância e intriga. Contratos, moedas e caravanas definem o poder.</p><p><strong>Ganchos de Aventura:</strong> Desvendar conspirações comerciais, proteger uma embaixada, contrabandear um item sagrado.</p><p><strong>Talento Regional:</strong> +1 CAR ou “Olho para Negócios” (vantagem em negociações comerciais).</p></div>` },
+                            { title: "Qadmiar — Deserto Antigo", content: `<div class="text-sm"><p><strong>Características:</strong> Areias douradas que escondem segredos milenares e ruínas soterradas. Guardiões de saberes antigos observam em silêncio.</p><p><strong>Ganchos de Aventura:</strong> Explorar uma tumba recém-revelada, atravessar o deserto seguindo uma rota de peregrinação estelar, proteger uma caravana de conhecimento.</p><p><strong>Talento Regional:</strong> +1 FÉ ou “Sobrevivência no Deserto” (resiste melhor a fome e sede).</p></div>` },
+                            { title: "Yam Talorah — Mar da Canção", content: `<div class="text-sm"><p><strong>Características:</strong> Oceanos profundos de onde emanam melodias místicas nas noites de calmaria. Marinheiros contam histórias de fortunas e perdições.</p><p><strong>Ganchos de Aventura:</strong> Navegar até ilhas lendárias, negociar com criaturas marinhas, caçar um navio fantasma.</p><p><strong>Talento Regional:</strong> +1 AGI ou “Navegador” (vantagem em orientação náutica).</p></div>` },
+                            { title: "Gan-Eved — Jardim Perdido", content: `<div class="text-sm"><p><strong>Características:</strong> Florestas exuberantes onde frutos cintilam e criaturas raras vigiam os caminhos. Um lugar de beleza indescritível.</p><p><strong>Ganchos de Aventura:</strong> Localizar a entrada para o Jardim, proteger um local sagrado de ser corrompido, resgatar alguém que se perdeu em suas trilhas.</p><p><strong>Talento Regional:</strong> +1 SAB ou “Ligação com a Criação” (identificar flora e fauna raras).</p></div>` },
                         ])}
                     </div>
                 `
@@ -390,12 +403,38 @@
                         <h4 class="!mt-6">As Ordens Livres</h4>
                         <p>As Ordens Livres são comunidades, irmandades e reinos que resistem à Escuridão Velada. Cada uma possui tradições, liderança e cultura próprias.</p>
                         ${renderAccordion([
-                            { title: "Irmandade de Lumenar (Haravoth)", content: "<strong>Especialidade:</strong> Conhecimento, persuasão e arte.<br><strong>Missão Típica:</strong> Recuperar um manuscrito roubado." },
-                            { title: "Ordem do Escudo de Pedra (Metsudoth)", content: "<strong>Especialidade:</strong> Defesa e liderança militar.<br><strong>Missão Típica:</strong> Escolta de um dignitário até uma cidade sitiada." },
-                            { title: "Conclave dos Navegantes (Yam Talorah)", content: "<strong>Especialidade:</strong> Navegação, exploração, espionagem marítima.<br><strong>Missão Típica:</strong> Mapear uma rota secreta entre ilhas." },
-                            { title: "Fraternidade de Neharim (Neharim)", content: "<strong>Especialidade:</strong> Comércio, diplomacia, influência política.<br><strong>Missão Típica:</strong> Negociar a paz entre duas casas rivais." },
-                            { title: "Vigias de Qadmiar (Qadmiar)", content: "<strong>Especialidade:</strong> Conhecimento, exploração, sobrevivência no deserto.<br><strong>Missão Típica:</strong> Investigar uma caravana desaparecida." },
+                            { title: "Irmandade de Lumenar (Haravoth)", content: "<strong>Características:</strong> Guardiões da paz e da sabedoria popular, cultivam artes que inspiram coragem. Mantêm escolas de diplomacia e templos de aprendizado.<br><strong>Força:</strong> Conhecimento, persuasão e magia simbólica (canções, luzes).<br><strong>Missão Típica:</strong> Inspirar coragem e unir povos contra a sombra.<br><strong>Aliada ideal para:</strong> Arautos, Curandeiros, Místicos." },
+                            { title: "Ordem do Escudo de Pedra (Metsudoth)", content: "<strong>Características:</strong> Guerreiros e estrategistas disciplinados. Protegem fronteiras e cidades-chave, treinando soldados para resistir a invasões.<br><strong>Força:</strong> Defesa implacável, liderança militar e táticas de combate.<br><strong>Missão Típica:</strong> Proteger cidades e rotas comerciais.<br><strong>Aliada ideal para:</strong> Guardiões, Caçadores de Sombras." },
+                            { title: "Conclave dos Navegantes (Yam Talorah)", content: "<strong>Características:</strong> Marinheiros, cartógrafos e exploradores. Dominam os mares, conhecem rotas secretas e mantêm contato entre regiões isoladas.<br><strong>Força:</strong> Navegação, espionagem marítima e exploração.<br><strong>Missão Típica:</strong> Explorar ilhas, manter os mares seguros.<br><strong>Aliada ideal para:</strong> Místicos, Peregrinos." },
+                            { title: "Fraternidade de Neharim (Neharim)", content: "<strong>Características:</strong> Comerciantes, diplomatas e artesãos. Mantêm alianças econômicas e políticas, garantindo que cidades prosperem sem sucumbir à corrupção.<br><strong>Força:</strong> Negociação, inteligência e influência econômica.<br><strong>Missão Típica:</strong> Negociar tratados, mediar conflitos.<br><strong>Aliada ideal para:</strong> Arautos, Peregrinos." },
+                            { title: "Vigias de Qadmiar (Qadmiar)", content: "<strong>Características:</strong> Guardiões de segredos antigos. Peregrinos e estudiosos do deserto, treinam na sobrevivência e observação.<br><strong>Força:</strong> Conhecimento arcano, resistência e orientação em terrenos hostis.<br><strong>Missão Típica:</strong> Explorar ruínas e proteger peregrinos.<br><strong>Aliada ideal para:</strong> Peregrinos, Guardiões, Caçadores de Sombras." },
                         ])}
+
+                        <h4 class="!mt-6">Dinâmicas das Ordens</h4>
+                        ${renderAccordion([
+                            { title: "Conflitos Entre Ordens", content: "Nem sempre as Ordens concordam. A Fraternidade de Neharim pode apoiar um tratado que a Ordem do Escudo de Pedra vê como traição. Os Vigias de Qadmiar podem guardar segredos que a Irmandade de Lumenar quer revelar. Um herói pode precisar escolher um lado, e essa escolha pode fechar portas em outras regiões." },
+                            { title: "Como Interagir com as Ordens", content: `A reputação com uma Ordem é construída através de ações:
+                                <ul>
+                                    <li><strong>Missões para a Ordem:</strong> Cumprir tarefas aumenta sua reputação e acesso a recursos.</li>
+                                    <li><strong>Alinhamento de valores:</strong> Agir de forma coerente com os princípios da Ordem fortalece vínculos.</li>
+                                    <li><strong>Presentes e serviços:</strong> Doar artefatos, curar feridos ou defender postos avançados.</li>
+                                    <li><strong>Respeito às tradições:</strong> Cada Ordem tem costumes; quebrá-los pode gerar desconfiança.</li>
+                                </ul>` },
+                        ])}
+
+                        <h4 class="!mt-6">Classes e suas Ordens Afins</h4>
+                        ${renderTable(
+                            ["Classe", "Ordens Mais Afins", "Papel Típico"],
+                            [
+                                ["Guardião", "Ordem do Escudo de Pedra, Vigias de Qadmiar", "Defesa de cidades, escolta de caravanas, treinamento militar."],
+                                ["Arauto", "Irmandade de Lumenar, Fraternidade de Neharim", "Diplomacia, negociação de alianças, espionagem entre regiões."],
+                                ["Curandeiro", "Irmandade de Lumenar, Vigias de Qadmiar", "Cuidado com feridos em campanhas, rituais de proteção, inspiração moral."],
+                                ["Caçador de Sombras", "Vigias de Qadmiar, Ordem do Escudo de Pedra", "Patrulha de fronteiras, eliminação de ameaças ocultas, rastreamento."],
+                                ["Místico", "Irmandade de Lumenar, Conclave dos Navegantes", "Proteção de lugares sagrados, manipulação do ambiente em batalhas."],
+                                ["Peregrino", "Todas (especialmente Vigias de Qadmiar)", "Exploração de regiões inexploradas, ligação entre ordens, descoberta de segredos."]
+                            ]
+                        )}
+                        
                         <h4 class="!mt-6">Favores de Ordem</h4>
                         <p>A relação com as Ordens Livres pode ser medida numa trilha de 3 degraus. O nível de favor sobe ao cumprir missões e agir de acordo com os valores da Ordem, e desce com falhas ou traições.</p>
                         ${renderTable(
@@ -1114,6 +1153,4 @@
     </script>
 </body>
 </html>
-
-
 
