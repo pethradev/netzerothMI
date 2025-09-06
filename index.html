@@ -60,8 +60,8 @@
     <header class="sticky top-0 z-30 backdrop-blur border-b border-gray-200 dark:border-gray-800 bg-white/70 dark:bg-gray-950/60">
         <div class="max-w-6xl mx-auto px-4 py-3 flex items-center gap-3">
             <div class="flex-1">
-                <h1 class="text-xl font-bold text-gray-900 dark:text-gray-100">A Lenda de Netzeroth</h1>
-                <p class="text-xs text-gray-700 dark:text-gray-400">Guia para Jogadores e Mestres</p>
+                <h1 class="text-xl font-bold text-gray-900 dark:text-gray-100">Manual de Netzeroth</h1>
+                <p class="text-xs text-gray-700 dark:text-gray-400">Livro do Jogador & Mestre — versão interativa</p>
             </div>
             <div class="flex items-center gap-2">
                 <input
@@ -690,6 +690,50 @@
                                     { title: "Cajado do Som", content: "<strong>Tipo:</strong> Contundente (Especial)<br><strong>Dano:</strong> 1d6<br><strong>Atributo:</strong> SAB / AST<br><strong>Descrição:</strong> Ondas sonoras podem atordoar, empurrar inimigos ou alertar aliados." },
                                 ])
                             },
+                            { 
+                                title: "Armaduras e Escudos", 
+                                content: () => renderAccordion([
+                                    { title: "Couraça de Elyon", content: "<strong>Tipo:</strong> Pesada<br><strong>Proteção (CA):</strong> +6<br><strong>Observações:</strong> Reforço mágico de luz, resistente contra ataques de Sombras." },
+                                    { title: "Cota de Malha de Neveloth", content: "<strong>Tipo:</strong> Média<br><strong>Proteção (CA):</strong> +4<br><strong>Observações:</strong> Boa mobilidade e proteção, usada por guardiões de muralhas." },
+                                    { title: "Peitoral de Couro de Haravoth", content: "<strong>Tipo:</strong> Leve<br><strong>Proteção (CA):</strong> +2<br><strong>Observações:</strong> Flexível, não atrapalha movimentos rápidos." },
+                                    { title: "Manto do Peregrino", content: "<strong>Tipo:</strong> Leve<br><strong>Proteção (CA):</strong> +1<br><strong>Observações:</strong> Protege contra clima, ajuda em furtividade e percepção." },
+                                    { title: "Escudo Redondo de Elyon", content: "<strong>Tipo:</strong> Médio<br><strong>Proteção (CA):</strong> +2<br><strong>Observações:</strong> Equilíbrio entre defesa e manobrabilidade." },
+                                    { title: "Escudo de Torre de Metsudoth", content: "<strong>Tipo:</strong> Pesado<br><strong>Proteção (CA):</strong> +4<br><strong>Observações:</strong> Para proteção de muralhas e bloqueio de ataques em linha." },
+                                ])
+                            },
+                            { 
+                                title: "Itens de Exploração e Consumíveis", 
+                                content: () => renderAccordion([
+                                    {title: "Itens de Exploração", content: `<ul>
+                                        <li><strong>Corda de Vinhas (Médio):</strong> Para escalada, cresce levemente sob comando 1x/aventura.</li>
+                                        <li><strong>Ganchos e Pitons (Leve):</strong> Tradicionais e confiáveis para ambientes rochosos.</li>
+                                        <li><strong>Kit de Sobrevivência do Deserto (Leve):</strong> Essencial para Qadmiar e Ashkar.</li>
+                                        <li><strong>Lentes do Arauto (Leve):</strong> Concede +2 em testes de percepção à distância ou em neblina.</li>
+                                        <li><strong>Trompa ou Sinos (Leve):</strong> Amplifica som em 100 metros, útil para comunicação.</li>
+                                    </ul>`},
+                                    {title: "Poções e Itens de Cura", content: `<ul>
+                                        <li><strong>Poção de Vida (Miudeza):</strong> Recupera 1d8 + VIG de HP.</li>
+                                        <li><strong>Poção de Energia (Miudeza):</strong> Recupera 1d6 + AGI de EP.</li>
+                                        <li><strong>Unguento de Curandeiro (Miudeza):</strong> Remove veneno ou doença leve (requer teste de SAB).</li>
+                                        <li><strong>Luz de FÉ (Miudeza):</strong> Ilumina 20m e repele Sombras por 1 hora.</li>
+                                    </ul>`},
+                                    {title: "Consumíveis Sagrados", content: `<ul>
+                                        <li><strong>Óleo da Oliveira Vigia (Miudeza):</strong> Cura 1d8 + SAB HP e remove 1 ponto de Corrupção.</li>
+                                        <li><strong>Pólen da Flor do Sol (Miudeza):</strong> Recupera 1d6 + FÉ EP e concede +2 em 1 teste de Percepção.</li>
+                                        <li><strong>Água do Rio de Luz (Miudeza):</strong> Purifica uma pequena área ou objeto.</li>
+                                        <li><strong>Fruto de Gan-Eved (Miudeza):</strong> Cura 2d6 HP e concede Vantagem no próximo teste de FÉ.</li>
+                                        <li><strong>Lágrima da Aurora (Miudeza):</strong> Remove a condição “amedrontado” ou “enfeitiçado”.</li>
+                                    </ul>`},
+                                    {title: "Outros Itens de Viagem", content: `<ul>
+                                        <li><strong>Tocha (Miudeza):</strong> Iluminação por 1h.</li>
+                                        <li><strong>Kit de ervas (Leve):</strong> Cura 1d4 HP fora de combate (1 uso/dia).</li>
+                                        <li><strong>Odre de água (Leve):</strong> Hidratação por 1 dia.</li>
+                                        <li><strong>Ração seca (Miudeza):</strong> Mantém a energia em viagens longas.</li>
+                                        <li><strong>Pederneira (Miudeza):</strong> Acender fogueiras ou tochas.</li>
+                                        <li><strong>Mapa regional (Miudeza):</strong> Reduz risco de se perder.</li>
+                                    </ul>`},
+                                ])
+                            },
                             { title: "Equipamento Inicial por Classe", content: () => `
                                 ${renderAccordion([
                                     { title: "Guardião", content: "Espada Longa ou Machado de Guerra, Cota de Malha, Escudo Redondo, mochila com 3 rações e 1 odre de água." },
@@ -1070,3 +1114,6 @@
     </script>
 </body>
 </html>
+
+
+
