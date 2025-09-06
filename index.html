@@ -138,13 +138,10 @@
             // --- FUNÇÕES DE RENDERIZAÇÃO AUXILIARES ---
             function highlight(text, q) {
                 if (!q || !text) return text;
-                const regex = new RegExp(`(${q.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")})`, "gi");
-                return text.split(regex).map(part => {
-                    if (part.toLowerCase() === q.toLowerCase()) {
-                        return `<span class="bg-yellow-300/70 dark:bg-yellow-500/60 rounded-sm px-0.5">${part}</span>`;
-                    }
-                    return part;
-                }).join('');
+                const query = q.trim();
+                if (!query) return text;
+                const regex = new RegExp(`(${query.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")})`, "gi");
+                return String(text).replace(regex, `<span class="bg-yellow-300/70 dark:bg-yellow-500/60 rounded-sm px-0.5">$1</span>`);
             }
 
             function renderAccordion(items) {
@@ -278,6 +275,24 @@
                                 <p>Atributos são valores que representam as capacidades básicas do seu personagem. Eles definem quão forte, rápido, sábio ou resistente alguém é.</p>
                                 <h4>Regras de Distribuição</h4>
                                 <p>Todos os atributos começam em 10. Você tem mais 10 pontos para distribuir livremente, sem ultrapassar 15 em nenhum atributo inicial. Baixar qualquer atributo para 6 concede +2 pontos extras, uma única vez.</p>
+                                
+                                <h5 class="!font-semibold !mt-6">Modificadores de Atributo</h5>
+                                <p>Cada valor de atributo corresponde a um modificador, que será somado às rolagens de d20. Este bônus (ou penalidade) é o que realmente entra na fórmula dos testes.</p>
+                                ${renderTable(
+                                    ["Valor do Atributo", "Modificador"],
+                                    [
+                                        ["6-7", "-2"],
+                                        ["8-9", "-1"],
+                                        ["10-11", "+0"],
+                                        ["12-13", "+1"],
+                                        ["14-15", "+2"],
+                                        ["16-17", "+3"],
+                                        ["18-19", "+4"],
+                                        ["20", "+5"]
+                                    ]
+                                )}
+
+                                <h4 class="!mt-6">Tabela de Atributos</h4>
                                 ${renderTable(
                                     ["Atributo", "Sigla", "Descrição", "Exemplos de Uso"],
                                     [
@@ -288,20 +303,6 @@
                                         ["Sabedoria", "SAB", "Discernimento e percepção.", "Detectar armadilhas, interpretar sinais."],
                                         ["Carisma", "CAR", "Influência e persuasão.", "Negociar, inspirar aliados."],
                                         ["Fé", "FÉ", "Força moral e espiritual.", "Resistir à corrupção, ativar bênçãos."]
-                                    ]
-                                )}
-                                <h4 class="!mt-6">Escala de Atributos</h4>
-                                ${renderTable(
-                                    ["Valor", "Descrição"],
-                                    [
-                                        ["1–3", "Muito fraco"],
-                                        ["4–6", "Fraco"],
-                                        ["7–9", "Abaixo da média"],
-                                        ["10–11", "Média humana"],
-                                        ["12–14", "Acima da média"],
-                                        ["15–17", "Excelente"],
-                                        ["18–19", "Heróico"],
-                                        ["20", "Lendário"]
                                     ]
                                 )}`
                             },
@@ -322,11 +323,65 @@
                                     ]
                                 )}`
                             },
-                            { title: "Habilidades de Classe (Dons da Criação)", content: () => `
-                                <p>Os Dons da Criação são manifestações da fé e da sintonia com a obra de Elyon. Cada Dom consome Pontos de Energia (PE). A progressão de nível acontece em marcos narrativos, e as novas habilidades são ganhas nos níveis 3, 5 e 7.</p>
+                            {
+                                title: "Habilidades Derivadas",
+                                content: () => `
+                                <p>Algumas capacidades importantes do seu personagem não são atributos básicos, mas sim valores calculados a partir deles. São essenciais para o combate e a sobrevivência.</p>
+                                ${renderTable(
+                                    ["Habilidade", "Fórmula de Cálculo", "Descrição"],
+                                    [
+                                        ["Pontos de Vida (PV)", "VIG × 5", "A quantidade de dano que o personagem consegue suportar antes de cair."],
+                                        ["Pontos de Energia (PE)", "(VIG + Modificador de SAB) × 2", "O fôlego espiritual e mental para usar Dons da Criação e habilidades especiais."],
+                                        ["Iniciativa", "Modificador de AGI", "Define a ordem de ação no início de um combate. (Rolagem: 1d20 + Mod. AGI)."],
+                                        ["Ataque Corpo a Corpo", "Modificador de FOR", "O bônus somado ao d20 para ataques com armas como espadas e machados."],
+                                        ["Ataque à Distância", "Modificador de AGI", "O bônus somado ao d20 para ataques com arcos, bestas e armas de arremesso."],
+                                        ["Defesa (DEF)", "10 + Modificador de AGI + Bônus de Armadura/Escudo", "A dificuldade para um inimigo acertar um ataque em você."],
+                                        ["Resistência à Corrupção", "Modificador de FÉ", "O bônus para resistir aos efeitos da escuridão, medo e tentações."]
+                                    ]
+                                )}`
+                            },
+                            { 
+                                title: "Habilidades de Classe (Exemplos Mecânicos)", 
+                                content: () => `
+                                    <p>Aqui estão exemplos de como as habilidades de cada classe funcionam mecanicamente, com seus custos em Pontos de Energia (PE) e efeitos diretos em jogo. Esta é uma referência rápida para as habilidades mais icônicas.</p>
+                                    ${renderAccordion([
+                                        { title: "Guardião", content: `<ul>
+                                            <li><strong>Postura Inabalável (Passiva):</strong> Enquanto estiver adjacente a um aliado, pode usar a sua reação para adicionar o seu bónus de Vigor à DEF desse aliado contra um ataque.</li>
+                                            <li><strong>Muralha de Fé (Nível 3):</strong> Custa 5 PE. Como uma ação, todos os aliados a 3 metros recebem +2 em testes de Fé contra medo e corrupção até ao final do seu próximo turno.</li>
+                                        </ul>`},
+                                        { title: "Arauto", content: `<ul>
+                                            <li><strong>Palavras que Movem (1/dia):</strong> Não requer teste para convencer um PNJ a realizar uma ação não-letal e razoável.</li>
+                                            <li><strong>Rede de Contatos (Nível 3):</strong> Ao passar um dia numa cidade, pode fazer um teste de Carisma (DF 15) para encontrar um contacto útil (informador, guarda, mercador) que lhe deva um pequeno favor.</li>
+                                        </ul>`},
+                                        { title: "Curandeiro", content: `<ul>
+                                            <li><strong>Toque Restaurador (Nível 1):</strong> Custa 3 PE. Cura 1d8 + Modificador de SAB em HP.</li>
+                                            <li><strong>Purificar (Nível 3):</strong> Custa 5 PE. Remove uma condição (envenenado, doente) de um alvo.</li>
+                                        </ul>`},
+                                        { title: "Caçador de Sombras", content: `<ul>
+                                            <li><strong>Olhos na Escuridão (Passiva):</strong> Tem vantagem em testes de Percepção para detetar criaturas das Sombras ou que estejam escondidas.</li>
+                                            <li><strong>Golpe Silencioso (Nível 3):</strong> Se atacar um inimigo que ainda não agiu no combate, causa +1d6 de dano extra.</li>
+                                        </ul>`},
+                                        { title: "Místico", content: `<ul>
+                                            <li><strong>Manifestação Elemental (Nível 1):</strong> Custa 4 PE. Escolha um efeito:
+                                                <ul class="!list-disc !pl-5 !mt-2">
+                                                    <li><strong>Luz:</strong> Cega um inimigo por 1 turno (teste de VIG DF 13 para resistir).</li>
+                                                    <li><strong>Vento:</strong> Empurra um alvo 3 metros.</li>
+                                                    <li><strong>Som:</strong> Cria um ruído alto para distrair ou ensurdecer um alvo por 1 turno (teste de VIG DF 13 para resistir).</li>
+                                                </ul>
+                                            </li>
+                                            <li class="!mt-2"><strong>Escudo de Luz (Nível 5):</strong> Custa 6 PE. Como reação, concede a um aliado +4 de DEF contra um ataque.</li>
+                                        </ul>`},
+                                        { title: "Peregrino", content: `<ul>
+                                            <li><strong>Sinais da Jornada (1/sessão):</strong> Pode pedir ao Mestre uma pista direta sobre o caminho a seguir, a fraqueza de um inimigo ou o segredo de um local.</li>
+                                            <li><strong>Fé Inspiradora (Nível 5):</strong> Custa 8 PE. Todos os aliados que o conseguem ouvir ganham vantagem no seu próximo teste.</li>
+                                        </ul>`},
+                                    ])}`
+                            },
+                            { title: "Progressão de Nível e Dons da Criação", content: () => `
+                                <p>Em Netzeroth, não existe "magia" como um poder arcano. O que existe são os <strong>Dons da Criação</strong>: manifestações da fé e da sintonia com a obra de Elyon. Cada Dom consome Pontos de Energia (PE) e é desbloqueado em níveis específicos.</p>
                                 ${renderAccordion([
                                     { title: "Guardião", content: `<ul>
-                                        <li><strong>Nível 1 - Postura Inabalável (Passiva):</strong> Pode usar sua reação para adicionar seu bônus de Vigor à DEF de um aliado adjacente contra um ataque.</li>
+                                        <li><strong>Nível 1 - Postura Inabalável (Passiva):</strong> Enquanto estiver adjacente a um aliado, pode usar a sua reação para adicionar o seu bónus de Vigor à DEF desse aliado contra um ataque.</li>
                                         <li><strong>Nível 3 - Muralha de Fé (5 PE):</strong> Como uma ação, todos os aliados a 3 metros recebem +2 em testes de Fé contra medo e corrupção.</li>
                                         <li><strong>Nível 5 - Voto de Proteção (4 PE):</strong> Como ação bônus, força um inimigo a ter desvantagem em ataques que não sejam contra você.</li>
                                         <li><strong>Nível 7 - Inquebrável (8 PE, 1x/descanso):</strong> Como reação, quando seria reduzido a 0 HP, permanece com 1 HP.</li>
@@ -344,21 +399,21 @@
                                         <li><strong>Nível 7 - Toque Restaurador Maior (6 PE):</strong> Cura 2d8 + Modificador de SAB em HP.</li>
                                     </ul>`},
                                     { title: "Caçador de Sombras", content: `<ul>
-                                        <li><strong>Nível 1 - Olhos na Escuridão (Passiva):</strong> Tem vantagem em testes de Percepção para detectar criaturas das Sombras.</li>
-                                        <li><strong>Nível 3 - Golpe Silencioso:</strong> Se atacar um inimigo que ainda não agiu, causa +1d6 de dano extra.</li>
+                                        <li><strong>Nível 1 - Olhos na Escuridão (Passiva):</strong> Tem vantagem em testes de Percepção para detetar criaturas das Sombras.</li>
+                                        <li><strong>Nível 3 - Golpe Silencioso:</strong> Se atacar um inimigo que ainda não agiu no combate, causa +1d6 de dano extra.</li>
                                         <li><strong>Nível 5 - Passo Leve:</strong> Ignora penalidades de terreno difícil.</li>
                                         <li><strong>Nível 7 - Ataque e Fuga:</strong> Pode atacar e se mover sem provocar ataques de oportunidade.</li>
                                     </ul>`},
                                     { title: "Místico", content: `<ul>
-                                        <li><strong>Nível 1 - Manifestação Elemental (4 PE):</strong> Cria um efeito de Luz (cega), Vento (empurra) ou Som (ensurdece).</li>
+                                        <li><strong>Nível 1 - Manifestação Elemental (4 PE):</strong> Cria um efeito de Luz (cega), Vento (empurra) ou Som (ensurdece). Teste de VIG DF 13 para resistir.</li>
                                         <li><strong>Nível 3 - Passo do Vento (5 PE):</strong> Aumenta o movimento de um aliado em 3 metros por um turno.</li>
                                         <li><strong>Nível 5 - Escudo de Luz (6 PE):</strong> Como reação, concede a um aliado +4 de DEF contra um ataque.</li>
                                         <li><strong>Nível 7 - Manifestação Aprimorada (7 PE):</strong> Pode manifestar dois efeitos elementais diferentes com uma única ação.</li>
                                     </ul>`},
                                     { title: "Peregrino", content: `<ul>
-                                        <li><strong>Nível 1 - Sinais da Jornada (1/sessão):</strong> Pode pedir ao Mestre uma pista direta sobre o caminho, fraqueza de inimigo ou segredo de um local.</li>
-                                        <li><strong>Nível 3 - Caminho Seguro (5 PE):</strong> Concede ao grupo vantagem no próximo teste para evitar perigos de viagem.</li>
-                                        <li><strong>Nível 5 - Fé Inspiradora (8 PE):</strong> Todos os aliados que o ouvem ganham vantagem no seu próximo teste.</li>
+                                        <li><strong>Nível 1 - Sinais da Jornada (1/sessão):</strong> Pode pedir ao Mestre uma pista direta sobre o caminho a seguir, a fraqueza de um inimigo ou o segredo de um local.</li>
+                                        <li><strong>Nível 3 - Vantagem em Sobrevivência:</strong> Ganha vantagem em testes de sobrevivência em ambientes selvagens.</li>
+                                        <li><strong>Nível 5 - Fé Inspiradora (8 PE):</strong> Todos os aliados que o conseguem ouvir ganham vantagem no seu próximo teste.</li>
                                         <li><strong>Nível 7 - Sentir a Ferida do Mundo (Passiva):</strong> Sente automaticamente a presença e direção da fonte de Corrupção mais próxima num raio de 1 km.</li>
                                     </ul>`},
                                 ])}`
@@ -455,8 +510,9 @@
                 content: () => `
                     <div class="space-y-4">
                      ${renderAccordion([
-                        { title: "Sistema de Regras (Testes e DF)", content: () => `
-                            <p><strong>Fórmula Básica:</strong> 1d20 + Modificador de Atributo + Bônus de Skill ≥ DF (Dificuldade).</p>
+                        { title: "Estrutura do Sistema de Regras", content: () => `
+                            <p>O sistema de Netzeroth é simples, focado na narrativa. Ações com risco de falha são resolvidas com uma rolagem de dado, buscando superar uma Dificuldade (DF) definida pelo Mestre.</p>
+                            <p><strong>Fórmula Básica:</strong> 1d20 + Modificador de Atributo + Bônus de Skill (se aplicável) ≥ DF.</p>
                             ${renderTable(
                                 ["DF", "Tipo", "Exemplo"],
                                 [
@@ -468,13 +524,9 @@
                                     ["30", "Lendário", "Proezas míticas"]
                                 ]
                             )}
-                            <h4 class="!mt-6">Os Dados</h4>
-                            <p>Em Netzeroth, diferentes dados são usados para diferentes propósitos:</p>
-                            <ul>
-                                <li><strong>d20:</strong> O dado principal, usado para todos os testes de ação, como ataques, esquivas e testes de skill.</li>
-                                <li><strong>d12, d10, d8, d6:</strong> Usados principalmente para calcular o dano de armas e o efeito de algumas habilidades.</li>
-                                <li><strong>d4:</strong> Geralmente usado para danos de armas menores ou para calcular a recuperação de recursos, como Pontos de Energia em um descanso curto.</li>
-                            </ul>
+                            <h4 class="!mt-6">Testes com Dois Atributos</h4>
+                            <p>Algumas ações complexas podem exigir a combinação de dois atributos. Nesses casos, o Mestre pode pedir um teste usando o modificador do atributo principal, e adicionar um bônus ou penalidade (+2 / -2) baseado no segundo atributo, ou usar a média dos modificadores.</p>
+
                             <h4 class="!mt-6">Vantagem e Desvantagem</h4>
                             <p>Para criar momentos mais dramáticos, o Mestre pode conceder Vantagem ou Desvantagem em um teste.</p>
                             <ul>
@@ -483,7 +535,7 @@
                             </ul>`
                         },
                         { title: "Combate", content: () => `
-                            <p><strong>Iniciativa:</strong> 1d20 + AGI.</p>
+                            <p><strong>Iniciativa:</strong> 1d20 + Modificador de AGI.</p>
                             <p><strong>Ações por Turno:</strong> 1 Ação Principal, 1 Movimento, e talvez 1 Ação Bônus.</p>
                             <p><strong>Ataques:</strong> 1d20 + modificador de ataque ≥ Defesa (DEF) do alvo. <strong>Crítico (20 natural):</strong> Dobre os dados de dano.</p>
                             <p><strong>Defesa (DEF):</strong> 10 + Modificador de AGI + Bônus de Armadura + Bônus de Escudo.</p>`
@@ -570,8 +622,13 @@
                             {
                                 title: "Experiência (XP) e Marcos de Jornada",
                                 content: () => `
-                                    <p>O crescimento em Netzeroth é medido por feitos que mudam o mundo. O avanço ocorre através de <strong>Marcos de Jornada</strong>. Ao acumular 3 Marcos, todos os personagens sobem 1 nível.</p>
+                                    <h4>A Filosofia da Progressão</h4>
+                                    <p>Em Netzeroth, o avanço não se resume a derrotar inimigos. O crescimento verdadeiro vem de viver marcos significativos na luta contra as Sombras. Cada vitória, descoberta ou ato de coragem aproxima o grupo de Elyon e fortalece sua jornada. Esse sistema reflete que a luz cresce quando escolhas certas são feitas — mesmo que custem sacrifícios.</p>
+                                    
+                                    <h5 class="!font-semibold !mt-4">Como Funciona</h5>
+                                    <p>O avanço ocorre através de <strong>Marcos de Jornada</strong>. Ao acumular 3 Marcos, todos os personagens sobem 1 nível. Exemplos de marcos incluem: cumprir uma missão para uma Ordem Livre, purificar um item maculado, mapear uma região inexplorada ou proteger inocentes de uma ameaça mortal.</p>
                                     <p>Cada Marco de Jornada concede <strong>350 XP</strong> a cada personagem. O Mestre pode conceder XP bônus por desafios ou boa interpretação.</p>
+
                                     ${renderTable(
                                         ["Nível Atual", "XP para o Próximo Nível", "Total de XP Acumulado"],
                                         [
@@ -934,49 +991,44 @@
                                     <li>Pequenos atos de bondade podem ter impacto tão grande quanto uma vitória em batalha.</li>
                                 </ul>
 
-                                <h4 class="!mt-6">Inimigos Memoráveis</h4>
-                                <p>Um inimigo não é só um bloco de estatísticas. Para torná-lo memorável:</p>
+                                <h4 class="!mt-6">Desafios Espirituais</h4>
+                                <p>Netzeroth é mais que aço e flechas. Desafios espirituais são centrais para a experiência. Use-os para testar a convicção dos heróis:</p>
                                 <ul>
-                                    <li><strong>Dê um traço marcante:</strong> aparência, voz, arma ou gesto.</li>
-                                    <li><strong>Conecte-o à história:</strong> talvez já tenha cruzado com os heróis antes.</li>
-                                    <li><strong>Dê-lhe um objetivo:</strong> não apenas “matar”, mas proteger algo ou corromper um local sagrado.</li>
+                                   <li>Resistir à tentação de usar um poder sombrio para um “bem maior”.</li>
+                                   <li>Decidir entre salvar aliados ou impedir que um artefato caia nas mãos do inimigo.</li>
+                                   <li>Escolher entre a vingança e a misericórdia.</li>
                                 </ul>
-                                <p class="mt-2">Grandes vilões devem ser escalados: introduza-os sutilmente, crie conflitos parciais e guarde o confronto final para o clímax.</p>
+                                <p>Para esses testes, o Mestre pode combinar <strong>FÉ</strong> com outro atributo relevante (ex: FÉ + VIG para resistir à tortura; FÉ + CAR para manter a moral de um exército).</p>
                              `
                          },
                          { 
-                            title: "Combate: Regras e Balanceamento", 
+                            title: "Combate, Inimigos e Balanceamento", 
                             content: () => `
                                 <h4>Regras de Combate Básico</h4>
                                 <ol class="list-decimal pl-5 space-y-2">
-                                    <li><strong>Início (Iniciativa):</strong> Cada participante rola 1d20 + AGI. A ordem é do maior para o menor.</li>
+                                    <li><strong>Início (Iniciativa):</strong> Cada participante rola 1d20 + Modificador de AGI. A ordem é do maior para o menor.</li>
                                     <li><strong>Turnos:</strong> No seu turno, você tem uma <strong>Ação Principal</strong> e um <strong>Movimento</strong>. Algumas habilidades podem conceder uma <strong>Ação Bônus</strong>.</li>
                                     <li><strong>Ataques:</strong> Role 1d20 + modificador de ataque. Se igualar ou superar a Defesa (DEF) do alvo, acerta. Um 20 natural é um acerto crítico (dobre os dados de dano).</li>
                                     <li><strong>Fim do Combate:</strong> O Mestre narra as consequências, recompensas e o que acontece a seguir.</li>
                                 </ol>
 
-                                <h5 class="!font-semibold !mt-4">Condições Comuns</h5>
-                                ${renderTable(
-                                    ["Condição", "Efeito"],
-                                    [
-                                        ["Atordoado", "Perde o próximo turno."],
-                                        ["Envenenado", "–2 em testes físicos até ser curado."],
-                                        ["Imobilizado", "Não pode se mover."],
-                                        ["Inspirado", "Ganha Vantagem no próximo teste."],
-                                        ["Amedrontado", "Sofre Desvantagem contra a fonte do medo."]
-                                    ]
-                                )}
-                                <p class="mt-2 text-xs italic">O combate deve ser tenso, mas fluido. Use o ambiente para criar drama.</p>
-
-                                <h4 class="!mt-6">Criando Encontros Equilibrados</h4>
-                                <p>Para definir a dificuldade de um encontro, avalie o poder do grupo e o papel do obstáculo na história. O Nível de Desafio (ND) de uma criatura ajuda a medir isso (um encontro de ND 1 é um desafio equilibrado para 4 personagens de nível 1).</p>
+                                <h4 class="!mt-6">Inimigos Memoráveis e Balanceamento (ND)</h4>
+                                <p>Um inimigo memorável precisa de um traço marcante, uma conexão com a história e um objetivo claro. O <strong>Nível de Desafio (ND)</strong> é uma ferramenta para medir a dificuldade de um combate: um encontro de ND 1 é um desafio equilibrado para 4 personagens de nível 1.</p>
                                 <h5 class="!font-semibold !mt-4">Fórmula Rápida para Balanceamento</h5>
                                 <ul>
                                     <li><strong>Ameaça Baixa:</strong> HP total dos inimigos = metade do HP total dos jogadores.</li>
                                     <li><strong>Ameaça Média:</strong> HP total dos inimigos = HP total dos jogadores.</li>
                                     <li><strong>Ameaça Alta:</strong> HP total dos inimigos = 1.5x o HP total dos jogadores.</li>
-                                    <li><strong>Ameaça Épica:</strong> HP total = 2x ou mais, com habilidades únicas.</li>
                                 </ul>
+                                
+                                <h4 class="!mt-6">Ferramenta Rápida para Criar Inimigos</h4>
+                                <ol class="list-decimal pl-5 text-sm">
+                                   <li><strong>Nome e Papel:</strong> Ex: “Espadas Sombrias, elite militar do Usurpador”.</li>
+                                   <li><strong>Atributos-Chave:</strong> Apenas 2 ou 3 mais relevantes para o tipo.</li>
+                                   <li><strong>Habilidade Especial:</strong> Algo único, ligado ao tema da criatura.</li>
+                                   <li><strong>Motivação:</strong> O que ela quer e por quê.</li>
+                                   <li><strong>Cena de Impacto:</strong> A primeira vez que aparece deve ser memorável.</li>
+                                </ol>
                             `
                         },
                          {
@@ -1003,13 +1055,26 @@
                                 <p>Da mesma forma, as consequências de uma falha devem ir além da perda de HP. Uma falha pode resultar na perda de um aliado, no avanço da Corrupção em uma região (preenchendo um Relógio Regional) ou na quebra de confiança com uma Ordem Livre.</p>`
                          },
                         { title: "NPCs Universais", content: () => renderAccordion([
-                            { title: "Elonir, o Velho Sábio-Profeta", content: "Fala por parábolas e pode revelar visões ou profecias." },
-                            { title: "Mira, a Viajante das Estradas", content: "Mensageira que sempre traz notícias frescas e ganchos de aventura." },
-                            { title: "Drako, o Ferreiro", content: "Pode consertar armas e forjar itens simples no meio da jornada." },
-                            { title: "Seliah, a Curandeira Nômade", content: "Oferece cura básica, mas sempre pede algo em troca." },
-                            { title: "Kael, o Errante Redimido", content: "Ex-guerreiro buscando redenção. Pode ser um aliado poderoso ou um dilema moral." },
-                            { title: "Ruthiel, a Cantora Itinerante", content: "Guardiã de histórias antigas, pode inspirar o grupo com seu canto." },
-                            { title: "Alon, o Louco das Praças", content: "Suas palavras desconexas podem esconder profecias reais." },
+                            { title: "Elonir, o Velho Sábio-Profeta", content: "<strong>Função:</strong> vidente e intérprete de sonhos.<br><strong>Uso:</strong> Guia espiritual, provoca dilemas morais, pode dar uma bênção simbólica." },
+                            { title: "Mira, a Viajante das Estradas", content: "<strong>Função:</strong> mensageira, sempre com notícias frescas.<br><strong>Uso:</strong> Introduz novas tramas, conecta Ordens distantes." },
+                            { title: "Drako, o Ferreiro", content: "<strong>Função:</strong> conserta armas, forja ferramentas.<br><strong>Uso:</strong> Suporte prático para renovar recursos no campo." },
+                            { title: "Seliah, a Curandeira Nômade", content: "<strong>Função:</strong> curandeira herbalista.<br><strong>Uso:</strong> Resgate de grupo ferido, contato com tradições antigas." },
+                            { title: "Tovran, o Mercador Astuto", content: "<strong>Função:</strong> comerciante e oportunista.<br><strong>Uso:</strong> Teste social para obter recursos ou informações." },
+                            { title: "Ruthiel, a Cantora Itinerante", content: "<strong>Função:</strong> artista, guardiã de histórias.<br><strong>Uso:</strong> Introduz lendas, conecta a aventura ao épico." },
+                            { title: "Kael, o Errante Redimido", content: "<strong>Função:</strong> ex-guerreiro buscando redenção.<br><strong>Uso:</strong> Dilema moral — será confiável ou pode recair?" },
+                            { title: "Edena, a Peregrina Jovem", content: "<strong>Função:</strong> novata Portadora do Selo.<br><strong>Uso:</strong> Reflexo dos jogadores, pode ser inspiração ou um fardo." },
+                            { title: "O Pescador Sem Nome", content: "<strong>Função:</strong> guia em rios ou mares.<br><strong>Uso:</strong> Introduz perigos de Yam Talorah ou traz presságios." },
+                            { title: "Nurian, a Guardiã da Ponte", content: "<strong>Função:</strong> vigia uma passagem entre regiões.<br><strong>Uso:</strong> Teste de Persuasão ou de fé para conseguir passar." },
+                            { title: "Alon, o Louco das Praças", content: "<strong>Função:</strong> pregador de rua.<br><strong>Uso:</strong> Fonte de visões; o que parece delírio pode ser revelação." },
+                            { title: "Iva, a Criança do Vento", content: "<strong>Função:</strong> menina órfã que surge em diferentes vilas.<br><strong>Uso:</strong> Traz esperança e avisos proféticos singelos." },
+                            { title: "Killian, o Caçador Silencioso", content: "<strong>Função:</strong> guia das florestas.<br><strong>Uso:</strong> Conduz por atalhos, mas pode trazer más notícias." },
+                            { title: "Samya, a Guardiã dos Códigos", content: "<strong>Função:</strong> bibliotecária errante.<br><strong>Uso:</strong> Revela conhecimento esquecido, mas exige sabedoria no uso." },
+                            { title: "Ossian, o Bardo Cego", content: "<strong>Função:</strong> músico viajante.<br><strong>Uso:</strong> Narra histórias antigas em forma de música." },
+                            { title: "Hadriel, o Exilado", content: "<strong>Função:</strong> nobre destituído.<br><strong>Uso:</strong> Contato com a alta nobreza ou dilema sobre justiça." },
+                            { title: "Ner, a Pastora de Rebanhos", content: "<strong>Função:</strong> camponesa simples.<br><strong>Uso:</strong> Símbolo de paz; pode abrigar heróis ou testemunhar algo." },
+                            { title: "Ezren, o Guardião da Ponte das Sombras", content: "<strong>Função:</strong> ex-cavaleiro vigiando uma ruína.<br><strong>Uso:</strong> Desafia os heróis a provarem sua fé." },
+                            { title: "Levana, a Mercadora de Sonhos", content: "<strong>Função:</strong> vendedora de artefatos estranhos.<br><strong>Uso:</strong> Vende itens que podem ser bênção ou maldição." },
+                            { title: "Uri, o Ancião Errante", content: "<strong>Função:</strong> andarilho que aconselha o grupo.<br><strong>Uso:</strong> Surge em encruzilhadas como um enviado de Elyon." },
                         ])},
                         { title: "Ferramentas Rápidas de Improviso", content: () =>`
                             <p>Use tabelas para gerar eventos, boatos e complicações rapidamente, mantendo o jogo fluido e surpreendente.</p>
@@ -1071,7 +1136,24 @@
                     </div>`
             }
             ];
+            
+            // --- Lógica de busca e pré-processamento ---
+            function stripHtml(html) {
+                if(!html) return "";
+                const tempDiv = document.createElement('div');
+                tempDiv.innerHTML = html;
+                return tempDiv.textContent || tempDiv.innerText || "";
+            }
 
+            const processedSections = sections.map(section => {
+                 const contentHtml = typeof section.content === 'function' ? section.content() : (section.content || '');
+                const searchableText = stripHtml(contentHtml).toLowerCase();
+                return {
+                    ...section,
+                    fullSearchableText: `${section.title.toLowerCase()} ${section.summary.toLowerCase()} ${searchableText}`
+                };
+            });
+            
             // --- ELEMENTOS DO DOM ---
             const bodyEl = document.body;
             const searchInput = document.getElementById('search-input');
@@ -1082,23 +1164,63 @@
 
             // --- FUNÇÕES DE RENDERIZAÇÃO ---
             function renderContent(section) {
+                if (!section) {
+                    contentArticle.innerHTML = '<p>Selecione uma seção para começar.</p>';
+                    return;
+                }
                 const finalHtml = `
                   <h2 class="!mb-1">${highlight(section.title, state.query)}</h2>
                   <p class="!mt-0 text-sm text-gray-700 dark:text-gray-400">${highlight(section.summary, state.query)}</p>
                   <div class="mt-4">${section.content()}</div>
                 `;
                 contentArticle.innerHTML = finalHtml;
+                autoExpandAccordions();
             }
 
+            function renderSearchResults() {
+                const q = state.query.toLowerCase().trim();
+                const filtered = processedSections.filter(s => s.fullSearchableText.includes(q));
+
+                if (filtered.length === 0) {
+                    contentArticle.innerHTML = `<div class="p-4 border border-gray-300 dark:border-gray-700 rounded-xl bg-white dark:bg-gray-900 shadow-sm"><p>Nenhum resultado encontrado para "<strong>${state.query}</strong>".</p></div>`;
+                    return;
+                }
+
+                const resultsHtml = filtered.map(section => `
+                    <div class="mb-8 p-4 border border-gray-300 dark:border-gray-700 rounded-xl bg-white dark:bg-gray-900 shadow-sm">
+                        <button data-key="${section.key}" class="nav-button w-full text-left">
+                           <h3 class="!text-lg !font-bold !mt-0 !mb-1 hover:underline">${highlight(section.title, state.query)}</h3>
+                        </button>
+                        <div class="mt-4">${section.content()}</div>
+                    </div>
+                `).join('');
+
+                contentArticle.innerHTML = `<h2 class="!mb-4">Resultados da Busca</h2>${resultsHtml}`;
+                autoExpandAccordions();
+            }
+
+            function autoExpandAccordions() {
+                if (state.query.trim()) {
+                    const accordions = contentArticle.querySelectorAll('.accordion-toggle');
+                    accordions.forEach(button => {
+                        const content = button.nextElementSibling;
+                        const title = button.querySelector('div > div:first-child');
+                        if ((content && (content.innerHTML.includes('bg-yellow-300') || content.innerHTML.includes('bg-yellow-500'))) || (title && (title.innerHTML.includes('bg-yellow-300') || title.innerHTML.includes('bg-yellow-500')))) {
+                           const icon = button.querySelector('.accordion-icon');
+                            button.setAttribute('aria-expanded', 'true');
+                            content.classList.remove('hidden');
+                            if (icon) icon.textContent = '−';
+                        }
+                    });
+                }
+            }
+            
             function renderSidebar() {
-                const q = state.query.toLowerCase();
-                const filtered = !q ? sections : sections
-                    .map(s => ({...s, score: (s.title.toLowerCase().includes(q) ? 3 : 0) + (s.summary.toLowerCase().includes(q) ? 1 : 0)}))
-                    .filter(s => s.score > 0)
-                    .sort((a,b) => b.score - a.score);
+                const q = state.query.toLowerCase().trim();
+                const filtered = !q ? processedSections : processedSections.filter(s => s.fullSearchableText.includes(q));
 
                 sidebarNav.innerHTML = filtered.map(s => {
-                    const isActive = state.activeKey === s.key;
+                    const isActive = state.activeKey === s.key && !state.query.trim();
                     
                     const buttonClasses = isActive
                         ? 'bg-indigo-600 dark:bg-indigo-500'
@@ -1139,7 +1261,6 @@
             }
 
             function updateUI() {
-                // Lógica de troca de tema APRIMORADA para ser mais direta e robusta
                 if (state.isDark) {
                     document.documentElement.classList.add('dark');
                     bodyEl.className = 'font-sans bg-gray-950 text-gray-200';
@@ -1153,15 +1274,23 @@
 
                 renderSidebar();
                 renderTabs();
-                const currentSection = sections.find(s => s.key === state.activeKey) || sections[0];
-                renderContent(currentSection);
+
+                if (state.query.trim()) {
+                    tabsContainer.classList.add('hidden');
+                    renderSearchResults();
+                } else {
+                    tabsContainer.classList.remove('hidden');
+                    const currentSection = processedSections.find(s => s.key === state.activeKey) || processedSections[0];
+                    renderContent(currentSection);
+                }
             }
 
             // --- MANIPULADORES DE EVENTOS ---
             function handleNavClick(e) {
                 const button = e.target.closest('.nav-button');
                 if (button && button.dataset.key) {
-                    setState({ activeKey: button.dataset.key });
+                    searchInput.value = '';
+                    setState({ activeKey: button.dataset.key, query: '' });
                 }
             }
 
@@ -1183,10 +1312,10 @@
                 try {
                     const storedTab = localStorage.getItem('netzeroth_tab');
                     const storedTheme = localStorage.getItem('netzeroth_theme');
-                    state.activeKey = storedTab ? JSON.parse(storedTab) : sections[0].key;
+                    state.activeKey = storedTab ? JSON.parse(storedTab) : processedSections[0].key;
                     state.isDark = storedTheme ? JSON.parse(storedTheme) : true;
                 } catch {
-                    state.activeKey = sections[0].key;
+                    state.activeKey = processedSections[0].key;
                     state.isDark = true;
                 }
             }
@@ -1199,15 +1328,22 @@
 
                 updateUI();
             }
-
-
-
-            // --- Registra os listeners ---
-            searchInput.addEventListener('input', (e) => setState({ query: e.target.value }));
+            
+            let searchTimeout;
+            searchInput.addEventListener('input', (e) => {
+                clearTimeout(searchTimeout);
+                searchTimeout = setTimeout(() => {
+                    setState({ query: e.target.value, activeKey: state.activeKey });
+                }, 250); // Debounce
+            });
+            
             themeToggle.addEventListener('click', () => setState({ isDark: !state.isDark }));
             sidebarNav.addEventListener('click', handleNavClick);
             tabsContainer.addEventListener('click', handleNavClick);
-            contentArticle.addEventListener('click', handleAccordionToggle);
+            contentArticle.addEventListener('click', (e) => {
+                handleAccordionToggle(e);
+                handleNavClick(e); 
+            });
 
             // --- Primeira renderização ---
             loadState();
@@ -1216,3 +1352,4 @@
     </script>
 </body>
 </html>
+
