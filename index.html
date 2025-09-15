@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>A Lenda de Netzeroth - Guia</title>
+    <title>A Lenda de Netzeroth</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         /* Estilos básicos para emular a classe 'prose' do Tailwind para melhor legibilidade do texto */
@@ -451,7 +451,7 @@
                         ${renderAccordion([
                            { title: "Elyon, o Grande Rei", subtitle: "Restaurar o mundo e reunir os fiéis.", content: "Criador e soberano de Netzeroth. Seu chamado inspira coragem e propósito." },
                            { title: "O Usurpador", subtitle: "Corromper a criação e reinar nas sombras.", content: "Antigo guardião da corte, agora senhor da Escuridão Velada. Usa mentiras, medo e poder sombrio." },
-                           { title: "As Ordens Livres", subtitle: "Defender regiões e manter tradições.", content: "Irmandades, cidades e reinos que resistem à corrupção. Usam diplomacia, resistência militar e alianças." },
+                           { title: "As Ordens Livres", subtitle: "Defender regiões e manter tradições.", content: "Irmandades, cidades e pequenos reinos que resistem à corrupção. Usam diplomacia, resistência militar e alianças." },
                            { title: "As Sombras", subtitle: "Servir ao Usurpador e espalhar corrupção.", content: "Criaturas deformadas e homens que escolheram o caminho do poder sombrio." },
                         ])}
                         
@@ -623,26 +623,29 @@
                                 title: "Experiência (XP) e Marcos de Jornada",
                                 content: () => `
                                     <h4>A Filosofia da Progressão</h4>
-                                    <p>Em Netzeroth, o avanço não se resume a derrotar inimigos. O crescimento verdadeiro vem de viver marcos significativos na luta contra as Sombras. Cada vitória, descoberta ou ato de coragem aproxima o grupo de Elyon e fortalece sua jornada. Esse sistema reflete que a luz cresce quando escolhas certas são feitas — mesmo que custem sacrifícios.</p>
+                                    <p>Em Netzeroth, o avanço de nível não se baseia em derrotar inimigos, mas em viver <strong>Marcos de Jornada</strong> — feitos que mudam o mundo e fortalecem o espírito. O XP é uma ferramenta para registrar essa jornada de fé e coragem.</p>
                                     
-                                    <h5 class="!font-semibold !mt-4">Como Funciona</h5>
-                                    <p>O avanço ocorre através de <strong>Marcos de Jornada</strong>. Ao acumular 3 Marcos, todos os personagens sobem 1 nível. Exemplos de marcos incluem: cumprir uma missão para uma Ordem Livre, purificar um item maculado, mapear uma região inexplorada ou proteger inocentes de uma ameaça mortal.</p>
-                                    <p>Cada Marco de Jornada concede <strong>350 XP</strong> a cada personagem. O Mestre pode conceder XP bônus por desafios ou boa interpretação.</p>
-
+                                    <h5 class="!font-semibold !mt-4">Como Funciona: Marcos e XP</h5>
+                                    <ul>
+                                        <li>O Mestre concede <strong>Marcos de Jornada</strong> por feitos heroicos, espirituais ou exploratórios.</li>
+                                        <li>Cada marco vale <strong>350 XP</strong>. Acumular <strong>3 marcos</strong> (1.050 XP) permite que o personagem suba de nível (após um período de descanso e treino).</li>
+                                        <li>O Mestre pode dar XP bônus (25–100 XP) por boa interpretação ou por superar desafios menores.</li>
+                                    </ul>
+                                    <h5 class="!font-semibold !mt-4">Progressão de Níveis (Netzeroth)</h5>
                                     ${renderTable(
-                                        ["Nível Atual", "XP para o Próximo Nível", "Total de XP Acumulado"],
+                                        ["Nível", "XP Total Necessário para Alcançar"],
                                         [
-                                            ["1", "1.000", "0"],
-                                            ["2", "1.500", "1.000"],
-                                            ["3", "2.000", "2.500"],
-                                            ["4", "2.500", "4.500"],
-                                            ["5", "3.000", "7.000"],
-                                            ["6", "3.500", "10.000"],
-                                            ["7", "-", "13.500"]
+                                            ["1", "0"],
+                                            ["2", "1.000"],
+                                            ["3", "2.500"],
+                                            ["4", "4.500"],
+                                            ["5", "7.000"],
+                                            ["6", "10.000"],
+                                            ["7", "13.500"]
                                         ]
                                     )}`
                             },
-                            {
+                             {
                                 title: "Condições Comuns",
                                 content: () => `
                                     <p>Durante o combate e a exploração, personagens podem sofrer condições que alteram suas capacidades. Elas são temporárias e podem ser removidas com tempo, itens ou habilidades.</p>
@@ -1033,8 +1036,8 @@
                                     <li><strong>Ataques:</strong> Role 1d20 + modificador de ataque. Se igualar ou superar a Defesa (DEF) do alvo, acerta. Um 20 natural é um acerto crítico (dobre os dados de dano).</li>
                                     <li><strong>Fim do Combate:</strong> O Mestre narra as consequências, recompensas e o que acontece a seguir.</li>
                                 </ol>
-
-                                <h5 class="!font-semibold !mt-4">Condições Comuns</h5>
+                                
+                                <h4 class="!mt-6">Condições Comuns</h4>
                                 <p>Durante o combate, personagens e criaturas podem sofrer condições que alteram suas capacidades.</p>
                                 ${renderAccordion([
                                     { title: "Atordoado", content: "Perde o próximo turno." },
@@ -1043,7 +1046,7 @@
                                     { title: "Inspirado", content: "Ganha Vantagem no próximo teste." },
                                     { title: "Amedrontado", content: "Sofre Desvantagem contra a fonte do medo." }
                                 ])}
-
+                                
                                 <h4 class="!mt-6">Balanceamento de Encontros (Nível de Desafio - ND)</h4>
                                 <p>O Nível de Desafio (ND) é uma ferramenta para o Mestre medir a dificuldade de um combate.</p>
                                 <ul>
@@ -1143,17 +1146,89 @@
                                     ["8", "“As Sombras se infiltraram em uma das Ordens Livres.”"]
                                 ]
                             )}
-                            <h4 class="!mt-6">Tabela de Eventos Aleatórios em Haravoth (1d6)</h4>
-                            ${renderTable(
-                                ["1d6", "Evento"],
-                                [
-                                    ["1", "Uma caravana nômade pede escolta em troca de suprimentos."],
-                                    ["2", "Uma manada de animais assustados atravessa a trilha, forçando testes de Agilidade."],
-                                    ["3", "Uma Vinha Sussurrante tenta enganar os viajantes com vozes familiares."],
-                                    ["4", "Uma aldeia prepara uma festa tradicional e convida o grupo a participar."],
-                                    ["5", "Um mensageiro ferido da Ordem do Escudo de Pedra carrega um selo real."],
-                                    ["6", "Um artefato de uma antiga batalha é revelado após uma forte chuva."]]
-                            )}`
+                            <h4 class="!mt-6">Tabelas de Eventos Aleatórios Regionais (1d6)</h4>
+                            ${renderAccordion([
+                                { title: "Haravoth – Campos de Multidões", content: () => renderTable(
+                                    ["1d6", "Evento"],
+                                    [
+                                        ["1", "Uma caravana nômade pede escolta em troca de suprimentos."],
+                                        ["2", "Uma manada de animais assustados atravessa a trilha, forçando testes de Agilidade."],
+                                        ["3", "Uma Vinha Sussurrante tenta enganar os viajantes com vozes familiares."],
+                                        ["4", "Uma aldeia prepara uma festa tradicional e convida o grupo a participar."],
+                                        ["5", "Um mensageiro ferido da Ordem do Escudo de Pedra carrega um selo real."],
+                                        ["6", "Um artefato de uma antiga batalha é revelado após uma forte chuva."]]
+                                )},
+                                { title: "Ashkar – Terras Queimadas", content: () => renderTable(
+                                    ["1d6", "Evento"],
+                                    [
+                                        ["1", "Uma tempestade de cinzas repentina força o grupo a procurar abrigo."],
+                                        ["2", "Criaturas feitas de rocha e fúria emergem de fendas no solo."],
+                                        ["3", "Um Arbusto de Cinzas, raro e resiliente, bloqueia o caminho, mas suas folhas podem ser úteis."],
+                                        ["4", "Os restos de uma armadura brilhante são encontrados entre as ruínas, mas parecem amaldiçoados."],
+                                        ["5", "Sussurros distantes são ouvidos no vento, testando a FÉ dos personagens."],
+                                        ["6", "Uma fenda no chão revela um fluxo de magma que ilumina uma caverna oculta."]]
+                                )},
+                                { title: "Neveloth – Vales Enevoados", content: () => renderTable(
+                                    ["1d6", "Evento"],
+                                    [
+                                        ["1", "Sinos distantes tocam um padrão de aviso, mas a aldeia de onde vêm parece deserta."],
+                                        ["2", "A névoa se adensa e os personagens ouvem vozes sussurrando seus nomes, tentando atraí-los para fora da trilha."],
+                                        ["3", "Uma ponte de cordas essencial está rompida, e a névoa ao redor parece se mover de forma inteligente."],
+                                        ["4", "Um monge eremita silencioso aproxima-se e, por gestos, pede ajuda contra uma criatura em sua caverna."],
+                                        ["5", "O grupo encontra um viajante paralisado de medo, que afirma ter visto os 'Cavaleiros de Cinza'."],
+                                        ["6", "Os 'Seres da Névoa' surgem, não para atacar, mas para guiar silenciosamente por um atalho seguro."]]
+                                )},
+                                 { title: "Metsudoth – Cidades‑Muralha", content: () => renderTable(
+                                    ["1d6", "Evento"],
+                                    [
+                                        ["1", "O alarme de cerco soa e os portões se fecham, prendendo os heróis do lado de dentro (ou de fora)."],
+                                        ["2", "Um capitão da Ordem do Escudo de Pedra é acusado de traição, e os heróis são chamados para investigar."],
+                                        ["3", "Uma patrulha de fronteira não retornou. O comandante oferece uma recompensa pela informação."],
+                                        ["4", "Um Guardião Retorcido tenta derrubar uma seção enfraquecida da muralha."],
+                                        ["5", "Um torneio de campeões é anunciado. Vencer pode garantir uma audiência com um líder influente."],
+                                        ["6", "Espiões do Usurpador são descobertos, e uma perseguição se inicia pelos parapeitos da cidade-fortaleza."]]
+                                )},
+                                { title: "Neharim – Mercados e Rios Largos", content: () => renderTable(
+                                    ["1d6", "Evento"],
+                                    [
+                                        ["1", "Duas casas mercantis rivais estão à beira de uma guerra, e a Fraternidade de Neharim contrata os heróis para mediar."],
+                                        ["2", "Um diplomata é envenenado durante um banquete, e o grupo precisa encontrar o antídoto e o culpado."],
+                                        ["3", "Um dragão do rio bloqueia uma rota comercial vital, exigindo um tributo que os comerciantes não podem pagar."],
+                                        ["4", "Uma caravana é atacada por contrabandistas, e um item maculado se perde no confronto."],
+                                        ["5", "Um contrato selado com uma Vinha dos Contratos é quebrado, e as consequências místicas afetam um distrito."],
+                                        ["6", "Um leilão secreto em uma barcaça no meio do rio oferece um artefato de luz. Agentes das Sombras estão presentes."]]
+                                )},
+                                { title: "Qadmiar – Deserto Antigo", content: () => renderTable(
+                                    ["1d6", "Evento"],
+                                    [
+                                        ["1", "Uma tempestade de areia força o grupo a se abrigar em ruínas antigas, recém-expostas pelo vento."],
+                                        ["2", "Uma rota de peregrinação foi profanada por Espadas Sombrias. Os Vigias de Qadmiar pedem ajuda."],
+                                        ["3", "O grupo encontra uma caravana nômade sitiada por criaturas do deserto."],
+                                        ["4", "Miragens constantes testam a fé e a sanidade do grupo, mostrando oásis falsos ou seus maiores medos."],
+                                        ["5", "Um grande falcão solar desce dos céus, oferecendo orientação em troca de um juramento."],
+                                        ["6", "O calor revela a silhueta de uma cidade soterrada que não consta em nenhum mapa."]]
+                                )},
+                                 { title: "Yam Talorah – Mar da Canção", content: () => renderTable(
+                                    ["1d6", "Evento"],
+                                    [
+                                        ["1", "A 'Canção' do mar se torna um lamento dissonante, e criaturas marinhas antes pacíficas tornam-se hostis."],
+                                        ["2", "Uma tempestade súbita e sobrenatural joga o navio dos heróis para uma ilha não mapeada."],
+                                        ["3", "Uma serpente de cristal emerge, exigindo um favor ou tributo para permitir passagem segura."],
+                                        ["4", "O Conclave dos Navegantes contrata o grupo para mapear uma rota através de um labirinto de corais venenosos."],
+                                        ["5", "Um navio fantasma assombra uma rota comercial, e os heróis devem libertar as almas presas a bordo."],
+                                        ["6", "O som de Algas Cantantes guia o navio para uma enseada secreta com um profeta."]]
+                                )},
+                                { title: "Gan-Eved – Jardim Perdido", content: () => renderTable(
+                                    ["1d6", "Evento"],
+                                    [
+                                        ["1", "A trilha que o grupo seguia desaparece, e a floresta se reorganiza em um enigma vivo."],
+                                        ["2", "Um Guardião da Lua, criatura rara e protetora, está ferido por uma flecha sombria."],
+                                        ["3", "O grupo encontra uma clareira com os lendários Frutos de Gan-Eved. Colher em excesso desperta a fúria da floresta."],
+                                        ["4", "Uma seção do jardim está morrendo, sufocada por Vinhas Sussurrantes e uma Lótus Sombria."],
+                                        ["5", "Um guardião ancestral surge e declara que os heróis devem passar por uma prova de coração para continuar."],
+                                        ["6", "A beleza de uma cachoeira é tão estonteante que um personagem deve fazer um teste de FÉ para não abandonar sua missão."]]
+                                )}
+                            ])}`
                         }
                     ])}`
             },
@@ -1396,4 +1471,3 @@
     </script>
 </body>
 </html>
-
