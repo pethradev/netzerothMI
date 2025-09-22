@@ -772,13 +772,107 @@
                                 content: () => `
                                     <p>Em suas viagens, você carregará armas, armaduras, ferramentas e provisões. Sua capacidade de carga é medida em "slots" para simplificar o gerenciamento.</p>
                                     <ul>
-                                        <li><strong>Capacidade Total:</strong> ${highlight('5 × VIG', state.query)} slots.</li>
-                                        <li><strong>Itens Pesados (5 slots):</strong> Como escudos de torre ou armaduras pesadas.</li>
-                                        <li><strong>Itens Médios (3 slots):</strong> Como espadas, machados ou uma corda de 15m.</li>
-                                        <li><strong>Itens Leves (1 slot):</strong> Como um kit de ervas ou um odre de água.</li>
+                                        <li><strong>Capacidade Total:</strong> ${highlight('VIG × 5', state.query)} slots.</li>
+                                        <li><strong>Itens Pesados (10 slots):</strong> Como armaduras pesadas.</li>
+                                        <li><strong>Itens Médios (5 slots):</strong> Como espadas, machados ou escudos de torre.</li>
+                                        <li><strong>Itens Leves (1-3 slots):</strong> Como uma corda de 15m, um kit de ervas ou um odre de água.</li>
                                         <li><strong>Miudezas (Agrupadas):</strong> Itens muito pequenos como frascos, mapas ou rações. A cada 5 miudezas, conta-se 1 slot completo.</li>
                                         <li><strong>Sobrepeso:</strong> Para cada 5 slots acima do seu limite, você sofre uma penalidade de <strong>–2 em testes de AGI e Furtividade</strong>.</li>
                                     </ul>
+                                `
+                            },
+                            {
+                                title: "Posses: Propriedades, Montarias e Armazenamento",
+                                content: () => `
+                                    <p>Em suas jornadas por Netzeroth, as recompensas por seus atos de coragem nem sempre caberão na mochila. Você poderá adquirir bens que representam seu crescimento, sua influência e seu lugar no mundo. Estes são as suas <strong>Posses</strong>: propriedades, montarias, baús e outros itens valiosos que você possui, mas não carrega constantemente.</p>
+                                    <p>Este sistema permite que seu personagem tenha uma base, armazene tesouros e se prepare para missões sem sobrecarregar seu inventário pessoal.</p>
+                                    
+                                    <h5 class="!font-semibold !mt-4">O Que São Posses?</h5>
+                                    <p>Diferente dos itens em sua mochila, que contam para sua capacidade de carga (slots), as Posses são bens que ficam em um local fixo. Elas só ocupam espaço no seu inventário se você decidir transportá-las ativamente.</p>
+                                    <p>Exemplos de Posses incluem:</p>
+                                    <ul class="!list-disc !pl-5 !mt-2">
+                                        <li><strong>Propriedades:</strong> Uma pequena casa em uma vila de Haravoth ou um quarto nos quartéis da Ordem do Escudo de Pedra. Propriedades não possuem valor em slots e servem como uma base de operações segura.</li>
+                                        <li><strong>Montarias:</strong> Um cavalo de Haravoth, um camelo do deserto ou outra criatura que facilite suas viagens. Montarias não contam como slots no seu inventário pessoal, mas possuem sua própria capacidade de carga.</li>
+                                        <li><strong>Armazenamento:</strong> Baús, armários ou estantes com itens, localizados em uma de suas propriedades.</li>
+                                        <li><strong>Itens Volumosos ou Situacionais:</strong> Um barco ancorado, uma armadura de cerimonial pesada ou um item de grande valor que você prefere manter em segurança.</li>
+                                    </ul>
+
+                                    <h5 class="!font-semibold !mt-4">Como Funciona o Sistema de Posses</h5>
+                                    <p>O gerenciamento de Posses é simples e focado na narrativa:</p>
+                                    <ul class="!list-disc !pl-5 !mt-2">
+                                        <li><strong>Localização Fixa:</strong> Toda Posse está ligada a um local específico no mundo.</li>
+                                        <li><strong>Presença Obrigatória:</strong> Para guardar ou retirar um item de suas Posses (como deixar uma espada em seu baú), o personagem precisa estar fisicamente no local onde a Posse está armazenada. Não é possível gerenciar seus bens à distância.</li>
+                                        <li><strong>Peso em Slots:</strong> Itens armazenados mantêm seu valor em slots. Se um Guardião com VIG 12 (60 slots de capacidade) decide pegar uma armadura pesada (10 slots) de seu baú para uma missão, esses 10 slots passam a contar em seu inventário pessoal.</li>
+                                        <li><strong>Vantagens Narrativas:</strong> Possuir um lar oferece um local para um Descanso Sagrado garantido. Uma montaria pode reduzir o tempo de viagem ou permitir a fuga de perigos.</li>
+                                    </ul>
+
+                                    ${renderAccordion([
+                                        {
+                                            title: "Regras Especiais para Montarias",
+                                            content: () => `
+                                                <p>Montarias são aliadas valiosas, capazes de transportar o Guardião e seus equipamentos por longas distâncias.</p>
+                                                <p><strong>Capacidade de Carga:</strong> A capacidade de carga de uma montaria é calculada com base no seu Vigor (VIG) animal. A fórmula é a mesma usada para os Guardiões: <strong>VIG do animal x 5 = total de slots de carga</strong>.</p>
+                                                <p><em>Exemplo: Um Cavalo de Guerra de Haravoth (VIG 14) pode carregar até 70 slots em equipamentos. Uma Lhama das Montanhas (VIG 9) carrega até 45 slots. O jogador que está montado não conta para este limite.</em></p>
+                                                <p class="!mt-2"><strong>Animais Auralinos:</strong> Criaturas imbuídas com a energia de Netzeroth, como um Grifo de Elyon ou um Corcel Espectral, são montarias especiais. Eles servem como transporte leal, mas sua natureza mágica os impede de serem usados como simples bestas de carga.</p>
+                                                <p><strong>Regra:</strong> Uma montaria auralina pode transportar itens, mas sua capacidade de carga máxima é limitada à <strong>metade da capacidade de slots do seu cavaleiro</strong>.</p>
+                                                <p><em>Exemplo: Um Guardião com VIG 12 (60 slots de capacidade) monta um Cervo Luzente. O cervo pode transportar, no máximo, 30 slots em equipamentos, independentemente do seu próprio VIG.</em></p>
+                                                <p class="!mt-4">A seguir, uma lista de animais que podem ser encontrados e utilizados como montarias. O Vigor (VIG) do animal determina sua capacidade de carga (VIG x 5) e, em certas situações, sua resistência em longas viagens.</p>
+
+                                                <h5 class="!font-semibold !mt-4">Montarias Comuns</h5>
+                                                <p>Estes são os animais de carga e transporte mais frequentes nas terras civilizadas.</p>
+                                                ${renderTable(
+                                                    ['Montaria', 'VIG', 'Capacidade de Carga', 'Descrição'],
+                                                    [
+                                                        ['Pangaré de Carga', 8, 40, 'Um cavalo simples e resistente, sem grande velocidade, mas confiável para carregar peso. Comum em todas as regiões humanas.'],
+                                                        ['Cavalo de Haravoth', 12, 60, 'Um cavalo de montaria treinado, mais rápido e ágil que um pangaré. O animal padrão para viajantes e aventureiros.'],
+                                                        ['Mula Obstinada', 11, 55, 'Famosa por sua teimosia, mas incomparável em terrenos íngremes e trilhas perigosas. Lenta, mas muito segura.'],
+                                                        ['Camelo de Qadmiar', 10, 50, 'Adaptado aos desertos, este animal pode viajar dias sem precisar de água e não é afetado por terrenos arenosos.'],
+                                                        ['Boi de Carga', 15, 75, 'Extremamente forte, mas muito lento. Usado para puxar carroças ou transportar cargas excepcionalmente pesadas. Não é uma boa montaria de viagem.']
+                                                    ]
+                                                )}
+
+                                                <h5 class="!font-semibold !mt-4">Montarias Exóticas e Raras</h5>
+                                                <p>Estes animais são difíceis de encontrar e domar, representando um grande investimento ou uma recompensa valiosa.</p>
+                                                ${renderTable(
+                                                    ['Montaria', 'VIG', 'Capacidade de Carga', 'Descrição'],
+                                                    [
+                                                        ['Cavalo de Guerra da Ordem', 14, 70, 'Criado e treinado pela Ordem do Escudo de Pedra, este cavalo é maior, mais forte e treinado para não se assustar em combate.'],
+                                                        ['Lhama das Montanhas Cinzentas', 9, 45, 'Ágil e de passo firme, é a única criatura capaz de navegar as trilhas mais traiçoeiras das montanhas com carga nas costas.'],
+                                                        ['Javali-Trovão das Florestas Sombrias', 13, 65, 'Uma fera selvagem e intimidadora, domada por clãs bárbaros. É uma montaria de combate que pode atacar com suas presas.'],
+                                                        ['Lagarto-Rocha do Subterrâneo', 16, 80, 'Encontrado nas profundezas de Netzeroth, este réptil gigante pode escalar paredes e se mover silenciosamente. É sensível à luz do sol.']
+                                                    ]
+                                                )}
+
+                                                <h5 class="!font-semibold !mt-4">Montarias Auralinas (Regra Especial)</h5>
+                                                <p>Criaturas tocadas pela energia de Elyon ou pela magia primordial de Netzeroth. Elas não servem como bestas de carga, mas como companheiras leais. <strong>Lembre-se:</strong> a capacidade de carga é sempre metade da capacidade de slots do cavaleiro.</p>
+                                                 ${renderTable(
+                                                    ['Montaria', 'VIG', 'Descrição'],
+                                                    [
+                                                        ['Cervo Luzente de Gan-Eved', 12, 'Um cervo cujos chifres brilham com uma luz suave. É incrivelmente rápido e pode atravessar florestas densas sem fazer barulho.'],
+                                                        ['Grifo do Pico do Alvorecer', 18, 'Uma criatura nobre e majestosa, capaz de voar. Conseguir um como montaria é uma dádiva divina ou o feito de uma vida inteira.'],
+                                                        ['Corcel Espectral', '--', 'Um espírito em forma de cavalo, invocado por rituais ou ligado a um cavaleiro por um juramento. Não possui Vigor físico e não pode carregar itens, apenas seu cavaleiro.']
+                                                    ]
+                                                )}
+                                            `
+                                        },
+                                        {
+                                            title: "Capacidade de Armazenamento",
+                                            content: () => `
+                                                <p>Cada tipo de móvel ou local de armazenamento possui um limite de quantos slots pode comportar. Esses itens podem ser comprados, construídos ou encontrados como recompensa.</p>
+                                                ${renderTable(
+                                                    ['Armazenamento', 'Capacidade', 'Descrição'],
+                                                    [
+                                                        ['Baú Pessoal', '50 slots', 'O tipo mais comum. Ideal para guardar equipamentos e tesouros.'],
+                                                        ['Arca Reforçada', '100 slots', 'Uma versão maior e mais segura de um baú.'],
+                                                        ['Armário', '80 slots', 'Perfeito para guardar vestimentas, armaduras e armas longas.'],
+                                                        ['Estante de Livros', '40 slots', 'Projetada para tomos, pergaminhos e mapas.'],
+                                                        ['Despensa', '120 slots', 'Um cômodo ou grande móvel para armazenar rações, ingredientes alquímicos e outros consumíveis.'],
+                                                        ['Mochila de Carga', '75 slots', 'Uma mochila grande e resistente, excelente para deixar na base com itens para futuras missões.']
+                                                    ]
+                                                )}
+                                            `
+                                        }
+                                    ])}
                                 `
                             },
                             {
