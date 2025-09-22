@@ -435,7 +435,7 @@
                             { title: "Metsudoth — Cidades‑Muralha", content: `<div class="text-sm"><p><strong>Características:</strong> Imponentes fortalezas de pedra que vigiam fronteiras e segredos. Cultura militar e disciplinada.</p><p><strong>Ganchos de Aventura:</strong> Defender as muralhas de um cerco, investigar uma traição interna, treinar com os guardiões lendários.</p><p><strong>Talento Regional:</strong> +1 FOR ou “Treinamento Militar” (vantagem em testes de Defesa contra investidas).</p></div>` },
                             { title: "Neharim — Mercados & Rios Largos", content: `<div class="text-sm"><p><strong>Características:</strong> Centros de comércio e política, onde a prosperidade esconde ganância e intriga. Contratos, moedas e caravanas definem o poder.</p><p><strong>Ganchos de Aventura:</strong> Desvendar conspirações comerciais, proteger uma embaixada, contrabandear um item sagrado.</p><p><strong>Talento Regional:</strong> +1 CAR ou “Olho para Negócios” (vantagem em negociações comerciais).</p></div>` },
                             { title: "Qadmiar — Deserto Antigo", content: `<div class="text-sm"><p><strong>Características:</strong> Areias douradas que escondem segredos milenares e ruínas soterradas. Guardiões de saberes antigos observam em silêncio.</p><p><strong>Ganchos de Aventura:</strong> Explorar uma tumba recém-revelada, atravessar o deserto seguindo uma rota de peregrinação estelar, proteger uma caravana de conhecimento.</p><p><strong>Talento Regional:</strong> +1 FÉ ou “Sobrevivência no Deserto” (resiste melhor a fome e sede).</p></div>` },
-                            { title: "Yam Talorah — Mar da Canção", content: `<div class="text-sm"><p><strong>Características:</strong> Oceanos profundos de onde emanam melodias místicas nas noites de calmaria. Marinheiros contam histórias de fortunas e perdições.</p><p><strong>Ganchos de Aventura:</strong> Navegar até ilhas lendárias, negociar com criaturas marinhas, caçar um navio fantasma.</p><p><strong>Talento Regional:</strong> +1 AGI ou “Navegador” (vantagem em orientação náutica).</p></div>` },
+                            { title: "Yam Talorah — O Mar da Canção", content: `<div class="text-sm"><p><strong>Características:</strong> Oceanos profundos de onde emanam melodias místicas nas noites de calmaria. Marinheiros contam histórias de fortunas e perdições.</p><p><strong>Ganchos de Aventura:</strong> Navegar até ilhas lendárias, negociar com criaturas marinhas, caçar um navio fantasma.</p><p><strong>Talento Regional:</strong> +1 AGI ou “Navegador” (vantagem em orientação náutica).</p></div>` },
                             { title: "Gan-Eved — Jardim Perdido", content: `<div class="text-sm"><p><strong>Características:</strong> Florestas exuberantes onde frutos cintilam e criaturas raras vigiam os caminhos. Um lugar de beleza indescritível.</p><p><strong>Ganchos de Aventura:</strong> Localizar a entrada para o Jardim, proteger um local sagrado de ser corrompido, resgatar alguém que se perdeu em suas trilhas.</p><p><strong>Talento Regional:</strong> +1 SAB ou “Ligação com a Criação” (identificar flora e fauna raras).</p></div>` },
                         ])}
                     </div>
@@ -807,6 +807,89 @@
                                     </ul>
 
                                     ${renderAccordion([
+                                        {
+                                            title: "O Preço de um Lar em Netzeroth",
+                                            content: () => `
+                                                <p>O valor de uma propriedade em Netzeroth é um reflexo direto da sua segurança, localização estratégica e da influência da Luz ou da Sombra. Os preços a seguir são uma base em Dracmas (D). O Narrador pode alterá-los com base na reputação dos jogadores ou em eventos do mundo.</p>
+                                                
+                                                <h5 class="!font-semibold !mt-4">1. Haravoth – Os Campos de Multidões (Padrão de Custo)</h5>
+                                                <p><strong>Lore:</strong> O coração da civilização, relativamente seguro e fértil. É o padrão pelo qual outros lugares são medidos. Comprar terras aqui é investir na comunidade e na esperança.</p>
+                                                <p><strong>Preços:</strong></p>
+                                                <ul class="!list-disc !pl-5 !mt-2">
+                                                    <li>Aluguel de Quarto em Estalagem (Mensal): 50 D</li>
+                                                    <li>Casa de Aldeia (Pequena, 2 cômodos): 2.500 D</li>
+                                                    <li>Pequena Vinha ou Fazenda: 4.000 D (Gera uma pequena renda, mas requer proteção)</li>
+                                                </ul>
+
+                                                <h5 class="!font-semibold !mt-4">2. Metsudoth – As Cidades-Muralha (Segurança tem um Preço)</h5>
+                                                <p><strong>Lore:</strong> O lugar mais seguro de Netzeroth, mas o espaço dentro das muralhas é limitado e controlado pela Ordem do Escudo de Pedra. A propriedade aqui é um privilégio, muitas vezes concedido por serviço, não apenas comprado.</p>
+                                                <p><strong>Preços:</strong></p>
+                                                <ul class="!list-disc !pl-5 !mt-2">
+                                                    <li>Beliche em um Quartel (para membros da Ordem): Custo de serviço, não monetário.</li>
+                                                    <li>Apartamento Compacto na Muralha: 3.500 D (Propriedade garantida pela Ordem)</li>
+                                                    <li>Torre de Vigia Abandonada (para reformar): 2.000 D + um juramento de serviço à Ordem.</li>
+                                                </ul>
+                                                
+                                                <h5 class="!font-semibold !mt-4">3. Neharim – Mercados e Rios Largos (Capitalismo e Oportunidade)</h5>
+                                                <p><strong>Lore:</strong> O centro do comércio e da intriga. A localização é tudo, e o valor de uma propriedade está em seu potencial de gerar riqueza e influência. Tudo está à venda pelo preço certo.</p>
+                                                <p><strong>Preços:</strong></p>
+                                                <ul class="!list-disc !pl-5 !mt-2">
+                                                    <li>Quarto nos Fundos de uma Guilda (Mensal): 100 D</li>
+                                                    <li>Casa Geminada nos Canais: 4.500 D</li>
+                                                    <li>Armazém no Distrito Portuário: 8.000 D (Pode ser usado como fachada para operações)</li>
+                                                </ul>
+
+                                                <h5 class="!font-semibold !mt-4">4. Qadmiar – O Deserto Antigo (O Valor da Simplicidade)</h5>
+                                                <p><strong>Lore:</strong> A vida aqui é dura e a moeda tem menos valor que a água ou a confiança. A propriedade é barata em Dracmas, mas cara em termos de respeito e adaptação.</p>
+                                                <p><strong>Preços:</strong></p>
+                                                <ul class="!list-disc !pl-5 !mt-2">
+                                                    <li>Tenda Permanente em um Oásis (requer permissão do clã): 500 D</li>
+                                                    <li>Casa de Adobe em uma Vila Murada: 1.500 D</li>
+                                                    <li>Ruína Antiga para Escavação (requer licença dos Vigias): 1.000 D (O valor está no que pode ser encontrado)</li>
+                                                </ul>
+
+                                                <h5 class="!font-semibold !mt-4">5. Ashkar – As Terras Queimadas (Terra de Ninguém)</h5>
+                                                <p><strong>Lore:</strong> Uma terra amaldiçoada onde ninguém escolheria viver. A terra em si não tem valor monetário; o custo está em torná-la minimamente habitável e defensável.</p>
+                                                <p><strong>Preços:</strong></p>
+                                                <ul class="!list-disc !pl-5 !mt-2">
+                                                    <li>Caverna Fortificada: Gratuita (basta encontrá-la e limpá-la)</li>
+                                                    <li>Torre em Ruínas (requer reconstrução total): 300 D (Pelo título de posse, se houver algum)</li>
+                                                </ul>
+
+                                                <h5 class="!font-semibold !mt-4">6. Neveloth – Os Vales Enevoados (O Preço do Isolamento)</h5>
+                                                <p><strong>Lore:</strong> Uma região de isolamento e desconfiança. As comunidades são fechadas e raramente vendem terras a forasteiros. O preço é baixo porque a ajuda nunca está por perto.</p>
+                                                <p><strong>Preços:</strong></p>
+                                                <ul class="!list-disc !pl-5 !mt-2">
+                                                    <li>Cabana de Caça Abandonada: 700 D</li>
+                                                    <li>Quarto em uma Aldeia Fortificada: 1.200 D (O preço inclui a aceitação da comunidade)</li>
+                                                </ul>
+
+                                                <h5 class="!font-semibold !mt-4">7. Yam Talorah – O Mar da Canção (Propriedade Flutuante)</h5>
+                                                <p><strong>Lore:</strong> A posse mais valiosa aqui não é a terra, mas um navio e um lugar para ancorá-lo. As cidades portuárias são superpovoadas e caras.</p>
+                                                <p><strong>Preços:</strong></p>
+                                                <ul class="!list-disc !pl-5 !mt-2">
+                                                    <li>Rede em um Dormitório de Marinheiros (Mensal): 40 D</li>
+                                                    <li>Cabana no Cais de um Porto: 1.800 D</li>
+                                                    <li>Barco de Pesca (pequeno, costeiro): 2.000 D</li>
+                                                    <li>Caravela de Exploração (requer tripulação): 10.000 D+</li>
+                                                </ul>
+
+                                                <h5 class="!font-semibold !mt-4">Gan-Eved: O Jardim Perdido</h5>
+                                                <p>Um paraíso mítico, um pedaço da criação intocada. A permissão para permanecer no Jardim é uma bênção concedida por seus guardiões, uma recompensa narrativa que transcende qualquer riqueza material. Uma terra para nobres, cavaleiros do selo, fidalgos de Elyon, reis e rainhas, principes e princesas de Netzeroth, escolhidos por Elyon para governar a terra com justiça e bondade, administrando seu reino.</p>
+                                                <p>Uma habitação em Gan-Eved não é uma posse mundana. É o reconhecimento final da jornada de um herói, concedida por dois motivos:</p>
+                                                <ul class="!list-disc !pl-5 !mt-2">
+                                                    <li><strong>Como Fruto da Luta:</strong> Uma recompensa por uma vida de sacrifícios e vitórias contra a Sombra, um lugar de descanso e honra eternos.</li>
+                                                    <li><strong>Pela Misericórdia do Rei:</strong> Em atos de compaixão, Elyon pode convocar uma alma nobre que, mesmo derrotada, manteve sua fé intacta até o fim.</li>
+                                                </ul>
+                                                <p><strong>Implicações para os Jogadores:</strong></p>
+                                                <p>Para um jogador, ser convidado a habitar Gan-Eved é o auge da jornada de seu personagem. Não é um objetivo que se alcança com riqueza ou poder, mas com atos e fé.</p>
+                                                 <ul class="!list-disc !pl-5 !mt-2">
+                                                    <li><strong>Não é um Item de Inventário:</strong> Um palácio aqui não pode ser vendido ou comprado. Residir em Gan-Eved significa transcender, tornando-se parte da lenda viva de Netzeroth.</li>
+                                                    <li><strong>Um Chamado, Não uma Compra:</strong> Os jogadores não encontram um corretor de imóveis em Gan-Eved. Um personagem pode ser convocado em um momento de grande triunfo, no leito de morte após um ato heroico, ou mesmo entre aventuras para receber uma bênção ou uma missão diretamente de um servo de Elyon.</li>
+                                                </ul>
+                                                <p><strong>Custo:</strong> Uma habitação em Gan-Eved não tem preço em Dracmas. Seu custo é uma vida de dedicação, coragem e fé inabalável.</p>
+                                            `
+                                        },
                                         {
                                             title: "Regras Especiais para Montarias",
                                             content: () => `
