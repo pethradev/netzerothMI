@@ -238,7 +238,8 @@
                                 ["Curandeiro", "Suporte / Cura", "Ervas, dons simbólicos, rituais", "Mantém os heróis vivos, inspira esperança e coragem; foco em restauração."],
                                 ["Caçador de Sombras", "Combate / Exploração", "Arco, rastreio, furtividade", "Elimina ameaças ocultas; explora e desarma perigos antes que causem dano."],
                                 ["Místico", "Suporte / Controle", "Energias naturais (luz, vento, som)", "Transforma fenômenos naturais em arte ou arma; protege e inspira."],
-                                ["Peregrino", "Exploração / Revelação", "Visões, sinais, conhecimento antigo", "Descobre segredos, conecta regiões e histórias; guia a narrativa."]
+                                ["Peregrino", "Exploração / Revelação", "Visões, sinais, conhecimento antigo", "Descobre segredos, conecta regiões e histórias; guia a narrativa."],
+                                ["Camponês", "Suporte / Resiliência", "Esforço Conjunto, Vigor", "Representa a força do povo comum, a esperança que brota da terra. É a prova de que o chamado de Elyon não escolhe apenas reis e guerreiros, mas principalmente corações dispostos."]
                             ]
                         )}
                         <h5 class="!text-base !font-semibold !mt-6">Detalhes das Classes</h5>
@@ -248,7 +249,8 @@
                             { title: "Curandeiro", subtitle: "Restauração e suporte", content: "<strong>Função:</strong> Restaurador de vida e coragem, usando conhecimentos antigos e dons especiais. É o farol de esperança em meio ao caos.<br><strong>Atributos-chave:</strong> FÉ, SAB." },
                             { title: "Caçador de Sombras", subtitle: "Rastreamento e combate furtivo", content: "<strong>Função:</strong> Rastreia e elimina ameaças ocultas. É ágil, silencioso e perspicaz, sendo a mão rápida contra a Escuridão.<br><strong>Atributos-chave:</strong> AGI, AST." },
                             { title: "Místico", subtitle: "Manipulação de energias", content: "<strong>Função:</strong> Manipula energias naturais e ancestrais de forma artística e simbólica (luz, vento, som). Sua 'magia' é uma manifestação da criação.<br><strong>Atributos-chave:</strong> SAB, FÉ." },
-                            { title: "Peregrino", subtitle: "Exploração e revelação", content: "<strong>Função:</strong> Viajante guiado por visões e sinais. É um descobridor de mistérios, conectando regiões e segredos antigos.<br><strong>Atributos-chave:</strong> FÉ, SAB." }
+                            { title: "Peregrino", subtitle: "Exploração e revelação", content: "<strong>Função:</strong> Viajante guiado por visões e sinais. É um descobridor de mistérios, conectando regiões e segredos antigos.<br><strong>Atributos-chave:</strong> FÉ, SAB." },
+                            { title: "Camponês", subtitle: "Suporte e Resiliência", content: `<strong>Função:</strong> O Camponês não empunha uma espada forjada em luz nem declama profecias antigas. Sua ferramenta é a de trabalho, suas mãos são calejadas pela lida com a terra e seu conhecimento vem da sabedoria popular. Ele representa a força silenciosa e perseverante de Netzeroth, o alicerce sobre o qual reinos e ordens se apoiam. Chamado por Elyon, ele prova que a maior bravura muitas vezes reside em um coração firme e na disposição de proteger a comunidade, mesmo sem armadura reluzente.<br><strong>Atributos-chave:</strong> VIG, SAB.<br><strong>Habilidade Única:</strong> Esforço Conjunto – Uma vez por turno, como ação bônus, pode auxiliar um aliado adjacente, concedendo +2 no próximo teste daquele aliado.` }
                         ])}
 
                         <h4 class="!mt-8">Espécies</h4>
@@ -343,80 +345,139 @@
                             { 
                                 title: "Habilidades de Classe (Exemplos Mecânicos)", 
                                 content: () => `
-                                    <p>Aqui estão exemplos de como as habilidades de cada classe funcionam mecanicamente, com seus custos em Pontos de Energia (PE) e efeitos diretos em jogo. Esta é uma referência rápida para as habilidades mais icônicas.</p>
+                                                                       <p>Estas são as habilidades que seu personagem aprende automaticamente ao atingir novos níveis. Elas representam o aprimoramento natural de suas aptidões e treinamento.</p>
                                     ${renderAccordion([
-                                        { title: "Guardião", content: `<ul>
-                                            <li><strong>Postura Inabalável (Passiva):</strong> Enquanto estiver adjacente a um aliado, pode usar a sua reação para adicionar o seu bónus de Vigor à DEF desse aliado contra um ataque.</li>
-                                            <li><strong>Muralha de Fé (Nível 3):</strong> Custa 5 PE. Como uma ação, todos os aliados a 3 metros recebem +2 em testes de Fé contra medo e corrupção até ao final do seu próximo turno.</li>
-                                        </ul>`},
-                                        { title: "Arauto", content: `<ul>
-                                            <li><strong>Palavras que Movem (1/dia):</strong> Não requer teste para convencer um PNJ a realizar uma ação não-letal e razoável.</li>
-                                            <li><strong>Rede de Contatos (Nível 3):</strong> Ao passar um dia numa cidade, pode fazer um teste de Carisma (DF 15) para encontrar um contacto útil (informador, guarda, mercador) que lhe deva um pequeno favor.</li>
-                                        </ul>`},
-                                        { title: "Curandeiro", content: `<ul>
-                                            <li><strong>Toque Restaurador (Nível 1):</strong> Custa 3 PE. Cura 1d8 + Modificador de SAB em HP.</li>
-                                            <li><strong>Purificar (Nível 3):</strong> Custa 5 PE. Remove uma condição (envenenado, doente) de um alvo.</li>
-                                        </ul>`},
-                                        { title: "Caçador de Sombras", content: `<ul>
-                                            <li><strong>Olhos na Escuridão (Passiva):</strong> Tem vantagem em testes de Percepção para detetar criaturas das Sombras ou que estejam escondidas.</li>
-                                            <li><strong>Golpe Silencioso (Nível 3):</strong> Se atacar um inimigo que ainda não agiu no combate, causa +1d6 de dano extra.</li>
-                                        </ul>`},
-                                        { title: "Místico", content: `<ul>
-                                            <li><strong>Manifestação Elemental (Nível 1):</strong> Custa 4 PE. Escolha um efeito:
-                                                <ul class="!list-disc !pl-5 !mt-2">
-                                                    <li><strong>Luz:</strong> Cega um inimigo por 1 turno (teste de VIG DF 13 para resistir).</li>
-                                                    <li><strong>Vento:</strong> Empurra um alvo 3 metros.</li>
-                                                    <li><strong>Som:</strong> Cria um ruído alto para distrair ou ensurdecer um alvo por 1 turno (teste de VIG DF 13 para resistir).</li>
-                                                </ul>
-                                            </li>
-                                            <li class="!mt-2"><strong>Escudo de Luz (Nível 5):</strong> Custa 6 PE. Como reação, concede a um aliado +4 de DEF contra um ataque.</li>
-                                        </ul>`},
-                                        { title: "Peregrino", content: `<ul>
-                                            <li><strong>Sinais da Jornada (1/sessão):</strong> Pode pedir ao Mestre uma pista direta sobre o caminho a seguir, a fraqueza de um inimigo ou o segredo de um local.</li>
-                                            <li><strong>Fé Inspiradora (Nível 5):</strong> Custa 8 PE. Todos os aliados que o conseguem ouvir ganham vantagem no seu próximo teste.</li>
-                                        </ul>`},
+                                        { 
+                                            title: "Guardião", 
+                                            content: `<ul class="!list-disc !pl-5 !mt-2">
+                                                        <li><strong>Nível 1:</strong> Postura Inabalável, proficiência com escudo básico e armadura média.</li>
+                                                        <li><strong>Nível 3:</strong> Aprende a habilidade Muralha de Fé.</li>
+                                                        <li><strong>Nível 5:</strong> Pode proteger dois aliados adjacentes ao mesmo tempo com sua ação de defesa.</li>
+                                                        <li><strong>Nível 7:</strong> Ignora a primeira falha em um teste de Defesa por combate.</li>
+                                                     </ul>`
+                                        },
+                                        { 
+                                            title: "Arauto", 
+                                            content: `<ul class="!list-disc !pl-5 !mt-2">
+                                                        <li><strong>Nível 1 - Palavras que Movem (1/dia):</strong> Convence um PNJ a realizar uma ação não-letal e razoável sem necessidade de teste. Recebe conhecimento básico de duas regiões.</li>
+                                                        <li><strong>Nível 3 - Rede de Contatos:</strong> Ao passar um dia numa cidade, pode fazer um teste de Carisma (DF 15) para encontrar um contacto útil que lhe deva um pequeno favor.</li>
+                                                        <li><strong>Nível 5 - Mestre da Persuasão:</strong> Ganha vantagem em todos os testes de Persuasão.</li>
+                                                        <li><strong>Nível 7 - Discurso Desmoralizante:</strong> Pode usar uma ação para fazer um discurso que afeta a moral de um grupo de inimigos (teste de CAR vs FÉ dos alvos, DF definida pelo Mestre).</li>
+                                                     </ul>`
+                                        },
+                                        { 
+                                            title: "Curandeiro", 
+                                            content: `<ul class="!list-disc !pl-5 !mt-2">
+                                                        <li><strong>Nível 1:</strong> Toque Restaurador, proficiência com kit de ervas e conhecimento médico básico.</li>
+                                                        <li><strong>Nível 3:</strong> Aprende a Purificar.</li>
+                                                        <li><strong>Nível 5:</strong> Pode reviver um aliado inconsciente uma vez por dia (usando Prece da Salvação).</li>
+                                                        <li><strong>Nível 7:</strong> Seu Toque Restaurador se torna mais potente.</li>
+                                                    </ul>`
+                                        },
+                                        { 
+                                            title: "Caçador de Sombras", 
+                                            content: `<ul class="!list-disc !pl-5 !mt-2">
+                                                        <li><strong>Nível 1 - Olhos na Escuridão (Passiva):</strong> Tem vantagem em testes de Percepção para detetar criaturas das Sombras ou escondidas. Proficiência com arco ou adagas e capa de camuflagem.</li>
+                                                        <li><strong>Nível 3 - Golpe Silencioso:</strong> Se atacar um inimigo que ainda não agiu no combate, causa +1d6 de dano extra.</li>
+                                                        <li><strong>Nível 5 - Passo Leve:</strong> Ignora penalidades de movimento de terreno difícil.</li>
+                                                        <li><strong>Nível 7 - Ataque e Fuga:</strong> Pode atacar e se mover no mesmo turno sem provocar ataques de oportunidade.</li>
+                                                    </ul>`
+                                        },
+                                        { 
+                                            title: "Místico", 
+                                            content: `<ul class="!list-disc !pl-5 !mt-2">
+                                                        <li><strong>Nível 1:</strong> Manifestação Elemental, proficiência com cajado básico.</li>
+                                                        <li><strong>Nível 3:</strong> Pode afetar até 2 alvos ao mesmo tempo com suas manifestações.</li>
+                                                        <li><strong>Nível 5:</strong> Aprende o Escudo de Luz.</li>
+                                                        <li><strong>Nível 7:</strong> Pode manipular dois elementos diferentes na mesma cena.</li>
+                                                    </ul>`
+                                        },
+                                        { 
+                                            title: "Peregrino", 
+                                            content: `<ul class="!list-disc !pl-5 !mt-2">
+                                                        <li><strong>Nível 1:</strong> Sinais da Jornada, recebe um mapa básico de sua região.</li>
+                                                        <li><strong>Nível 3:</strong> Ganha vantagem em testes de sobrevivência em ambientes selvagens.</li>
+                                                        <li><strong>Nível 5:</strong> Pode conceder +1 FÉ a todos os aliados durante uma cena inspiradora (usando Fé Inspiradora).</li>
+                                                        <li><strong>Nível 7:</strong> Descobre automaticamente se uma área foi tocada pela Escuridão (através de Sentir a Ferida do Mundo).</li>
+                                                    </ul>`
+                                        },
+                                        { 
+                                            title: "Camponês", 
+                                            content: `<ul class="!list-disc !pl-5 !mt-2">
+                                                        <li><strong>Nível 1:</strong> Esforço Conjunto, proficiência com ferramenta agrícola como arma improvisada.</li>
+                                                        <li><strong>Nível 3:</strong> Coração Resiliente.</li>
+                                                        <li><strong>Nível 5:</strong> Inspirar a Lida.</li>
+                                                        <li><strong>Nível 7:</strong> Inabalável como a Terra.</li>
+                                                    </ul>`
+                                        },
                                     ])}`
                             },
-                            { title: "Progressão de Nível e Dons da Criação", content: () => `
-                                <p>Em Netzeroth, não existe "magia" como um poder arcano. O que existe são os <strong>Dons da Criação</strong>: manifestações da fé e da sintonia com a obra de Elyon. Cada Dom consome Pontos de Energia (PE) e é desbloqueado em níveis específicos.</p>
-                                ${renderAccordion([
-                                    { title: "Guardião", content: `<ul>
-                                        <li><strong>Nível 1 - Postura Inabalável (Passiva):</strong> Enquanto estiver adjacente a um aliado, pode usar a sua reação para adicionar o seu bónus de Vigor à DEF desse aliado contra um ataque.</li>
-                                        <li><strong>Nível 3 - Muralha de Fé (5 PE):</strong> Como uma ação, todos os aliados a 3 metros recebem +2 em testes de Fé contra medo e corrupção.</li>
-                                        <li><strong>Nível 5 - Voto de Proteção (4 PE):</strong> Como ação bônus, força um inimigo a ter desvantagem em ataques que não sejam contra você.</li>
-                                        <li><strong>Nível 7 - Inquebrável (8 PE, 1x/descanso):</strong> Como reação, quando seria reduzido a 0 HP, permanece com 1 HP.</li>
-                                    </ul>`},
-                                    { title: "Arauto", content: `<ul>
-                                        <li><strong>Nível 1 - Palavras que Movem (1/dia):</strong> Convence um PNJ a realizar uma ação não-letal e razoável sem teste.</li>
-                                        <li><strong>Nível 3 - Rede de Contatos:</strong> Pode gastar um dia numa cidade para encontrar um contato útil que lhe deva um pequeno favor (teste de CAR DF 15).</li>
-                                        <li><strong>Nível 5 - Vantagem em Persuasão:</strong> Ganha vantagem em todos os testes de Persuasão.</li>
-                                        <li><strong>Nível 7 - Discurso Desmoralizante:</strong> Pode desestabilizar a moral de inimigos com um discurso (DF definida pelo Mestre).</li>
-                                    </ul>`},
-                                    { title: "Curandeiro", content: `<ul>
-                                        <li><strong>Nível 1 - Toque Restaurador (3 PE):</strong> Cura 1d8 + Modificador de SAB em HP.</li>
-                                        <li><strong>Nível 3 - Purificar (5 PE):</strong> Remove uma condição (Envenenado, Doente, Amedrontado) de um alvo.</li>
-                                        <li><strong>Nível 5 - Prece da Salvação (10 PE):</strong> Estabiliza imediatamente um aliado com 0 HP e o cura em 1 HP.</li>
-                                        <li><strong>Nível 7 - Toque Restaurador Maior (6 PE):</strong> Cura 2d8 + Modificador de SAB em HP.</li>
-                                    </ul>`},
-                                    { title: "Caçador de Sombras", content: `<ul>
-                                        <li><strong>Nível 1 - Olhos na Escuridão (Passiva):</strong> Tem vantagem em testes de Percepção para detetar criaturas das Sombras.</li>
-                                        <li><strong>Nível 3 - Golpe Silencioso:</strong> Se atacar um inimigo que ainda não agiu no combate, causa +1d6 de dano extra.</li>
-                                        <li><strong>Nível 5 - Passo Leve:</strong> Ignora penalidades de terreno difícil.</li>
-                                        <li><strong>Nível 7 - Ataque e Fuga:</strong> Pode atacar e se mover sem provocar ataques de oportunidade.</li>
-                                    </ul>`},
-                                    { title: "Místico", content: `<ul>
-                                        <li><strong>Nível 1 - Manifestação Elemental (4 PE):</strong> Cria um efeito de Luz (cega), Vento (empurra) ou Som (ensurdece). Teste de VIG DF 13 para resistir.</li>
-                                        <li><strong>Nível 3 - Passo do Vento (5 PE):</strong> Aumenta o movimento de um aliado em 3 metros por um turno.</li>
-                                        <li><strong>Nível 5 - Escudo de Luz (6 PE):</strong> Como reação, concede a um aliado +4 de DEF contra um ataque.</li>
-                                        <li><strong>Nível 7 - Manifestação Aprimorada (7 PE):</strong> Pode manifestar dois efeitos elementais diferentes com uma única ação.</li>
-                                    </ul>`},
-                                    { title: "Peregrino", content: `<ul>
-                                        <li><strong>Nível 1 - Sinais da Jornada (1/sessão):</strong> Pode pedir ao Mestre uma pista direta sobre o caminho a seguir, a fraqueza de um inimigo ou o segredo de um local.</li>
-                                        <li><strong>Nível 3 - Vantagem em Sobrevivência:</strong> Ganha vantagem em testes de sobrevivência em ambientes selvagens.</li>
-                                        <li><strong>Nível 5 - Fé Inspiradora (8 PE):</strong> Todos os aliados que o conseguem ouvir ganham vantagem no seu próximo teste.</li>
-                                        <li><strong>Nível 7 - Sentir a Ferida do Mundo (Passiva):</strong> Sente automaticamente a presença e direção da fonte de Corrupção mais próxima num raio de 1 km.</li>
-                                    </ul>`},
-                                ])}`
+                            {
+                                title: "Dons da Criação (Habilidades Especiais)",
+                                content: () => `
+                                    <p>Dons da Criação são manifestações especiais da sua fé e sintonia com a obra de Elyon. Usar estes dons consome Pontos de Energia (PE) e representa um esforço espiritual ou mental.</p>
+                                     ${renderAccordion([
+                                        { 
+                                            title: "Guardião", 
+                                            subtitle: "Bênçãos de Batalha",
+                                            content: `<ul class="!list-disc !pl-5 !mt-2">
+                                                        <li><strong>Postura Inabalável (Passiva):</strong> Enquanto estiver adjacente a um aliado, pode usar a sua reação para adicionar o seu bónus de Vigor à DEF desse aliado contra um ataque.</li>
+                                                        <li><strong>Muralha de Fé (Nível 3, 5 PE):</strong> Como uma ação, todos os aliados a 3 metros recebem +2 em testes de Fé contra medo e corrupção até ao final do seu próximo turno.</li>
+                                                        <li><strong>Voto de Proteção (Nível 5, 4 PE):</strong> Como ação bônus, lança um desafio a um inimigo. Esse inimigo sofre desvantagem em todos os ataques que não sejam contra o Guardião até o seu próximo turno.</li>
+                                                        <li><strong>Inquebrável (Nível 7, 8 PE, 1x/descanso longo):</strong> Como reação, quando sofre dano que o levaria a 0 HP, o Guardião ignora o dano e permanece com 1 HP.</li>
+                                                     </ul>`
+                                        },
+                                        { 
+                                            title: "Curandeiro", 
+                                            subtitle: "O Canal da Restauração",
+                                            content: `<ul class="!list-disc !pl-5 !mt-2">
+                                                        <li><strong>Toque Restaurador (Nível 1, 3 PE):</strong> Toca uma criatura e restaura 1d8 + Modificador de SAB em HP.</li>
+                                                        <li><strong>Bênção da Vigilância (Nível 1, 2 PE):</strong> Concede a um aliado +2 no seu próximo teste de Iniciativa ou Percepção.</li>
+                                                        <li><strong>Purificar (Nível 3, 5 PE):</strong> Remove uma condição (Envenenado, Doente ou Amedrontado) de um alvo.</li>
+                                                        <li><strong>Bênção da Resiliência (Nível 3, 6 PE):</strong> Concede a um aliado 1d6 + Modificador de FÉ em Pontos de Vida temporários.</li>
+                                                        <li><strong>Prece da Salvação (Nível 5, 10 PE):</strong> Toca um aliado com 0 HP. O aliado estabiliza e recupera 1 HP, voltando à consciência.</li>
+                                                        <li><strong>Santuário Provisório (Nível 5, 8 PE):</strong> Cria uma aura de 3m de raio. Aliados que começam o turno dentro dela recuperam 1d4 HP. Dura até o início do seu próximo turno.</li>
+                                                        <li><strong>Toque Restaurador Maior (Nível 7, 6 PE):</strong> Uma versão mais potente que restaura 2d8 + Modificador de SAB em HP.</li>
+                                                    </ul>`
+                                        },
+                                        { 
+                                            title: "Místico", 
+                                            subtitle: "O Intérprete da Criação",
+                                            content: `<ul class="!list-disc !pl-5 !mt-2">
+                                                        <li><strong>Manifestação Elemental (Nível 1, 4 PE):</strong> Cria um efeito de Luz (cega), Vento (empurra) ou Som (ensurdece). Alvos resistem com teste de VIG (DF 13).</li>
+                                                        <li><strong>Sentir a Harmonia (Nível 1, 2 PE):</strong> Concentra-se para ganhar vantagem em um teste para detectar ilusões, criaturas escondidas ou corrupção.</li>
+                                                        <li><strong>Passo do Vento (Nível 3, 5 PE):</strong> Aumenta o movimento de um aliado (ou de si mesmo) em 3 metros por um turno.</li>
+                                                        <li><strong>Canção da Coragem (Nível 3, 6 PE):</strong> Todos os aliados que ouvirem recebem vantagem no próximo teste de FÉ contra medo ou corrupção.</li>
+                                                        <li><strong>Escudo de Luz (Nível 5, 6 PE):</strong> Como reação, concede a um aliado +4 de DEF contra um ataque.</li>
+                                                        <li><strong>Forma Etérea (Nível 5, 8 PE):</strong> Torna-se translúcido por 1 turno, podendo atravessar inimigos e ignorar terreno difícil.</li>
+                                                        <li><strong>Manifestação Elemental Aprimorada (Nível 7, 7 PE):</strong> Pode manifestar dois efeitos elementais diferentes com uma única ação, podendo visar alvos diferentes.</li>
+                                                    </ul>`
+                                        },
+                                        { 
+                                            title: "Peregrino",
+                                            subtitle: "Sinais do Caminho",
+                                            content: `<ul class="!list-disc !pl-5 !mt-2">
+                                                        <li><strong>Sinais da Jornada (Nível 1, 1/sessão):</strong> Pode pedir ao Mestre uma pista direta sobre o caminho, a fraqueza de um inimigo ou o segredo de um local.</li>
+                                                        <li><strong>Caminho Seguro (Nível 3, 5 PE):</strong> Usado durante a viagem, o grupo recebe vantagem no próximo teste para evitar se perder, encontrar acampamento seguro ou detectar emboscada.</li>
+                                                        <li><strong>Fé Inspiradora (Nível 5, 8 PE):</strong> Todos os aliados que o conseguem ouvir ganham vantagem no seu próximo teste.</li>
+                                                        <li><strong>Sentir a Ferida do Mundo (Nível 7, Passiva):</strong> Sente automaticamente a presença e a direção geral da fonte de Corrupção mais próxima num raio de 1 km.</li>
+                                                    </ul>`
+                                        },
+                                        { 
+                                            title: "Camponês", 
+                                            subtitle: "Os Saberes da Lida",
+                                            content: `<ul class="!list-disc !pl-5 !mt-2">
+                                                        <li><strong>Esforço Conjunto (Nível 1, 2 PE):</strong> Como ação bônus, toca um aliado adjacente, que recebe +2 em seu próximo teste de atributo ou perícia.</li>
+                                                        <li><strong>Semente de Paciência (Nível 1, 2 PE):</strong> Como reação, permite que um aliado a até 9m que falhou num teste de resistência contra medo ou desespero role novamente.</li>
+                                                        <li><strong>Coração Resiliente (Nível 3, Passiva, 1/dia):</strong> Quando falha em um teste de resistência contra uma condição, pode escolher refazer o teste.</li>
+                                                        <li><strong>Partilhar o Pão (Nível 3, 4 PE):</strong> Oferece sua ração a um aliado, que recupera 1d6 + seu mod. de Vigor em PV. (Fora de combate, consome 1 ração).</li>
+                                                        <li><strong>Inspirar a Lida (Nível 5, 6 PE):</strong> Como ação, todos os aliados a até 9m (incluindo você) recuperam 1d4 Pontos de Energia (PE).</li>
+                                                        <li><strong>Abrigo Improvisado (Nível 5, 8 PE):</strong> Leva 1 minuto para criar um abrigo. No próximo Descanso Curto, o grupo fica protegido de clima moderado e ganha vantagem contra surpresas.</li>
+                                                        <li><strong>Inabalável como a Terra (Nível 7, Passiva, 1/dia):</strong> Quando seria reduzido a 0 PV, pode fazer um teste de Vigor (DF 15) para ficar com 1 PV em vez de 0.</li>
+                                                        <li><strong>A Força da Colheita (Nível 7, 10 PE):</strong> Até o seu próximo turno, qualquer aliado que começar seu turno a até 3m de você adiciona seu mod. de Sabedoria ao dano do primeiro ataque bem-sucedido.</li>
+                                                    </ul>`
+                                        },
+                                    ])}`
                             }
                         ])}
                     </div>`
@@ -463,6 +524,7 @@
                             { title: "Conclave dos Navegantes (Yam Talorah)", content: "<strong>Características:</strong> Marinheiros, cartógrafos e exploradores. Dominam os mares, conhecem rotas secretas e mantêm contato entre regiões isoladas.<br><strong>Força:</strong> Navegação, espionagem marítima e exploração.<br><strong>Missão Típica:</strong> Explorar ilhas, manter os mares seguros.<br><strong>Aliada ideal para:</strong> Místicos, Peregrinos." },
                             { title: "Fraternidade de Neharim (Neharim)", content: "<strong>Características:</strong> Comerciantes, diplomatas e artesãos. Mantêm alianças econômicas e políticas, garantindo que cidades prosperem sem sucumbir à corrupção.<br><strong>Força:</strong> Negociação, inteligência e influência econômica.<br><strong>Missão Típica:</strong> Negociar tratados, mediar conflitos.<br><strong>Aliada ideal para:</strong> Arautos, Peregrinos." },
                             { title: "Vigias de Qadmiar (Qadmiar)", content: "<strong>Características:</strong> Guardiões de segredos antigos. Peregrinos e estudiosos do deserto, treinam na sobrevivência e observação.<br><strong>Força:</strong> Conhecimento arcano, resistência e orientação em terrenos hostis.<br><strong>Missão Típica:</strong> Explorar ruínas e proteger peregrinos.<br><strong>Aliada ideal para:</strong> Peregrinos, Guardiões, Caçadores de Sombras." },
+                            { title: "O Baluarte de Cinzas (Ashkar)", content: "<strong>Características:</strong> Uma ordem pragmática e desconfiada que atua como uma muralha contra ameaças sutis. Vivem imersos na tentação e na intriga para melhor combatê-las, enfrentando o perigo constante da corrupção interna e da infiltração.<br><strong>Força:</strong> Subterfúgio, espionagem, investigação, conhecimento do submundo e resistência a influências corruptoras.<br><strong>Missão Típica:</strong> Desmascarar infiltrados, interceptar contrabando de artefatos amaldiçoados e investigar cultos secretos que florescem no ambiente permissivo de Ashkar.<br><strong>Aliada ideal para:</strong> Arautos, Caçadores de Sombras e Místicos. Também para Errantes focados em redenção, que não temem se aproximar da escuridão para guiar outros à luz." },
                         ])}
 
                         <h4 class="!mt-6">Dinâmicas das Ordens</h4>
@@ -482,11 +544,12 @@
                             ["Classe", "Ordens Mais Afins", "Papel Típico"],
                             [
                                 ["Guardião", "Ordem do Escudo de Pedra, Vigias de Qadmiar", "Defesa de cidades, escolta de caravanas, treinamento militar."],
-                                ["Arauto", "Irmandade de Lumenar, Fraternidade de Neharim", "Diplomacia, negociação de alianças, espionagem entre regiões."],
+                                ["Arauto", "Irmandade de Lumenar, Fraternidade de Neharim, O Baluarte de Cinzas", "Diplomacia, negociação de alianças, espionagem entre regiões."],
                                 ["Curandeiro", "Irmandade de Lumenar, Vigias de Qadmiar", "Cuidado com feridos em campanhas, rituais de proteção, inspiração moral."],
-                                ["Caçador de Sombras", "Vigias de Qadmiar, Ordem do Escudo de Pedra", "Patrulha de fronteiras, eliminação de ameaças ocultas, rastreamento."],
-                                ["Místico", "Irmandade de Lumenar, Conclave dos Navegantes", "Proteção de lugares sagrados, manipulação do ambiente em batalhas."],
-                                ["Peregrino", "Todas (especialmente Vigias de Qadmiar)", "Exploração de regiões inexploradas, ligação entre ordens, descoberta de segredos."]
+                                ["Caçador de Sombras", "Vigias de Qadmiar, Ordem do Escudo de Pedra, O Baluarte de Cinzas", "Patrulha de fronteiras, eliminação de ameaças ocultas, rastreamento."],
+                                ["Místico", "Irmandade de Lumenar, Conclave dos Navegantes, O Baluarte de Cinzas", "Proteção de lugares sagrados, manipulação do ambiente em batalhas."],
+                                ["Peregrino", "Todas (especialmente Vigias de Qadmiar)", "Exploração de regiões inexploradas, ligação entre ordens, descoberta de segredos."],
+                                ["Camponês", "Irmandade de Lumenar, Fraternidade de Neharim", "Logística, trabalho comunitário, obter informações em vilas e fazendas, garantir rotas de suprimentos."]
                             ]
                         )}
                         
@@ -958,22 +1021,102 @@
                                     ])}
                                 `
                             },
-                            {
+                           {
                                 title: "Dracmas e Economia",
                                 content: () => `
                                     <p>A moeda principal em Netzeroth são os <strong>Dracmas (Dr)</strong>, peças de prata cunhadas em Neharim. Cada personagem começa com 20 Dracmas, além de seu equipamento inicial.</p>
+                                    
+                                    <h5 class="!font-semibold !mt-4">Armas Corpo a Corpo</h5>
                                     ${renderTable(
-                                        ["Item Comum", "Custo"],
+                                        ["Arma", "Custo"],
                                         [
-                                            ["Ração seca (1 dia)", "5 Dr"],
-                                            ["Odre de água", "2 Dr"],
-                                            ["Tocha", "1 Dr"],
-                                            ["Corda (15m)", "10 Dr"],
-                                            ["Kit de ervas", "25 Dr"],
-                                            ["Poção de Vida", "50 Dr"],
-                                            ["Pederneira", "2 Dr"]
+                                            ["Adaga de Rapina", "15 Dr"],
+                                            ["Cajado do Peregrino", "20 Dr"],
+                                            ["Lança da Vigília", "25 Dr"],
+                                            ["Espada Longa de Elyon", "45 Dr"],
+                                            ["Machado de Guerra", "60 Dr"]
                                         ]
                                     )}
+
+                                    <h5 class="!font-semibold !mt-4">Armas à Distância</h5>
+                                    ${renderTable(
+                                        ["Arma", "Custo"],
+                                        [
+                                            ["Funda de Yam Talorah", "5 Dr"],
+                                            ["Dardo de Qadmiar (unidade)", "5 Dr"],
+                                            ["Arco de Haravoth", "50 Dr"],
+                                            ["Besta de Neveloth", "75 Dr"]
+                                        ]
+                                    )}
+
+                                    <h5 class="!font-semibold !mt-4">Armaduras</h5>
+                                    ${renderTable(
+                                        ["Armadura", "Custo"],
+                                        [
+                                            ["Manto do Peregrino (Leve, CA+1)", "25 Dr"],
+                                            ["Peitoral de Couro de Haravoth (Leve, CA+2)", "40 Dr"],
+                                            ["Cota de Malha de Neveloth (Média, CA+4)", "75 Dr"],
+                                            ["Couraça de Elyon (Pesada, CA+6)", "150 Dr"]
+                                        ]
+                                    )}
+
+                                     <h5 class="!font-semibold !mt-4">Escudos</h5>
+                                    ${renderTable(
+                                        ["Escudo", "Custo"],
+                                        [
+                                            ["Escudo de Madeira Viva (Leve, CA+1)", "30 Dr"],
+                                            ["Escudo Redondo de Elyon (Médio, CA+2)", "35 Dr"],
+                                            ["Escudo de Cristal do Deserto (Médio, CA+3)", "90 Dr"],
+                                            ["Escudo de Torre de Metsudoth (Pesado, CA+4)", "70 Dr"]
+                                        ]
+                                    )}
+                                    
+                                    <h5 class="!font-semibold !mt-4">Itens Comuns e de Exploração</h5>
+                                    ${renderTable(
+                                        ["Item", "Custo"],
+                                        [
+                                            ["Tocha", "1 Dr"],
+                                            ["Odre de água", "2 Dr"],
+                                            ["Pederneira", "2 Dr"],
+                                            ["Ração seca (1 dia)", "5 Dr"],
+                                            ["Corda (15m)", "10 Dr"],
+                                            ["Kit de ervas", "25 Dr"],
+                                            ["Kit de Sobrevivência do Deserto", "35 Dr"],
+                                            ["Unguento de Curandeiro", "40 Dr"],
+                                            ["Poção de Vida", "50 Dr"],
+                                            ["Poção de Energia", "60 Dr"],
+                                            ["Luz de FÉ (consumível)", "75 Dr"]
+                                        ]
+                                    )}
+
+                                    <h5 class="!font-semibold !mt-4">Consumíveis Sagrados (Valor de Referência)</h5>
+                                    <p class="text-xs italic">Estes itens são extremamente raros e não são encontrados em mercados comuns. Os preços representam seu valor para colecionadores ou como base para recompensas de missões.</p>
+                                    ${renderTable(
+                                        ["Item", "Valor Estimado"],
+                                        [
+                                            ["Pólen da Flor do Sol", "450 Dr"],
+                                            ["Óleo da Oliveira Vigia", "600 Dr"],
+                                            ["Lágrima da Aurora", "750 Dr"],
+                                            ["Água do Rio de Luz", "800 Dr"],
+                                            ["Fruto de Gan-Eved", "1.000 Dr"]
+                                        ]
+                                    )}
+                                    <h5 class="!font-semibold !mt-4">Kit do Lavrador</h5>
+                                    <p class="text-xs italic">Estes itens são extremamente raros e não são encontrados em mercados comuns. Os preços representam seu valor para colecionadores ou como base para recompensas de missões.</p>
+                                    ${renderTable(
+                                        ["Item", "Valor Estimado"],
+                                        [
+                                            ["Enxada Robusta", "4 Dr"],
+                                            ["Pá de Lâmina Afiada", "5 Dr"],
+                                            ["Foice de Mão", "2 Dr"],
+                                            ["Forcado", "4 Dr"],
+                                            ["Machadinha", "6 Dr"],
+                                            ["Malho de Madeira", "3 Dr"],
+                                            ["Saco de Sementes", "1 Dr"],
+                                            ["Corda de Cânhamo (15m)", "10 Dr"]
+                                        ]
+                                    )}
+
                                 `
                             },
                             { 
@@ -1011,6 +1154,25 @@
                             { 
                                 title: "Itens de Exploração e Consumíveis", 
                                 content: () => renderAccordion([
+                                    {
+                                        title: "Kit do Lavrador",
+                                        content: () => `
+                                            <p>O conjunto de ferramentas essenciais para qualquer um que trabalhe a terra, provando que a verdadeira força de Netzeroth vem do seu povo. Cada ferramenta tem um uso prático e pode servir como uma arma improvisada em tempos de necessidade.</p>
+                                            ${renderTable(
+                                                ["Item", "Descrição e Custo", "Uso em Combate"],
+                                                [
+                                                    ["Enxada Robusta", "Perfeita para capinar, remover ervas daninhas e preparar o solo. Pode ser usada para cavar trincheiras rasas.", "<strong>Dano:</strong> 1d6 contundente. <strong>Propriedade:</strong> Médio. <strong>Alcançar:</strong> Permite atacar a 1,5m."],
+                                                    ["Pá de Lâmina Afiada", "Essencial para cavar buracos, mover terra ou criar barreiras improvisadas. Sua borda pode ser afiada para cortar raízes.", "<strong>Dano:</strong> 1d6 cortante. <strong>Propriedade:</strong> Médio. Pode ser arremessada (3/6m)."],
+                                                    ["Foice de Mão", "Usada para colher grãos ou cortar vegetação. Seu formato curvo é ideal para prender e puxar objetos.", "<strong>Dano:</strong> 1d4 cortante. <strong>Propriedade:</strong> Leve, Acuidade. Vantagem para desarmar."],
+                                                    ["Forcado", "Ferramenta de três ou quatro dentes para mover feno. Sua aparência é naturalmente intimidadora.", "<strong>Dano:</strong> 1d6 perfurante. <strong>Propriedade:</strong> Médio. <strong>Duas Mãos:</strong> Dano aumenta para 1d8."],
+                                                    ["Machadinha", "Versátil para cortar lenha ou talhar madeira. Um item essencial para a vida no campo.", "<strong>Dano:</strong> 1d6 cortante. <strong>Propriedade:</strong> Leve. <strong>Arremesso</strong> (6/12m)."],
+                                                    ["Malho de Madeira", "Usado para cravar estacas ou quebrar pedras. Requer força para ser manuseado.", "<strong>Dano:</strong> 1d8 contundente. <strong>Propriedade:</strong> Pesado, Duas Mãos. Vantagem em ataques contra objetos."],
+                                                    ["Saco de Sementes", "Um pequeno saco de linho com sementes variadas.", "<strong>Propriedade:</strong> Miudeza. Pode espalhar em 1,5m² para criar <strong>terreno difícil</strong>. Requer teste de AGI (DF 12) para não cair."],
+                                                    ["Corda de Cânhamo (15m)", "Corda grossa e resistente para amarrar, puxar ou escalar.", "<strong>Propriedade:</strong> Leve. Pode ser usada para tentar derrubar ou prender um inimigo a até 4,5m (teste de ataque à distância)."]
+                                                ]
+                                            )}
+                                        `
+                                    },
                                     {title: "Itens de Exploração", content: `<ul>
                                         <li><strong>Corda de Vinhas (Médio):</strong> Para escalada, cresce levemente sob comando 1x/aventura.</li>
                                         <li><strong>Ganchos e Pitons (Leve):</strong> Tradicionais e confiáveis para ambientes rochosos.</li>
@@ -1050,6 +1212,7 @@
                                     { title: "Caçador de Sombras", content: "Duas Adagas ou Arco, Peitoral de Couro, mochila com 15m de corda, uma capa e 2 rações." },
                                     { title: "Místico", content: "Cajado do Peregrino, Manto do Peregrino, mochila com um símbolo sagrado, 2 tochas e 2 rações." },
                                     { title: "Peregrino", content: "Lança da Vigília, Manto do Peregrino, mochila com mapa regional, pederneira, 4 rações e 1 odre de água." },
+                                    { title: "Camponês", content: "Foice de Mão ou um Cajado do Peregrino, Manto do Peregrino, mochila com uma ferramenta agrícola (como uma pá ou enxada), 3 rações secas, 1 odre de água e uma pederneira." },
                                 ])}
                                 <p class="mt-4 text-xs italic text-gray-600 dark:text-gray-400"><strong>Observação:</strong> Além do kit do personagem, é permitido o acréscimo de 1 item a mais que tenha relação com sua lore.</p>
                             `}
